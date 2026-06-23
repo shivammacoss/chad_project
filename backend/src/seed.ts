@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { connectDb, disconnectDb } from './lib/db.js'
 import { User } from './models/User.js'
 import { Application } from './models/Application.js'
+import { DocumentModel } from './models/Document.js'
 import { hashPassword } from './lib/auth.js'
 import { totalPrice } from './lib/pricing.js'
 
@@ -17,6 +18,8 @@ export async function seedDemo(): Promise<void> {
     email: 'user@chad.demo', passwordHash: await hashPassword('User@123'),
     fullName: 'Demo User', country: 'India', role: 'user', emailVerified: true, phone: '+91 90000 00000',
   })
+  const legal = await User.create({ email: 'legal@chad.demo', passwordHash: await hashPassword('Legal@123'), fullName: 'Legal Officer', country: 'Chad', role: 'legal', emailVerified: true })
+  const agent = await User.create({ email: 'agent@chad.demo', passwordHash: await hashPassword('Agent@123'), fullName: 'Gov Agent', country: 'Chad', role: 'government_agent', emailVerified: true })
 
   const specs = [
     {
@@ -40,8 +43,9 @@ export async function seedDemo(): Promise<void> {
     },
   ]
 
+  const created = []
   for (const s of specs) {
-    await Application.create({
+    created.push(await Application.create({
       userId: user._id,
       serviceKey: 'company-formation',
       serviceName: 'Company Formation',
@@ -55,7 +59,7 @@ export async function seedDemo(): Promise<void> {
       paymentStatus: s.status === 'registered' || s.status === 'in_review' ? 'paid' : 'unpaid',
       currentStep: s.status === 'draft' ? 2 : 7,
       statusHistory: [{ status: s.status, at: new Date() }],
-    })
+    }))
   }
 
   await Application.create({
@@ -70,7 +74,17 @@ export async function seedDemo(): Promise<void> {
     statusHistory: [{ status: 'in_review', at: new Date() }],
   })
 
-  console.log('Seeded:', { admin: admin.email, user: user.email, applications: specs.length + 1 })
+  const inReview = created.find((a) => a.status === 'in_review')
+  if (inReview) { inReview.assignedAgentId = agent._id; await inReview.save() }
+  const registered = created.find((a) => a.status === 'registered')
+  if (inReview) {
+    await DocumentModel.create({ applicationId: inReview._id, userId: user._id, ownerName: 'Amadou Diallo', type: 'passport', fileName: 'passport.pdf', storagePath: 'seed/passport.pdf', status: 'rejected', rejectionReason: 'Please upload a clearer passport scan.' })
+  }
+  if (registered) {
+    await DocumentModel.create({ applicationId: registered._id, userId: user._id, ownerName: '', type: 'certificate', fileName: 'certificate-of-incorporation.pdf', storagePath: 'seed/certificate.pdf', status: 'approved' })
+  }
+
+  console.log('Seeded:', { admin: admin.email, user: user.email, legal: legal.email, agent: agent.email, applications: specs.length + 1 })
 }
 
 // Direct execution: `npm run seed`

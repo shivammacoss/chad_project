@@ -7,6 +7,8 @@ describe('seedDemo', () => {
   it('creates admin, user and rich applications', async () => {
     await seedDemo()
     expect(await User.countDocuments({ role: 'admin' })).toBe(1)
+    expect(await User.countDocuments({ role: 'legal' })).toBe(1)
+    expect(await User.countDocuments({ role: 'government_agent' })).toBe(1)
     expect(await Application.countDocuments()).toBe(4)
     const registered = await Application.findOne({ status: 'registered' })
     expect(registered).toBeDefined()
