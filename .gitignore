@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-server/node_modules
-server/uploads
-server/.env
-server/dist
+backend/node_modules
+backend/uploads
+backend/.env
+backend/dist
