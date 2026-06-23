@@ -6,7 +6,7 @@ const userSchema = new Schema({
   fullName: { type: String, required: true },
   country: { type: String, required: true },
   phone: { type: String, default: '' },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  role: { type: String, enum: ['user', 'customer', 'sales', 'legal', 'compliance', 'government_agent', 'finance', 'support', 'admin'], default: 'customer' },
   emailVerified: { type: Boolean, default: false },
   emailVerifyToken: { type: String, default: null },
   emailVerifyExpires: { type: Date, default: null },

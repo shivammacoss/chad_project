@@ -10,7 +10,7 @@ describe('User model', () => {
       country: 'India',
     })
     expect(u.email).toBe('a@example.com') // lowercased
-    expect(u.role).toBe('user')
+    expect(u.role).toBe('customer')
     expect(u.emailVerified).toBe(false)
   })
 

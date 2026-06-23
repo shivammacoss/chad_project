@@ -19,6 +19,7 @@ const statusEntry = new Schema(
 
 const applicationSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  assignedAgentId: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   serviceKey: { type: String, required: true, default: 'company-formation' },
   serviceName: { type: String, default: 'Company Formation' },
   entityType: { type: String, enum: ['SARL', 'SARL_U', 'SA', 'BRANCH', 'REP_OFFICE'] },
@@ -39,7 +40,7 @@ const applicationSchema = new Schema({
   priceCents: { type: Number, required: true },
   status: {
     type: String,
-    enum: ['draft', 'documents_submitted', 'payment_pending', 'paid', 'in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected'],
+    enum: ['draft', 'documents_submitted', 'payment_pending', 'paid', 'in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected', 'legal_review', 'waiting_government', 'completed'],
     default: 'draft',
   },
   paymentStatus: { type: String, enum: ['unpaid', 'paid'], default: 'unpaid' },
