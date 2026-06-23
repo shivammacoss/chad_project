@@ -19,8 +19,9 @@ export interface CompanyDetails {
 export interface VirtualOffice { wanted: boolean; plan?: VoPlan }
 
 export interface Application {
-  _id: string; entityType: EntityType; packageTier: 'standard' | 'premium'
-  companyDetails: CompanyDetails; owners: Owner[]; virtualOffice: VirtualOffice
+  _id: string; entityType?: EntityType; packageTier: 'standard' | 'premium'
+  companyDetails?: CompanyDetails; owners: Owner[]; virtualOffice: VirtualOffice
+  serviceKey: string; serviceName: string; intake?: Record<string, unknown>
   priceCents: number; status: ApplicationStatus; paymentStatus: 'unpaid' | 'paid'
   statusHistory: { status: string; note?: string; at: string }[]
   currentStep: number; createdAt: string
