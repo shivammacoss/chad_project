@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { STATUS_LABEL, formatPrice } from '@/content/formations'
-import { apiGet } from '@/lib/api'
+import { apiGet, apiUpload } from '@/lib/api'
 import type { Application, DocItem, ApplicationStatus } from '@/types/app'
 
 export default function ApplicationDetailPage() {
@@ -16,6 +16,17 @@ export default function ApplicationDetailPage() {
     apiGet<Application>(`/api/applications/${id}`).then(setA).catch(() => setFailed(true))
     apiGet<DocItem[]>(`/api/applications/${id}/documents`).then(setDocs).catch(() => setDocs([]))
   }, [id])
+
+  async function reupload(type: string, file: File) {
+    if (!id) return
+    const form = new FormData()
+    form.append('type', type)
+    form.append('ownerName', '')
+    form.append('file', file)
+    await apiUpload(`/api/applications/${id}/documents`, form)
+    const fresh = await apiGet<DocItem[]>(`/api/applications/${id}/documents`)
+    setDocs(fresh)
+  }
 
   if (failed) return (
     <div className="min-h-screen bg-navy pt-24 text-center text-frost/60">
@@ -75,12 +86,39 @@ export default function ApplicationDetailPage() {
         <div className="mt-2 grid gap-2">
           {docs.length === 0 && <p className="text-sm text-frost/55">No documents uploaded.</p>}
           {docs.map((d) => (
-            <div key={d._id} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
-              <span className="text-frost">{d.ownerName ? `${d.ownerName} — ` : ''}{d.type} ({d.fileName})</span>
-              <span className="text-frost/60">{d.status}</span>
+            <div key={d._id}>
+              <div className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
+                <span className="text-frost">{d.ownerName ? `${d.ownerName} — ` : ''}{d.type} ({d.fileName})</span>
+                <span className="text-frost/60">{d.status}</span>
+              </div>
+              {d.status === 'rejected' && (
+                <div className="mt-1 text-xs">
+                  <span className="text-indigo-pulse">Rejected: {d.rejectionReason || 'please re-upload'}</span>
+                  <input
+                    type="file"
+                    accept="image/*,application/pdf"
+                    className="ml-2 text-frost/60"
+                    onChange={(e) => e.target.files?.[0] && reupload(d.type, e.target.files[0])}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
+
+        {docs.some((d) => ['certificate', 'government_receipt', 'license'].includes(d.type)) && (
+          <>
+            <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Certificates & official documents</h2>
+            <div className="mt-2 grid gap-2">
+              {docs.filter((d) => ['certificate', 'government_receipt', 'license'].includes(d.type)).map((d) => (
+                <div key={d._id} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
+                  <span className="text-frost">{d.type.replace(/_/g, ' ')} — {d.fileName}</span>
+                  <a href={`/api/applications/${id}/documents/${d._id}/file`} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Timeline</h2>
         <ol className="mt-2 border-l border-frost/15 pl-5">
