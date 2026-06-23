@@ -2,6 +2,7 @@ import express, { type Express } from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { authRouter } from './routes/auth.js'
+import { formationsRouter } from './routes/formations.js'
 
 export function createApp(): Express {
   const app = express()
@@ -21,6 +22,7 @@ export function createApp(): Express {
   })
 
   app.use('/api/auth', authRouter)
+  app.use('/api/formations', formationsRouter)
 
   return app
 }
