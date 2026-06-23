@@ -1,6 +1,7 @@
 import express, { type Express } from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import { authRouter } from './routes/auth.js'
 
 export function createApp(): Express {
   const app = express()
@@ -18,6 +19,8 @@ export function createApp(): Express {
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true })
   })
+
+  app.use('/api/auth', authRouter)
 
   return app
 }
