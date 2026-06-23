@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react'
 import { apiGet, apiPost } from '@/lib/api'
 import type { AuthUser } from '@/types/app'
 
@@ -16,17 +16,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
 
-  async function refresh() {
+  const refresh = useCallback(async () => {
     try {
       setUser(await apiGet<AuthUser>('/api/auth/me'))
     } catch {
       setUser(null)
     }
-  }
+  }, [])
 
   useEffect(() => {
     refresh().finally(() => setLoading(false))
-  }, [])
+  }, [refresh])
 
   async function login(email: string, password: string) {
     const u = await apiPost<AuthUser>('/api/auth/login', { email, password })
