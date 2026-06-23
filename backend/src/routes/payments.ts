@@ -18,7 +18,7 @@ checkoutRouter.post('/', async (req, res) => {
       {
         price_data: {
           currency: 'usd',
-          product_data: { name: `${app.entityType} formation — ${app.companyDetails.proposedName}` },
+          product_data: { name: `${app.entityType} formation — ${app.companyDetails?.proposedName ?? 'Untitled'}` },
           unit_amount: app.priceCents,
         },
         quantity: 1,

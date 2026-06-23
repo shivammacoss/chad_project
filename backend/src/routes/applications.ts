@@ -44,7 +44,7 @@ applicationsRouter.patch('/:id', async (req, res) => {
   if (!app) return res.status(404).json({ error: 'Not found' })
   const { companyDetails, owners, virtualOffice, currentStep } = req.body ?? {}
   if (companyDetails) app.companyDetails = { ...app.companyDetails, ...companyDetails }
-  if (Array.isArray(owners)) app.owners = owners
+  if (Array.isArray(owners)) app.owners = owners as typeof app.owners
   if (virtualOffice) app.virtualOffice = virtualOffice
   if (typeof currentStep === 'number') app.currentStep = currentStep
   recompute(app)

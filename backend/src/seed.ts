@@ -1,52 +1,61 @@
 import 'dotenv/config'
 import { connectDb, disconnectDb } from './lib/db.js'
 import { User } from './models/User.js'
-import { Formation } from './models/Formation.js'
+import { Application } from './models/Application.js'
 import { hashPassword } from './lib/auth.js'
-import { priceFor } from './lib/pricing.js'
+import { totalPrice } from './lib/pricing.js'
 
 export async function seedDemo(): Promise<void> {
   await User.deleteMany({})
-  await Formation.deleteMany({})
+  await Application.deleteMany({})
 
   const admin = await User.create({
-    email: 'admin@chad.demo',
-    passwordHash: await hashPassword('Admin@123'),
-    fullName: 'Demo Admin',
-    country: 'Chad',
-    role: 'admin',
-    emailVerified: true,
+    email: 'admin@chad.demo', passwordHash: await hashPassword('Admin@123'),
+    fullName: 'Demo Admin', country: 'Chad', role: 'admin', emailVerified: true,
   })
   const user = await User.create({
-    email: 'user@chad.demo',
-    passwordHash: await hashPassword('User@123'),
-    fullName: 'Demo User',
-    country: 'India',
-    role: 'user',
-    emailVerified: true,
+    email: 'user@chad.demo', passwordHash: await hashPassword('User@123'),
+    fullName: 'Demo User', country: 'India', role: 'user', emailVerified: true, phone: '+91 90000 00000',
   })
 
-  const specs: Array<{ entityType: 'SARL' | 'SA' | 'BRANCH'; name: string; status: string }> = [
-    { entityType: 'SARL', name: 'Sahel Trading SARL', status: 'registered' },
-    { entityType: 'SA', name: "N'Djamena Holdings SA", status: 'in_review' },
-    { entityType: 'BRANCH', name: 'Global Imports Branch', status: 'documents_submitted' },
-    { entityType: 'SARL', name: 'Draft Co SARL', status: 'draft' },
+  const specs = [
+    {
+      entityType: 'SARL' as const, name: 'Sahel Trading SARL', status: 'registered',
+      owners: [
+        { fullName: 'Amadou Diallo', role: 'both' as const, nationality: 'Chad', ownershipPercent: 60, isPrimaryContact: true },
+        { fullName: 'Rajesh Kumar', role: 'shareholder' as const, nationality: 'India', ownershipPercent: 40, isPrimaryContact: false },
+      ],
+      vo: { wanted: true, plan: 'premium' as const },
+    },
+    {
+      entityType: 'SA' as const, name: "N'Djamena Holdings SA", status: 'in_review',
+      owners: [
+        { fullName: 'Fatima Hassan', role: 'director' as const, nationality: 'Chad', ownershipPercent: 100, isPrimaryContact: true },
+      ],
+      vo: { wanted: true, plan: 'basic' as const },
+    },
+    {
+      entityType: 'SARL' as const, name: 'Draft Co SARL', status: 'draft',
+      owners: [], vo: { wanted: false as const },
+    },
   ]
 
   for (const s of specs) {
-    await Formation.create({
+    await Application.create({
       userId: user._id,
       entityType: s.entityType,
-      companyName: s.name,
       packageTier: 'standard',
-      priceCents: priceFor(s.entityType, 'standard'),
+      companyDetails: { proposedName: s.name, businessActivity: 'General trading', shareCapitalFCFA: 1000000, city: "N'Djamena" },
+      owners: s.owners,
+      virtualOffice: s.vo,
+      priceCents: totalPrice(s.entityType, 'standard', s.vo),
       status: s.status,
       paymentStatus: s.status === 'registered' || s.status === 'in_review' ? 'paid' : 'unpaid',
+      currentStep: s.status === 'draft' ? 2 : 7,
       statusHistory: [{ status: s.status, at: new Date() }],
     })
   }
-
-  console.log('Seeded:', { admin: admin.email, user: user.email, formations: specs.length })
+  console.log('Seeded:', { admin: admin.email, user: user.email, applications: specs.length })
 }
 
 // Direct execution: `npm run seed`
