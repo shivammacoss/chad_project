@@ -15,6 +15,8 @@ import LoginPage from '@/pages/LoginPage'
 import SignupPage from '@/pages/SignupPage'
 import VerifyEmailPage from '@/pages/VerifyEmailPage'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import AdminRoute from '@/components/auth/AdminRoute'
+import AdminPage from '@/pages/AdminPage'
 import { SERVICE_CATEGORIES } from '@/content/menu'
 
 /**
@@ -33,6 +35,9 @@ export function AppRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/formations/new" element={<FormationWizardPage />} />
           <Route path="/formations/:id" element={<FormationDetailPage />} />
+        </Route>
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
         <Route path="/contact" element={<ContactPage />} />
 
