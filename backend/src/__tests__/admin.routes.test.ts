@@ -33,4 +33,21 @@ describe('admin routes', () => {
     const a = await Application.findById(created.body._id)
     expect(a!.statusHistory.at(-1)!.note).toBe('done')
   })
+
+  it('fetches one application and its documents as admin', async () => {
+    const user = await makeUser('user', 'u2@x.com')
+    const created = await user.post('/api/applications').send({ entityType: 'SARL', packageTier: 'standard' })
+    await user
+      .post(`/api/applications/${created.body._id}/documents`)
+      .field('type', 'passport').field('ownerName', 'Alice')
+      .attach('file', Buffer.from('x'), { filename: 'p.pdf', contentType: 'application/pdf' })
+    const admin = await makeUser('admin', 'admin2@x.com')
+    const one = await admin.get(`/api/admin/applications/${created.body._id}`)
+    expect(one.status).toBe(200)
+    expect(one.body.entityType).toBe('SARL')
+    const docs = await admin.get(`/api/admin/applications/${created.body._id}/documents`)
+    expect(docs.status).toBe(200)
+    expect(docs.body).toHaveLength(1)
+    expect(docs.body[0].ownerName).toBe('Alice')
+  })
 })

@@ -15,6 +15,17 @@ adminRouter.get('/applications', async (req, res) => {
   res.json(list)
 })
 
+adminRouter.get('/applications/:id', async (req, res) => {
+  const app = await Application.findById(req.params.id).populate('userId', 'email fullName')
+  if (!app) return res.status(404).json({ error: 'Not found' })
+  res.json(app)
+})
+
+adminRouter.get('/applications/:id/documents', async (req, res) => {
+  const docs = await DocumentModel.find({ applicationId: req.params.id }).sort({ uploadedAt: 1 })
+  res.json(docs)
+})
+
 adminRouter.patch('/applications/:id/status', async (req, res) => {
   const { status, note } = req.body ?? {}
   if (!ADMIN_STATUSES.includes(status)) return res.status(400).json({ error: 'Invalid admin status' })
