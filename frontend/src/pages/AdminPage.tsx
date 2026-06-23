@@ -1,58 +1,118 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
-import { ENTITY_TYPES } from '@/content/formations'
+import { ENTITY_TYPES, formatPrice } from '@/content/formations'
 import { apiGet, apiPatch } from '@/lib/api'
-import type { Application } from '@/types/app'
+import type { Application, DocItem } from '@/types/app'
 
 const ADMIN_STATUSES = ['in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected'] as const
-
-function clientEmail(f: Application): string {
-  return typeof f.userId === 'object' && f.userId ? f.userId.email : '—'
+const entityLabel = (v: string) => ENTITY_TYPES.find((e) => e.value === v)?.label ?? v
+function clientEmail(a: Application): string {
+  return typeof a.userId === 'object' && a.userId ? a.userId.email : '—'
 }
 
 export default function AdminPage() {
   const [items, setItems] = useState<Application[]>([])
-  const [busyId, setBusyId] = useState<string | null>(null)
+  const [selected, setSelected] = useState<Application | null>(null)
+  const [docs, setDocs] = useState<DocItem[]>([])
+  const [busy, setBusy] = useState(false)
 
-  const load = useCallback(async () => {
-    setItems(await apiGet<Application[]>('/api/admin/applications'))
+  const loadList = useCallback(async () => { setItems(await apiGet<Application[]>('/api/admin/applications')) }, [])
+  useEffect(() => { loadList() }, [loadList])
+
+  const open = useCallback(async (id: string) => {
+    setSelected(await apiGet<Application>(`/api/admin/applications/${id}`))
+    setDocs(await apiGet<DocItem[]>(`/api/admin/applications/${id}/documents`))
   }, [])
-  useEffect(() => { load() }, [load])
 
-  async function advance(f: Application, status: string) {
-    setBusyId(f._id)
-    try {
-      await apiPatch(`/api/admin/applications/${f._id}/status`, { status })
-      await load()
-    } finally { setBusyId(null) }
+  async function advance(status: string) {
+    if (!selected) return
+    setBusy(true)
+    try { await apiPatch(`/api/admin/applications/${selected._id}/status`, { status }); await open(selected._id); await loadList() }
+    finally { setBusy(false) }
+  }
+  async function reviewDoc(docId: string, status: 'approved' | 'rejected') {
+    if (!selected) return
+    await apiPatch(`/api/admin/documents/${docId}`, { status })
+    setDocs(await apiGet<DocItem[]>(`/api/admin/applications/${selected._id}/documents`))
   }
 
   return (
     <div className="min-h-screen bg-navy pt-16">
-      <div className="mx-auto max-w-5xl px-5 py-12">
-        <h1 className="text-3xl font-semibold text-frost">Admin — Applications</h1>
-        <div className="mt-8 grid gap-3">
-          {items.map((f) => (
-            <div key={f._id} className="rounded-xl border border-frost/10 bg-steel/20 p-5">
+      <div className="mx-auto grid max-w-6xl gap-6 px-5 py-12 lg:grid-cols-[1fr_1.4fr]">
+        <div>
+          <h1 className="text-2xl font-semibold text-frost">Applications</h1>
+          <div className="mt-6 grid gap-2">
+            {items.map((a) => (
+              <button key={a._id} type="button" onClick={() => open(a._id)}
+                className={`rounded-xl border px-4 py-3 text-left ${selected?._id === a._id ? 'border-teal-electric/50 bg-teal-electric/10' : 'border-frost/10 bg-steel/20'}`}>
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-frost">{a.companyDetails?.proposedName || 'Untitled'}</span>
+                  <StatusBadge status={a.status} />
+                </div>
+                <span className="text-sm text-frost/55">{entityLabel(a.entityType)} · {clientEmail(a)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          {!selected ? <p className="text-frost/55">Select an application to review.</p> : (
+            <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-frost">{f.companyDetails.proposedName}</p>
-                  <p className="text-sm text-frost/55">
-                    {ENTITY_TYPES.find((e) => e.value === f.entityType)?.label} · {clientEmail(f)}
-                  </p>
+                  <h2 className="text-xl font-semibold text-frost">{selected.companyDetails.proposedName}</h2>
+                  <p className="text-sm text-frost/55">{entityLabel(selected.entityType)} · {formatPrice(selected.priceCents)} · {clientEmail(selected)}</p>
                 </div>
-                <StatusBadge status={f.status} />
+                <StatusBadge status={selected.status} />
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {ADMIN_STATUSES.map((s) => (
-                  <Button key={s} size="sm" variant="outline" disabled={busyId === f._id} onClick={() => advance(f, s)}>
-                    {s}
-                  </Button>
-                ))}
+
+              <div className="rounded-lg border border-frost/10 bg-steel/20 p-4 text-sm text-frost/80">
+                <p>Activity: {selected.companyDetails.businessActivity || '—'}</p>
+                <p>Capital: {selected.companyDetails.shareCapitalFCFA?.toLocaleString() ?? '—'} FCFA · City: {selected.companyDetails.city}</p>
+                <p>Virtual office: {selected.virtualOffice.wanted ? selected.virtualOffice.plan : 'none'}</p>
+              </div>
+
+              <div>
+                <h3 className="text-sm uppercase tracking-wider text-frost/50">Owners</h3>
+                <div className="mt-2 grid gap-2">
+                  {selected.owners.map((o, i) => (
+                    <div key={i} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-2 text-sm">
+                      <span className="text-frost">{o.fullName} <span className="text-frost/50">({o.role})</span></span>
+                      <span className="text-frost/60">{o.nationality} · {o.ownershipPercent}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm uppercase tracking-wider text-frost/50">Documents</h3>
+                <div className="mt-2 grid gap-2">
+                  {docs.length === 0 && <p className="text-sm text-frost/55">No documents.</p>}
+                  {docs.map((d) => (
+                    <div key={d._id} className="flex items-center justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-2 text-sm">
+                      <span className="text-frost">{d.ownerName ? `${d.ownerName} — ` : ''}{d.type}</span>
+                      <span className="flex items-center gap-3">
+                        <a href={`/api/applications/${selected._id}/documents/${d._id}/file`} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
+                        <span className="text-frost/50">{d.status}</span>
+                        <button type="button" className="text-teal-electric" onClick={() => reviewDoc(d._id, 'approved')}>Approve</button>
+                        <button type="button" className="text-indigo-pulse" onClick={() => reviewDoc(d._id, 'rejected')}>Reject</button>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm uppercase tracking-wider text-frost/50">Advance status</h3>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {ADMIN_STATUSES.map((s) => (
+                    <Button key={s} size="sm" variant="outline" disabled={busy} onClick={() => advance(s)}>{s}</Button>
+                  ))}
+                </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

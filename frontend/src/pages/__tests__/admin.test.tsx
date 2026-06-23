@@ -6,28 +6,28 @@ import AdminPage from '../AdminPage'
 
 afterEach(() => vi.restoreAllMocks())
 
+const APP = {
+  _id: 'a1', entityType: 'SARL', packageTier: 'standard',
+  companyDetails: { proposedName: 'Acme SARL', city: "N'Djamena" },
+  owners: [{ fullName: 'Alice', role: 'both', nationality: 'IN', ownershipPercent: 100, isPrimaryContact: true }],
+  virtualOffice: { wanted: false }, priceCents: 49900, status: 'in_review', paymentStatus: 'paid',
+  statusHistory: [], currentStep: 7, createdAt: '', userId: { _id: 'u1', email: 'c@x.com', fullName: 'C' },
+}
+
 describe('AdminPage', () => {
-  it('lists formations and patches status', async () => {
+  it('lists, opens an application, and advances status', async () => {
     const patch = vi.fn(async () => new Response('{}', { status: 200 }))
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (_url: string, opts?: RequestInit) => {
-        if (opts?.method === 'PATCH') return patch()
-        return new Response(
-          JSON.stringify([
-            { _id: 'f1', entityType: 'SARL', companyDetails: { proposedName: 'Acme SARL', city: "N'Djamena" }, owners: [], virtualOffice: { wanted: false }, packageTier: 'standard', priceCents: 49900, status: 'in_review', paymentStatus: 'paid', statusHistory: [], currentStep: 1, createdAt: '', userId: { _id: 'u1', email: 'c@x.com', fullName: 'C' } },
-          ]),
-          { status: 200 },
-        )
-      }),
-    )
-    render(
-      <MemoryRouter>
-        <AdminPage />
-      </MemoryRouter>,
-    )
+    vi.stubGlobal('fetch', vi.fn(async (url: string, opts?: RequestInit) => {
+      if (opts?.method === 'PATCH') return patch()
+      if (url.endsWith('/documents')) return new Response('[]', { status: 200 })
+      if (url.includes('/api/admin/applications/a1')) return new Response(JSON.stringify(APP), { status: 200 })
+      if (url.includes('/api/admin/applications')) return new Response(JSON.stringify([APP]), { status: 200 })
+      return new Response('[]', { status: 200 })
+    }))
+    render(<MemoryRouter><AdminPage /></MemoryRouter>)
     await waitFor(() => expect(screen.getByText('Acme SARL')).toBeInTheDocument())
-    expect(screen.getByText('c@x.com', { exact: false })).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Acme SARL'))
+    await waitFor(() => expect(screen.getByText('Alice', { exact: false })).toBeInTheDocument())
     await userEvent.click(screen.getByRole('button', { name: 'registered' }))
     expect(patch).toHaveBeenCalled()
   })
