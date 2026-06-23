@@ -1,0 +1,37 @@
+import nodemailer from 'nodemailer'
+
+interface Transport {
+  sendMail(opts: {
+    from: string
+    to: string
+    subject: string
+    html: string
+  }): Promise<unknown>
+}
+
+let transport: Transport | null = null
+
+export function __setTransport(t: Transport): void {
+  transport = t
+}
+
+function getTransport(): Transport {
+  if (transport) return transport
+  transport = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT ?? 587),
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+  })
+  return transport
+}
+
+export async function sendVerificationEmail(to: string, link: string): Promise<void> {
+  await getTransport().sendMail({
+    from: process.env.EMAIL_FROM ?? 'no-reply@example.com',
+    to,
+    subject: 'Verify your email — Chad Business Assist',
+    html: `<p>Welcome! Confirm your email to activate your account:</p>
+           <p><a href="${link}">Verify my email</a></p>
+           <p>This link expires in 24 hours.</p>`,
+  })
+}
