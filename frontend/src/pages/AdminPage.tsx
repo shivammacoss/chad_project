@@ -34,7 +34,8 @@ export default function AdminPage() {
   async function reviewDoc(docId: string, status: 'approved' | 'rejected') {
     if (!selected) return
     await apiPatch(`/api/admin/documents/${docId}`, { status })
-    setDocs(await apiGet<DocItem[]>(`/api/admin/applications/${selected._id}/documents`))
+    await open(selected._id)
+    await loadList()
   }
 
   return (
