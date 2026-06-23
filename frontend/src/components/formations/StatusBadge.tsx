@@ -1,8 +1,8 @@
 import { Badge, type BadgeTone } from '@/components/ui/Badge'
 import { STATUS_LABEL } from '@/content/formations'
-import type { FormationStatus } from '@/types/app'
+import type { ApplicationStatus } from '@/types/app'
 
-const TONE: Record<FormationStatus, BadgeTone> = {
+const TONE: Record<ApplicationStatus, BadgeTone> = {
   draft: 'neutral',
   documents_submitted: 'neutral',
   payment_pending: 'warning',
@@ -14,6 +14,6 @@ const TONE: Record<FormationStatus, BadgeTone> = {
   rejected: 'warning',
 }
 
-export function StatusBadge({ status }: { status: FormationStatus }) {
+export function StatusBadge({ status }: { status: ApplicationStatus }) {
   return <Badge tone={TONE[status]} withDot={status === 'registered'}>{STATUS_LABEL[status]}</Badge>
 }
