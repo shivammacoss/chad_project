@@ -13,7 +13,8 @@ async function ownedFormation(userId: string | undefined, id: string) {
 }
 
 documentsRouter.post('/', upload.single('file'), async (req, res) => {
-  const formation = await ownedFormation(req.userId, req.params.id)
+  const { id } = req.params as { id: string }
+  const formation = await ownedFormation(req.userId, id)
   if (!formation) return res.status(404).json({ error: 'Formation not found' })
   if (!req.file) return res.status(400).json({ error: 'file required (jpg/png/webp/pdf, <=10MB)' })
   const type = ['passport', 'address_proof', 'photo', 'other'].includes(req.body?.type)
@@ -31,7 +32,8 @@ documentsRouter.post('/', upload.single('file'), async (req, res) => {
 })
 
 documentsRouter.get('/', async (req, res) => {
-  const formation = await ownedFormation(req.userId, req.params.id)
+  const { id } = req.params as { id: string }
+  const formation = await ownedFormation(req.userId, id)
   if (!formation) return res.status(404).json({ error: 'Formation not found' })
   const docs = await DocumentModel.find({ formationId: formation._id }).sort({ uploadedAt: 1 })
   res.json(docs)

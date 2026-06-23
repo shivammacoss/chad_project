@@ -9,7 +9,8 @@ export const checkoutRouter = Router({ mergeParams: true })
 checkoutRouter.use(requireAuth)
 
 checkoutRouter.post('/', async (req, res) => {
-  const f = await Formation.findOne({ _id: req.params.id, userId: req.userId })
+  const { id } = req.params as { id: string }
+  const f = await Formation.findOne({ _id: id, userId: req.userId })
   if (!f) return res.status(404).json({ error: 'Not found' })
 
   const session = await getStripe().checkout.sessions.create({
