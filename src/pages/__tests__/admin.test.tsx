@@ -11,7 +11,7 @@ describe('AdminPage', () => {
     const patch = vi.fn(async () => new Response('{}', { status: 200 }))
     vi.stubGlobal(
       'fetch',
-      vi.fn(async (url: string, opts?: RequestInit) => {
+      vi.fn(async (_url: string, opts?: RequestInit) => {
         if (opts?.method === 'PATCH') return patch()
         return new Response(
           JSON.stringify([
