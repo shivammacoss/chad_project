@@ -1,29 +1,26 @@
 import { Router } from 'express'
-import { Formation } from '../models/Formation.js'
+import { createReadStream } from 'node:fs'
+import { Application } from '../models/Application.js'
 import { DocumentModel } from '../models/Document.js'
 import { upload } from '../middleware/upload.js'
 import { requireAuth } from '../middleware/auth.js'
 
-// mergeParams so :id (formation id) from the parent mount is visible here
 export const documentsRouter = Router({ mergeParams: true })
 documentsRouter.use(requireAuth)
 
-async function ownedFormation(userId: string | undefined, id: string) {
-  return Formation.findOne({ _id: id, userId })
+function appId(req: { params: Record<string, string> }) {
+  return (req.params as { id: string }).id
 }
 
 documentsRouter.post('/', upload.single('file'), async (req, res) => {
-  const { id } = req.params as { id: string }
-  const formation = await ownedFormation(req.userId, id)
-  if (!formation) return res.status(404).json({ error: 'Formation not found' })
+  const application = await Application.findOne({ _id: appId(req), userId: req.userId })
+  if (!application) return res.status(404).json({ error: 'Application not found' })
   if (!req.file) return res.status(400).json({ error: 'file required (jpg/png/webp/pdf, <=10MB)' })
-  const type = ['passport', 'address_proof', 'photo', 'other'].includes(req.body?.type)
-    ? req.body.type
-    : 'other'
-
+  const type = ['passport', 'address_proof', 'photo', 'other'].includes(req.body?.type) ? req.body.type : 'other'
   const doc = await DocumentModel.create({
-    formationId: formation._id,
+    applicationId: application._id,
     userId: req.userId,
+    ownerName: req.body?.ownerName ?? '',
     type,
     fileName: req.file.originalname,
     storagePath: req.file.path,
@@ -32,9 +29,21 @@ documentsRouter.post('/', upload.single('file'), async (req, res) => {
 })
 
 documentsRouter.get('/', async (req, res) => {
-  const { id } = req.params as { id: string }
-  const formation = await ownedFormation(req.userId, id)
-  if (!formation) return res.status(404).json({ error: 'Formation not found' })
-  const docs = await DocumentModel.find({ formationId: formation._id }).sort({ uploadedAt: 1 })
+  const application = await Application.findOne({ _id: appId(req), userId: req.userId })
+  if (!application) return res.status(404).json({ error: 'Application not found' })
+  const docs = await DocumentModel.find({ applicationId: application._id }).sort({ uploadedAt: 1 })
   res.json(docs)
+})
+
+documentsRouter.get('/:docId/file', async (req, res) => {
+  const doc = await DocumentModel.findById(req.params.docId)
+  if (!doc) return res.status(404).json({ error: 'Not found' })
+  const isOwner = String(doc.userId) === req.userId
+  const isAdmin = req.userRole === 'admin'
+  if (!isOwner && !isAdmin) return res.status(404).json({ error: 'Not found' })
+  const stream = createReadStream(doc.storagePath)
+  stream.pipe(res)
+  stream.on('error', () => {
+    if (!res.headersSent) res.status(404).json({ error: 'File missing' })
+  })
 })

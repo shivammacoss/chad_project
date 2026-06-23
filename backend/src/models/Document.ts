@@ -1,8 +1,9 @@
 import mongoose, { Schema, type InferSchemaType } from 'mongoose'
 
 const documentSchema = new Schema({
-  formationId: { type: Schema.Types.ObjectId, ref: 'Formation', required: true, index: true },
+  applicationId: { type: Schema.Types.ObjectId, ref: 'Application', required: true, index: true },
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  ownerName: { type: String, default: '' },
   type: { type: String, enum: ['passport', 'address_proof', 'photo', 'other'], required: true },
   fileName: { type: String, required: true },
   storagePath: { type: String, required: true },
