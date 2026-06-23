@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { authRouter } from './routes/auth.js'
 import { formationsRouter } from './routes/formations.js'
+import { webhookRouter } from './routes/payments.js'
 
 export function createApp(): Express {
   const app = express()
@@ -14,6 +15,7 @@ export function createApp(): Express {
     }),
   )
   // Stripe webhook needs the raw body; it is mounted before express.json() in Task 8.
+  app.use('/api/webhooks/stripe', webhookRouter)
   app.use(express.json())
   app.use(cookieParser())
 
