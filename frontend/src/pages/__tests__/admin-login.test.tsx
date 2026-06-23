@@ -8,16 +8,16 @@ import { AuthProvider } from '@/store/AuthContext'
 afterEach(() => vi.restoreAllMocks())
 
 describe('AdminLoginPage', () => {
-  it('rejects a non-admin account', async () => {
+  it('rejects a non-staff account', async () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string, opts?: RequestInit) => {
       if (url.includes('/login') && opts?.method === 'POST')
-        return new Response(JSON.stringify({ id: '1', email: 'u@x.com', fullName: 'U', role: 'user' }), { status: 200 })
+        return new Response(JSON.stringify({ id: '1', email: 'u@x.com', fullName: 'U', role: 'customer' }), { status: 200 })
       return new Response('{}', { status: 401 })
     }))
     render(<MemoryRouter><AuthProvider><AdminLoginPage /></AuthProvider></MemoryRouter>)
     await userEvent.type(screen.getByPlaceholderText('Email'), 'u@x.com')
     await userEvent.type(screen.getByPlaceholderText('Password'), 'secret123')
     await userEvent.click(screen.getByRole('button', { name: /sign in/i }))
-    expect(await screen.findByText(/not an admin/i)).toBeInTheDocument()
+    expect(await screen.findByText(/not staff/i)).toBeInTheDocument()
   })
 })

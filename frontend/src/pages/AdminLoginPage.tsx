@@ -17,8 +17,8 @@ export default function AdminLoginPage() {
     e.preventDefault(); setError(''); setBusy(true)
     try {
       const u = await login(email, password)
-      if (u.role === 'admin') navigate('/admin')
-      else setError('This account is not an admin.')
+      if (u.role && !['customer', 'user'].includes(u.role)) navigate('/staff')
+      else setError('This account is not staff.')
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Login failed')
     } finally { setBusy(false) }

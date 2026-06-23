@@ -18,8 +18,10 @@ import GetStartedPage from '@/pages/GetStartedPage'
 import VerifyEmailPage from '@/pages/VerifyEmailPage'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import AdminRoute from '@/components/auth/AdminRoute'
+import StaffRoute from '@/components/auth/StaffRoute'
 import AdminLoginPage from '@/pages/AdminLoginPage'
 import AdminPage from '@/pages/AdminPage'
+import StaffPage from '@/pages/StaffPage'
 import { SERVICE_CATEGORIES } from '@/content/menu'
 
 /**
@@ -44,6 +46,9 @@ export function AppRoutes() {
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminPage />} />
+        </Route>
+        <Route element={<StaffRoute />}>
+          <Route path="/staff" element={<StaffPage />} />
         </Route>
         <Route path="/contact" element={<ContactPage />} />
 
