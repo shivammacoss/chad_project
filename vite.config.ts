@@ -19,5 +19,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    // Only the frontend app's own tests — the backend (server/) and the
+    // leftover template (rendr/) have their own runners and setups.
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['node_modules', 'server/**', 'rendr/**'],
   },
 })
