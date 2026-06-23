@@ -3,10 +3,10 @@ import { SectionLabel } from '@/components/common/SectionLabel'
 import type { Metric } from '@/types'
 
 const METRICS: Metric[] = [
-  { value: '12K+', label: 'Companies Formed', sublabel: 'And Counting' },
-  { value: '38', label: 'Countries Served', sublabel: 'Worldwide' },
-  { value: '24/7', label: 'Operator Support', sublabel: 'Always On' },
-  { value: 'Same-Day', label: 'UK Filing', sublabel: 'Companies House' },
+  { value: '240+', label: 'Countries Served', sublabel: 'Clients Worldwide' },
+  { value: '100%', label: 'Foreign Ownership', sublabel: 'In Chad' },
+  { value: '24/7', label: 'Client Support', sublabel: 'Always On' },
+  { value: 'Remote', label: 'Setup From Anywhere', sublabel: 'Fully Online' },
 ]
 
 export function MetricsSection() {
@@ -14,9 +14,9 @@ export function MetricsSection() {
     <section id="numbers" className="border-t border-frost/10 bg-navy">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
         <div className="mb-12 flex flex-col gap-4">
-          <SectionLabel index="01">By the numbers</SectionLabel>
+          <SectionLabel index="01">Global coverage</SectionLabel>
           <h2 className="max-w-2xl text-display-md font-semibold text-frost">
-            Trusted by founders building across borders.
+            We serve clients globally — all registered in Chad.
           </h2>
         </div>
 

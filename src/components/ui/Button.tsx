@@ -17,7 +17,7 @@ const baseClasses =
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-teal-electric text-frost shadow-lg shadow-teal-electric/25 hover:bg-teal-electric/90 active:bg-teal-electric/80',
+    'bg-teal-electric text-white shadow-lg shadow-teal-electric/25 hover:bg-teal-electric/90 active:bg-teal-electric/80',
   outline:
     'border border-teal-electric/40 text-teal-electric hover:bg-teal-electric/10 active:bg-teal-electric/[0.16]',
   ghost: 'text-frost/70 hover:bg-steel hover:text-frost active:bg-steel/80',

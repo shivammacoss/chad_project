@@ -129,9 +129,9 @@ export default function DashboardPage() {
                   const isSelected = selected?.id === node.id
                   const fill =
                     node.status === 'degraded'
-                      ? '#F59E0B'
+                      ? '#FECB00'
                       : node.status === 'online'
-                        ? '#1ED760'
+                        ? '#002664'
                         : '#9AA3AF'
                   return (
                     <g

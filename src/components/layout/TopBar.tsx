@@ -96,12 +96,12 @@ const CONTACTS = [
 /** Slim utility bar above the navbar: reviews + contact channels + client login. */
 export function TopBar() {
   return (
-    <div className="fixed inset-x-0 top-0 z-50 h-10 bg-[#0B0E13] text-white">
+    <div className="fixed inset-x-0 top-0 z-50 h-12 bg-chad-blue text-white">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 sm:px-8">
         {/* Reviews */}
         <div className="flex items-center gap-2">
           <span className="font-display text-sm font-bold">500+</span>
-          <span className="flex items-center gap-0.5 text-amber-400">
+          <span className="flex items-center gap-0.5 text-chad-yellow">
             {Array.from({ length: 5 }).map((_, i) => (
               <StarIcon key={i} className="h-3.5 w-3.5" />
             ))}
@@ -130,7 +130,7 @@ export function TopBar() {
 
           <Link
             to="/dashboard"
-            className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-3.5 py-1.5 font-display text-sm font-semibold text-white transition-colors hover:bg-[#1D4ED8]"
+            className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-chad-yellow px-3.5 py-1.5 font-display text-sm font-semibold text-chad-blue transition-colors hover:bg-chad-yellow/90"
           >
             <UserIcon className="h-4 w-4" />
             Client Login

@@ -7,15 +7,15 @@ const HERO_IMAGE =
 const FEATURES = [
   {
     title: 'Non-Resident Friendly',
-    text: 'Same process and pricing wherever in the world you happen to live.',
+    text: 'The same process and pricing to register in Chad, wherever in the world you live.',
   },
   {
-    title: 'Same-Day Filing',
-    text: 'UK companies filed directly to Companies House, often the same day.',
+    title: 'Fast Chad Filing',
+    text: 'Company formation filed directly with the Chad authorities, handled end to end.',
   },
   {
     title: 'Registered Agent Included',
-    text: 'Registered office and agent services bundled with your package.',
+    text: 'Registered office and agent services in Chad bundled with your package.',
   },
 ]
 
@@ -43,14 +43,9 @@ export function HeroSection() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E13]/85 via-[#0B0E13]/25 to-transparent" />
 
-          <div className="absolute inset-0 flex flex-col justify-between p-7 sm:p-10 lg:p-14">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 font-body text-xs font-medium text-white backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-teal-electric" />
-              Registered Companies House agent
-            </span>
-
+          <div className="absolute inset-0 flex flex-col justify-end p-7 pb-16 sm:p-10 sm:pb-24 lg:p-14 lg:pb-28">
             <h1 className="max-w-2xl font-display text-display-xl font-bold text-white">
-              The gate to your global business.
+              The gateway to business in Chad.
             </h1>
           </div>
         </div>
@@ -84,7 +79,7 @@ export function HeroSection() {
             <Button
               variant="primary"
               size="lg"
-              className="w-full bg-[#0E1116] text-white shadow-none hover:bg-[#0E1116]/90 sm:w-auto"
+              className="w-full bg-chad-blue text-white shadow-none hover:bg-[#013a87] sm:w-auto"
               onClick={() => navigate('/contact')}
             >
               Get started now

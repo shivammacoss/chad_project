@@ -2,62 +2,57 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { cn } from '@/lib/utils'
 
-interface Testimonial {
-  quote: string
-  name: string
-  role: string
+interface Insight {
+  title: string
+  category: string
+  meta: string
   tone: 'brand' | 'dark'
 }
 
 /**
- * Placeholder testimonials — swap with real client quotes when available.
+ * Latest insights — expert guides on doing business in Chad.
+ * (Carousel component reused from the original testimonials slider.)
  */
-const TESTIMONIALS: Testimonial[] = [
+const INSIGHTS: Insight[] = [
   {
-    quote:
-      'Setting up our UK company from abroad was effortless — filed the same day with every document handled for us.',
-    name: 'Eric Rosenberg',
-    role: 'Founder, Northwind',
+    title: 'How to register a company in Chad as a non-resident',
+    category: 'Company Formation',
+    meta: 'Jun 2026 · 5 min read',
     tone: 'brand',
   },
   {
-    quote:
-      'The virtual office and mail handling made us look established from day one. Support has been outstanding throughout.',
-    name: 'Mike Slater',
-    role: 'Director, Slater & Co',
+    title: 'Why a Chad virtual office builds instant credibility',
+    category: 'Virtual Offices',
+    meta: 'Jun 2026 · 4 min read',
     tone: 'dark',
   },
   {
-    quote:
-      'Incorporation, registered agent and a bank introduction in one place. Honestly the smoothest launch we have had.',
-    name: 'Zara Winters',
-    role: 'CEO, Vantage Labs',
+    title: 'Chad International Free Zone: tax advantages explained',
+    category: 'Free Zone',
+    meta: 'May 2026 · 6 min read',
     tone: 'brand',
   },
   {
-    quote:
-      'As non-residents we expected friction. Instead the process and pricing were exactly the same — no surprises.',
-    name: 'Priya Nair',
-    role: 'Co-Founder, Lumen',
+    title: 'Staying compliant: statutory filings for Chad companies',
+    category: 'Compliance',
+    meta: 'May 2026 · 4 min read',
     tone: 'dark',
   },
   {
-    quote:
-      'Their back-office team keeps our compliance and data spotless so we can focus entirely on growth.',
-    name: 'Daniel Okafor',
-    role: 'COO, Bridgepoint',
+    title: 'Opening a business bank account from abroad',
+    category: 'Banking',
+    meta: 'Apr 2026 · 5 min read',
     tone: 'brand',
   },
   {
-    quote:
-      'Clear fixed fees and a real team that answers quickly. Exactly what a growing business needs.',
-    name: 'Hannah Beck',
-    role: 'Head of Ops, Frame',
+    title: '5 steps to launch your business in Chad remotely',
+    category: 'Guides',
+    meta: 'Apr 2026 · 3 min read',
     tone: 'dark',
   },
 ]
 
-const COUNT = TESTIMONIALS.length
+const COUNT = INSIGHTS.length
 const AUTOPLAY_MS = 5000
 
 function getPerView(): number {
@@ -126,16 +121,16 @@ export function TestimonialsSection() {
       <div className="mx-auto flex max-w-7xl flex-col gap-12 px-5 sm:px-8">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-5">
-            <SectionLabel>Honest feedback</SectionLabel>
+            <SectionLabel>Latest insights</SectionLabel>
             <h2 className="max-w-xl font-display text-display-lg font-bold text-frost">
-              Our customers are our best marketers
+              Insights & guides to help you launch in Chad
             </h2>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               type="button"
-              aria-label="Previous testimonial"
+              aria-label="Previous insight"
               onClick={prev}
               className="flex h-12 w-12 items-center justify-center rounded-full border border-frost/15 text-frost transition-colors hover:bg-steel active:scale-95"
             >
@@ -143,9 +138,9 @@ export function TestimonialsSection() {
             </button>
             <button
               type="button"
-              aria-label="Next testimonial"
+              aria-label="Next insight"
               onClick={next}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0E1116] text-white transition-colors hover:bg-[#14181F] active:scale-95"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-chad-blue text-white transition-colors hover:bg-[#013a87] active:scale-95"
             >
               <ArrowIcon dir="right" />
             </button>
@@ -157,7 +152,7 @@ export function TestimonialsSection() {
           className="overflow-hidden"
           role="region"
           aria-roledescription="carousel"
-          aria-label="Customer testimonials"
+          aria-label="Latest insights"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
@@ -169,40 +164,35 @@ export function TestimonialsSection() {
             className="flex touch-pan-y transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{ transform: `translateX(-${index * (100 / perView)}%)` }}
           >
-            {TESTIMONIALS.map((t, i) => (
+            {INSIGHTS.map((item, i) => (
               <div
-                key={t.name}
+                key={item.title}
                 className="w-full shrink-0 grow-0 basis-full px-2.5 sm:basis-1/2 lg:basis-1/3"
                 aria-hidden={i < index || i >= index + perView}
               >
                 <article
                   className={cn(
                     'flex h-full select-none flex-col justify-between gap-8 rounded-[1.75rem] p-7 sm:p-8',
-                    t.tone === 'brand' ? 'bg-teal-electric text-frost' : 'bg-[#0E1116] text-white',
+                    item.tone === 'brand' ? 'bg-chad-red text-white' : 'bg-chad-blue text-white',
                   )}
                 >
-                  <p
-                    className={cn(
-                      'font-display text-lg font-semibold leading-snug',
-                      t.tone === 'brand' ? 'text-frost' : 'text-white',
-                    )}
-                  >
-                    “{t.quote}”
-                  </p>
+                  <h3 className="font-display text-lg font-semibold leading-snug text-white">
+                    {item.title}
+                  </h3>
 
                   <div
                     className={cn(
                       'flex items-center gap-3 rounded-2xl p-2.5',
-                      t.tone === 'brand' ? 'bg-white/80' : 'bg-white/10',
+                      item.tone === 'brand' ? 'bg-white/80' : 'bg-white/10',
                     )}
                   >
                     <span
                       className={cn(
                         'flex h-11 w-11 items-center justify-center rounded-xl font-display text-sm font-bold',
-                        t.tone === 'brand' ? 'bg-frost text-white' : 'bg-teal-electric text-frost',
+                        item.tone === 'brand' ? 'bg-frost text-white' : 'bg-chad-yellow text-chad-blue',
                       )}
                     >
-                      {t.name
+                      {item.category
                         .split(' ')
                         .map((p) => p[0])
                         .join('')
@@ -212,18 +202,18 @@ export function TestimonialsSection() {
                       <p
                         className={cn(
                           'font-display text-sm font-semibold',
-                          t.tone === 'brand' ? 'text-frost' : 'text-white',
+                          item.tone === 'brand' ? 'text-frost' : 'text-white',
                         )}
                       >
-                        {t.name}
+                        {item.category}
                       </p>
                       <p
                         className={cn(
                           'font-body text-xs',
-                          t.tone === 'brand' ? 'text-frost/60' : 'text-white/60',
+                          item.tone === 'brand' ? 'text-frost/60' : 'text-white/60',
                         )}
                       >
-                        {t.role}
+                        {item.meta}
                       </p>
                     </div>
                   </div>

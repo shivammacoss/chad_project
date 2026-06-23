@@ -8,7 +8,7 @@ export interface SectionLabelProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * Mono, uppercase eyebrow label used above section headings.
- * Pairs a short teal rule with optional index + label text.
+ * Pairs a short Chad-flag tricolor rule with optional index + label text.
  */
 export function SectionLabel({ index, className, children, ...props }: SectionLabelProps) {
   return (
@@ -19,7 +19,11 @@ export function SectionLabel({ index, className, children, ...props }: SectionLa
       )}
       {...props}
     >
-      <span aria-hidden="true" className="h-px w-8 bg-teal-electric/50" />
+      <span aria-hidden="true" className="flex h-1 w-10 overflow-hidden rounded-full">
+        <span className="flex-1 bg-chad-blue" />
+        <span className="flex-1 bg-chad-yellow" />
+        <span className="flex-1 bg-chad-red" />
+      </span>
       {index && <span className="text-teal-electric/60">{index}</span>}
       <span>{children}</span>
     </div>
