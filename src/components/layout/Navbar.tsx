@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { MENU } from '@/content/menu'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/store/AuthContext'
 
 /** Brand logo. */
 function Logo({ onClick }: { onClick?: () => void }) {
@@ -42,6 +43,7 @@ export function Navbar() {
   const [mobileCat, setMobileCat] = useState<string | null>(null)
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     if (isDesktop && mobileOpen) setMobileOpen(false)
@@ -163,12 +165,30 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-2 lg:flex">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
-            Sign In
-          </Button>
-          <Button variant="primary" size="sm" onClick={() => navigate('/contact')}>
-            Get Started
-          </Button>
+          {user ? (
+            <>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
+                Dashboard
+              </Button>
+              {user.role === 'admin' && (
+                <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
+                  Admin
+                </Button>
+              )}
+              <Button variant="primary" size="sm" onClick={() => logout()}>
+                Log out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
+                Log in
+              </Button>
+              <Button variant="primary" size="sm" onClick={() => navigate('/contact')}>
+                Get Started
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -256,28 +276,70 @@ export function Navbar() {
           })}
 
           <div className="mt-4 flex flex-col gap-2 pt-2">
-            <Button
-              variant="outline"
-              size="md"
-              fullWidth
-              onClick={() => {
-                closeAll()
-                navigate('/dashboard')
-              }}
-            >
-              Sign In
-            </Button>
-            <Button
-              variant="primary"
-              size="md"
-              fullWidth
-              onClick={() => {
-                closeAll()
-                navigate('/contact')
-              }}
-            >
-              Get Started
-            </Button>
+            {user ? (
+              <>
+                <Button
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    closeAll()
+                    navigate('/dashboard')
+                  }}
+                >
+                  Dashboard
+                </Button>
+                {user.role === 'admin' && (
+                  <Button
+                    variant="outline"
+                    size="md"
+                    fullWidth
+                    onClick={() => {
+                      closeAll()
+                      navigate('/admin')
+                    }}
+                  >
+                    Admin
+                  </Button>
+                )}
+                <Button
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    closeAll()
+                    logout()
+                  }}
+                >
+                  Log out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    closeAll()
+                    navigate('/login')
+                  }}
+                >
+                  Log in
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    closeAll()
+                    navigate('/contact')
+                  }}
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
