@@ -12,6 +12,7 @@ import ChadFreeZonePage from '@/pages/ChadFreeZonePage'
 import LoginPage from '@/pages/LoginPage'
 import SignupPage from '@/pages/SignupPage'
 import VerifyEmailPage from '@/pages/VerifyEmailPage'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import { SERVICE_CATEGORIES } from '@/content/menu'
 
 /**
@@ -26,7 +27,9 @@ export function AppRoutes() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
         <Route path="/contact" element={<ContactPage />} />
 
         {/* Generated category overviews + service sub-pages */}
