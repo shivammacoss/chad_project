@@ -3,6 +3,7 @@ import MainLayout from '@/components/layout/MainLayout'
 import HomePage from '@/pages/HomePage'
 import DashboardPage from '@/pages/DashboardPage'
 import FormationWizardPage from '@/pages/FormationWizardPage'
+import FormationDetailPage from '@/pages/FormationDetailPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import ServicePage from '@/pages/ServicePage'
 import CategoryPage from '@/pages/CategoryPage'
@@ -31,6 +32,7 @@ export function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/formations/new" element={<FormationWizardPage />} />
+          <Route path="/formations/:id" element={<FormationDetailPage />} />
         </Route>
         <Route path="/contact" element={<ContactPage />} />
 
