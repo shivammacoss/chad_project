@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { ENTITY_TYPES } from '@/content/formations'
@@ -15,10 +15,10 @@ export default function AdminPage() {
   const [items, setItems] = useState<Formation[]>([])
   const [busyId, setBusyId] = useState<string | null>(null)
 
-  async function load() {
+  const load = useCallback(async () => {
     setItems(await apiGet<Formation[]>('/api/admin/formations'))
-  }
-  useEffect(() => { load() }, [])
+  }, [])
+  useEffect(() => { load() }, [load])
 
   async function advance(f: Formation, status: string) {
     setBusyId(f._id)

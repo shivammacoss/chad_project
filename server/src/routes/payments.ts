@@ -13,6 +13,8 @@ checkoutRouter.post('/', async (req, res) => {
   const f = await Formation.findOne({ _id: id, userId: req.userId })
   if (!f) return res.status(404).json({ error: 'Not found' })
 
+  const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:5173'
+
   const session = await getStripe().checkout.sessions.create({
     mode: 'payment',
     line_items: [
@@ -25,9 +27,13 @@ checkoutRouter.post('/', async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: `${process.env.CLIENT_URL}/dashboard?paid=1`,
-    cancel_url: `${process.env.CLIENT_URL}/dashboard?canceled=1`,
+    success_url: `${clientUrl}/dashboard?paid=1`,
+    cancel_url: `${clientUrl}/dashboard?canceled=1`,
   })
+
+  if (!session.url) {
+    return res.status(502).json({ error: 'No checkout URL returned by Stripe' })
+  }
 
   f.stripeSessionId = session.id
   pushStatus(f, 'payment_pending')

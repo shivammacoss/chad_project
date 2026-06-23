@@ -3,7 +3,6 @@ import request from 'supertest'
 import { createApp } from '../app.js'
 import { __setTransport } from '../lib/email.js'
 import { User } from '../models/User.js'
-import { hashToken } from '../lib/auth.js'
 
 const app = createApp()
 let lastLink = ''

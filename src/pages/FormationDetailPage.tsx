@@ -9,12 +9,20 @@ export default function FormationDetailPage() {
   const { id } = useParams()
   const [f, setF] = useState<Formation | null>(null)
   const [docs, setDocs] = useState<DocItem[]>([])
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     if (!id) return
-    apiGet<Formation>(`/api/formations/${id}`).then(setF).catch(() => setF(null))
+    apiGet<Formation>(`/api/formations/${id}`).then(setF).catch(() => { setF(null); setFailed(true) })
     apiGet<DocItem[]>(`/api/formations/${id}/documents`).then(setDocs).catch(() => setDocs([]))
   }, [id])
+
+  if (failed) return (
+    <div className="min-h-screen bg-navy pt-24 text-center">
+      <p className="text-frost/60">Couldn't load this formation.</p>
+      <Link to="/dashboard" className="text-teal-electric">Back to dashboard</Link>
+    </div>
+  )
 
   if (!f) return <div className="min-h-screen bg-navy pt-24 text-center text-frost/60">Loading…</div>
 

@@ -17,6 +17,7 @@ export default function DashboardPage() {
   useEffect(() => {
     apiGet<Formation[]>('/api/formations')
       .then(setItems)
+      .catch(() => setItems([]))
       .finally(() => setLoading(false))
   }, [])
 

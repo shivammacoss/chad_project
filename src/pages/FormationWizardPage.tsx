@@ -22,6 +22,7 @@ export default function FormationWizardPage() {
   const [formation, setFormation] = useState<Formation | null>(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [uploaded, setUploaded] = useState<Record<string, 'ok' | 'error'>>({})
 
   async function createFormation() {
     setError(''); setBusy(true)
@@ -39,7 +40,13 @@ export default function FormationWizardPage() {
     const form = new FormData()
     form.append('type', type)
     form.append('file', file)
-    await apiUpload(`/api/formations/${formation._id}/documents`, form)
+    try {
+      await apiUpload(`/api/formations/${formation._id}/documents`, form)
+      setUploaded((prev) => ({ ...prev, [type]: 'ok' }))
+    } catch {
+      setUploaded((prev) => ({ ...prev, [type]: 'error' }))
+      setError('Upload failed for ' + type + ' — check file type (jpg/png/webp/pdf) and size (<=10MB).')
+    }
   }
 
   async function payAndSubmit() {
@@ -47,6 +54,11 @@ export default function FormationWizardPage() {
     setBusy(true)
     try {
       const { url } = await apiPost<{ url: string }>(`/api/formations/${formation._id}/checkout`)
+      if (!url) {
+        setError('Checkout failed — no redirect URL returned.')
+        setBusy(false)
+        return
+      }
       window.location.href = url
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Checkout failed')
@@ -93,9 +105,15 @@ export default function FormationWizardPage() {
                   className="text-sm text-frost/70"
                   onChange={(e) => e.target.files?.[0] && uploadDoc(d.type, e.target.files[0])}
                 />
+                {uploaded[d.type] === 'ok' && <span className="text-xs text-teal-electric">✓ Uploaded</span>}
+                {uploaded[d.type] === 'error' && <span className="text-xs text-indigo-pulse">Upload failed</span>}
               </label>
             ))}
+            {error && <p className="text-sm text-indigo-pulse">{error}</p>}
             <Button onClick={() => setStep(3)}>Continue to payment</Button>
+            {Object.keys(uploaded).length === 0 && (
+              <p className="text-xs text-frost/55">Tip: upload documents before paying.</p>
+            )}
           </div>
         )}
 
