@@ -11,7 +11,7 @@ interface ServicePageProps {
 }
 
 const TRUST = [
-  'Registered Companies House agent',
+  'Registered company-formation agent in Chad',
   'Same process & pricing for non-residents',
   'Secure, confidential handling',
 ]

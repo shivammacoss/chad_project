@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1500&q=80'
+const HERO_IMAGE = '/hero_banner.png'
 
 const FEATURES = [
   {
@@ -41,12 +40,6 @@ export function HeroSection() {
             loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E13]/85 via-[#0B0E13]/25 to-transparent" />
-
-          <div className="absolute inset-0 flex flex-col justify-end p-7 pb-16 sm:p-10 sm:pb-24 lg:p-14 lg:pb-28">
-            <h1 className="max-w-2xl font-display text-display-xl font-bold text-white">
-              The gateway to business in Chad.
-            </h1>
-          </div>
         </div>
 
         {/* Overlapping white card: 3 features + CTA strip */}

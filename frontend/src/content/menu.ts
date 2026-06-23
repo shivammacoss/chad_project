@@ -47,27 +47,27 @@ const CONTACT = '/contact'
 export const MENU: MenuCategory[] = [
   {
     id: 'virtual-offices',
-    label: 'Virtual Offices',
+    label: 'Office Solutions',
     overviewPath: '/virtual-offices',
-    blurb: 'Prestigious business addresses and mail handling across the UK, USA and Canada.',
+    blurb: 'Prestigious Chad business addresses with secure mail handling and forwarding.',
     pages: [
       {
-        id: 'uk-virtual-office',
-        path: '/virtual-offices/uk',
-        menuLabel: 'UK Virtual Office',
-        heroTitle: 'A Prestigious UK Business Address — Without the Overheads',
+        id: 'chad-virtual-office',
+        path: '/virtual-offices/chad',
+        menuLabel: 'Chad Virtual Office',
+        heroTitle: 'A Prestigious Chad Business Address — Without the Overheads',
         intro:
-          "Establish an instant professional presence in the UK. Use our address as your registered office and director's service address, with secure mail handling and forwarding worldwide.",
+          "Establish an instant professional presence in Chad. Use our address as your registered office and director's service address, with secure mail handling and forwarding worldwide.",
         sections: [
           {
-            title: 'Registered Office Address',
+            title: 'Prestigious Chad Address',
             description:
-              "Use our prestigious UK address as your company's official registered office on the public record.",
+              "Use our prestigious Chad address as your company's official business address.",
           },
           {
             title: "Director's Service Address",
             description:
-              "Keep your home address private with a compliant director's service address.",
+              "Keep your home address private with a compliant director's service address in Chad.",
           },
           {
             title: 'Mail Scanning & Forwarding',
@@ -75,61 +75,56 @@ export const MENU: MenuCategory[] = [
           },
           {
             title: 'Non-Resident Friendly',
-            description: 'Ideal for non-residents registering a UK company from anywhere in the world.',
+            description: 'Ideal for non-residents registering a Chad company from anywhere in the world.',
           },
         ],
-        cta: 'Get Your UK Address Today',
+        cta: 'Get Your Chad Address Today',
       },
       {
-        id: 'usa-virtual-office',
-        path: '/virtual-offices/usa',
-        menuLabel: 'USA Virtual Office',
-        heroTitle: 'A Professional US Business Presence',
+        id: 'registered-office-address',
+        path: '/virtual-offices/registered-office',
+        menuLabel: 'Registered Office Address',
+        heroTitle: 'Your Official Registered Office in Chad',
         intro:
-          'Build credibility in the United States with a prestigious US address, registered-agent service, and full mail handling.',
+          'A compliant registered office and agent address in Chad, kept on the official record so your company stays in good standing.',
         sections: [
           {
-            title: 'US Address Only',
-            description:
-              'Registered agent / virtual office and mail handling, without forming an LLC.',
+            title: 'Official Registered Office',
+            description: "Our Chad address listed as your company's official registered office.",
           },
           {
-            title: 'US Address + LLC Incorporation',
-            description: 'Combine your US address with full LLC incorporation in one package.',
+            title: 'Registered Agent Included',
+            description: 'Registered-agent service to receive official correspondence on your behalf.',
           },
           {
-            title: 'Mail Forwarding',
-            description: 'Reliable scanning and forwarding of your US mail to anywhere in the world.',
-          },
-          {
-            title: 'Nationwide State Coverage',
-            description: 'Address and registered-agent coverage across the United States.',
+            title: 'Privacy Protected',
+            description: 'Keep your personal address off the public record.',
           },
         ],
-        cta: 'Get Your US Address',
+        cta: 'Get a Registered Office',
       },
       {
-        id: 'canada-virtual-office',
-        path: '/virtual-offices/canada',
-        menuLabel: 'Canada Virtual Office',
-        heroTitle: 'Your Canadian Business Address & Mail Handling',
+        id: 'mail-handling',
+        path: '/virtual-offices/mail-handling',
+        menuLabel: 'Mail Handling & Forwarding',
+        heroTitle: 'Never Miss Important Post',
         intro:
-          'A private, secure Canadian address for both personal and business use, with reliable mail forwarding.',
+          'Reliable scanning and forwarding of your Chad business mail to anywhere in the world.',
         sections: [
           {
-            title: 'Virtual Address with Mail Handling',
-            description: 'A Canadian address for personal and business use with full mail handling.',
+            title: 'Same-Day Scanning',
+            description: 'Your post scanned and sent to your inbox the same day.',
           },
           {
-            title: 'Registered Agent Support',
-            description: 'Registered-agent service to support your Canadian presence.',
+            title: 'Worldwide Forwarding',
+            description: 'Physical mail forwarded to wherever you are based.',
           },
           {
-            title: 'Mail Scanning',
-            description: 'Same-day scanning so you never miss important correspondence.',
+            title: 'Secure & Confidential',
+            description: 'Confidential, secure handling of every item.',
           },
         ],
-        cta: 'Get Your Canada Address',
+        cta: 'Set Up Mail Handling',
       },
       {
         id: 'shared-meeting-spaces',
@@ -137,7 +132,7 @@ export const MENU: MenuCategory[] = [
         menuLabel: 'Shared & Meeting Spaces',
         heroTitle: 'Professional Spaces When You Need Them',
         intro:
-          'Access shared offices and meeting rooms on flexible terms to complement your virtual office.',
+          'Access shared offices and meeting rooms in Chad on flexible terms to complement your virtual office.',
         sections: [
           { title: 'Hot Desks', description: 'Flexible desk space whenever you need a place to work.' },
           { title: 'Meeting Rooms', description: 'Professional meeting rooms booked by the hour or day.' },
@@ -149,88 +144,87 @@ export const MENU: MenuCategory[] = [
   },
   {
     id: 'company-incorporation',
-    label: 'Company Incorporation',
+    label: 'Company Formation',
     overviewPath: '/incorporation',
-    blurb: 'Form companies in the UK, USA and Canada — residents and non-residents welcome.',
+    blurb: 'Form your company in Chad — residents and non-residents welcome.',
     pages: [
       {
-        id: 'uk-limited-company',
-        path: '/incorporation/uk-limited-company',
-        menuLabel: 'UK Limited Company',
-        heroTitle: 'Form Your UK Limited Company — Same Day',
+        id: 'chad-company-formation',
+        path: '/incorporation/chad-company',
+        menuLabel: 'Chad Company Formation',
+        heroTitle: 'Form Your Chad Company — Fully Managed',
         intro:
-          'Fully managed UK Ltd formation with all documents handled for you. Same pricing for UK and non-UK residents, no hidden costs.',
+          'Fully managed company formation in Chad with all documents handled for you. Same pricing for residents and non-residents, no hidden costs.',
         sections: [
           {
             title: 'What You Receive',
             description:
-              'Certificate of Incorporation, Memorandum & Articles, and Share Certificates.',
+              'Certificate of Incorporation, company statutes, and share documentation.',
           },
           {
-            title: 'Same-Day Filing to Companies House',
-            description: 'We file directly to Companies House, often the very same day.',
+            title: 'Filed With the Chad Authorities',
+            description: 'We prepare and file your registration directly with the Chad authorities.',
           },
           {
             title: 'Non-Resident Friendly',
-            description: 'Identical process and pricing for UK and non-UK residents.',
+            description: 'Identical process and pricing for residents and non-residents.',
           },
         ],
-        cta: 'Start Your UK Company',
+        cta: 'Start Your Chad Company',
       },
       {
-        id: 'usa-llc',
-        path: '/incorporation/usa-llc',
-        menuLabel: 'USA LLC / Company',
-        heroTitle: 'Incorporate in the United States',
+        id: 'chad-free-zone-company',
+        path: '/incorporation/free-zone-company',
+        menuLabel: 'Free Zone Company',
+        heroTitle: 'Incorporate in the Chad International Free Zone',
         intro:
-          'LLC and corporation formation across all states, with registered-agent service included.',
+          'Set up a free-zone company in Chad with 100% foreign ownership, tax advantages, and a fully remote process.',
         sections: [
           {
-            title: 'LLC + Registered Agent',
-            description:
-              'LLC incorporation with registered agent / virtual office and mail handling.',
+            title: '100% Foreign Ownership',
+            description: 'Own your company outright with no local shareholder requirement.',
           },
           {
-            title: 'LLC Using Your Own Address',
-            description: 'LLC incorporation using your own address, with no agent or mail service.',
+            title: 'Tax-Efficient Structure',
+            description: 'Benefit from the free zone’s attractive tax framework.',
           },
           {
-            title: 'EIN Number Application',
-            description: 'We obtain your EIN (federal tax number) for US banking and tax.',
+            title: 'Fully Remote Setup',
+            description: 'Incorporate entirely online from anywhere in the world.',
           },
         ],
-        cta: 'Form Your US Company',
+        cta: 'Set Up a Free Zone Company',
       },
       {
-        id: 'canada-incorporation',
-        path: '/incorporation/canada',
-        menuLabel: 'Canada Company',
-        heroTitle: 'Incorporate Your Business in Canada',
+        id: 'company-name-reservation',
+        path: '/incorporation/name-reservation',
+        menuLabel: 'Company Name Reservation',
+        heroTitle: 'Reserve Your Chad Company Name',
         intro:
-          'Federal and provincial incorporation with registered-agent support for residents and non-residents.',
+          'Secure your preferred company name in Chad before you incorporate, with an availability check handled for you.',
         sections: [
           {
-            title: 'Free LLC Incorporation Option',
-            description: 'A no-cost incorporation option to get you started.',
+            title: 'Availability Check',
+            description: 'We confirm your chosen name is available to register in Chad.',
           },
           {
-            title: 'Incorporation Using Your Own Address',
-            description: 'Incorporate using your own Canadian address.',
+            title: 'Name Reservation',
+            description: 'Reserve your name so it’s ready when you incorporate.',
           },
           {
-            title: 'Company Incorporation & Registered Agents',
-            description: 'Canadian company incorporation with registered-agent support.',
+            title: 'Guidance Included',
+            description: 'Advice on naming rules and requirements in Chad.',
           },
         ],
-        cta: 'Incorporate in Canada',
+        cta: 'Reserve My Name',
       },
       {
         id: 'non-resident-incorporation',
         path: '/incorporation/non-resident',
         menuLabel: 'Non-Resident Incorporation',
-        heroTitle: 'Start Your Company From Anywhere in the World',
+        heroTitle: 'Register Your Chad Company From Anywhere in the World',
         intro:
-          'We handle the paperwork, address requirements, and filings so you can incorporate remotely with confidence.',
+          'We handle the paperwork, address requirements, and filings so you can incorporate in Chad remotely with confidence.',
         sections: [
           {
             title: 'Required Documents',
@@ -238,7 +232,7 @@ export const MENU: MenuCategory[] = [
           },
           {
             title: 'Address Solutions',
-            description: 'Registered office and service-address solutions included.',
+            description: 'Registered office and service-address solutions in Chad included.',
           },
           {
             title: 'Same Process & Pricing as Residents',
@@ -251,22 +245,22 @@ export const MENU: MenuCategory[] = [
   },
   {
     id: 'company-services',
-    label: 'Company Services',
+    label: 'Corporate Services',
     overviewPath: '/company-services',
     blurb: 'Compliance, secretarial, branding and banking — everything to run your company.',
     columns: 2,
     pages: [
       {
         id: 'confirmation-statement',
-        path: '/company-services/confirmation-statement',
-        menuLabel: 'Confirmation Statement Filing',
-        heroTitle: 'Keep Your Company Compliant',
+        path: '/company-services/annual-compliance',
+        menuLabel: 'Annual Compliance Filing',
+        heroTitle: 'Keep Your Chad Company Compliant',
         intro:
-          'Accurate, on-time confirmation statement submission to keep your records current with Companies House.',
+          'Accurate, on-time annual filings to keep your records current with the Chad company registry.',
         sections: [
           {
             title: "What's Included",
-            description: 'Full preparation and filing of your annual confirmation statement.',
+            description: 'Full preparation and filing of your annual compliance returns.',
           },
           {
             title: 'Why It Matters',
@@ -274,7 +268,7 @@ export const MENU: MenuCategory[] = [
           },
           { title: 'Low Fixed Fee', description: 'A simple, transparent price with no surprises.' },
         ],
-        cta: 'File My Confirmation Statement',
+        cta: 'File My Annual Return',
       },
       {
         id: 'company-secretarial',
@@ -282,7 +276,7 @@ export const MENU: MenuCategory[] = [
         menuLabel: 'Company Secretarial Services',
         heroTitle: 'Ongoing Compliance, Handled for You',
         intro:
-          'As a registered Companies House agent, we manage your statutory and secretarial requirements year-round.',
+          'As a registered company-formation agent in Chad, we manage your statutory and secretarial requirements year-round.',
         sections: [
           {
             title: 'Statutory Filings',
@@ -305,15 +299,15 @@ export const MENU: MenuCategory[] = [
         menuLabel: 'Company Dissolution',
         heroTitle: 'Close Your Company — Hassle-Free',
         intro:
-          'A low-cost service to dissolve your UK-registered company, from application to Companies House communication.',
+          'A low-cost service to dissolve your Chad-registered company, from application to registry communication.',
         sections: [
           {
             title: 'Dissolution Application',
             description: 'We prepare and submit your dissolution application.',
           },
           {
-            title: 'Companies House Handling',
-            description: 'We manage all communication with Companies House.',
+            title: 'Registry Handling',
+            description: 'We manage all communication with the Chad company registry.',
           },
           {
             title: 'What to Expect',
@@ -375,7 +369,7 @@ export const MENU: MenuCategory[] = [
   },
   {
     id: 'communication',
-    label: 'Communication',
+    label: 'Telecoms',
     overviewPath: '/communication',
     blurb: 'Call answering, landline and virtual mobile numbers for a professional image.',
     pages: [
@@ -402,19 +396,19 @@ export const MENU: MenuCategory[] = [
       {
         id: 'business-voip',
         path: '/communication/voip-numbers',
-        menuLabel: 'Business VoIP Numbers',
-        heroTitle: 'UK, Ireland & USA Landline Numbers',
+        menuLabel: 'Business Phone Numbers',
+        heroTitle: 'Professional Business Phone Numbers',
         intro:
-          'Get a professional landline number you can use to make and receive calls from anywhere in the world.',
+          'Get a professional business phone number you can use to make and receive calls from anywhere in the world.',
         sections: [
           {
-            title: 'UK / Ireland / USA Numbers',
-            description: 'Choose a local landline number for your market.',
+            title: 'Local & International Numbers',
+            description: 'Choose a professional number that suits your market.',
           },
           { title: 'Use Anywhere', description: 'Make and receive calls from anywhere in the world.' },
           { title: 'Mobile App Access', description: 'Manage your calls from a simple mobile app.' },
         ],
-        cta: 'Get a VoIP Number',
+        cta: 'Get a Business Number',
       },
       {
         id: 'virtual-mobile',
@@ -440,7 +434,7 @@ export const MENU: MenuCategory[] = [
   },
   {
     id: 'back-office',
-    label: 'Back Office Solutions',
+    label: 'Back Office Support',
     overviewPath: '/back-office',
     blurb: 'Data, documents, transcription and quality assurance — handled with precision.',
     columns: 2,
@@ -595,7 +589,7 @@ export const MENU: MenuCategory[] = [
   },
   {
     id: 'more',
-    label: 'More',
+    label: 'Resources',
     blurb: 'Insights, partnerships and our flagship Chad International Free Zone.',
     custom: true,
     pages: [

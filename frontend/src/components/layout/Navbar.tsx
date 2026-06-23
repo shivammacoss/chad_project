@@ -78,6 +78,15 @@ export function Navbar() {
 
         {/* Desktop navigation */}
         <ul className="hidden items-center gap-1 lg:flex">
+          <li>
+            <Link
+              to="/"
+              onClick={() => setOpenId(null)}
+              className="flex items-center whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.9rem] font-semibold text-frost/90 transition-colors hover:text-frost"
+            >
+              Home
+            </Link>
+          </li>
           {MENU.map((cat) => {
             const isOpen = openId === cat.id
             return (
@@ -93,7 +102,7 @@ export function Navbar() {
                     onClick={() => setOpenId(null)}
                     aria-haspopup="true"
                     aria-expanded={isOpen}
-                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.8rem] font-semibold text-frost/90 transition-colors hover:text-frost"
+                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.9rem] font-semibold text-frost/90 transition-colors hover:text-frost"
                   >
                     {cat.label}
                     <Chevron open={isOpen} />
@@ -104,7 +113,7 @@ export function Navbar() {
                     aria-haspopup="true"
                     aria-expanded={isOpen}
                     onClick={() => setOpenId((id) => (id === cat.id ? null : cat.id))}
-                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.8rem] font-semibold text-frost/90 transition-colors hover:text-frost"
+                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.9rem] font-semibold text-frost/90 transition-colors hover:text-frost"
                   >
                     {cat.label}
                     <Chevron open={isOpen} />
@@ -230,6 +239,13 @@ export function Navbar() {
         )}
       >
         <div className="flex flex-col gap-1 px-5 py-4">
+          <Link
+            to="/"
+            onClick={closeAll}
+            className="border-b border-frost/10 px-2 py-3.5 font-body text-sm font-medium text-frost"
+          >
+            Home
+          </Link>
           {MENU.map((cat) => {
             const expanded = mobileCat === cat.id
             return (
