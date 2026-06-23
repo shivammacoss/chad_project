@@ -4,6 +4,7 @@ import { Application, type IApplication } from '../models/Application.js'
 import { totalPrice, type EntityType, type Tier, type VoPlan } from '../lib/pricing.js'
 import { requireAuth } from '../middleware/auth.js'
 import { documentsRouter } from './documents.js'
+import { checkoutRouter } from './payments.js'
 
 const ENTITIES: EntityType[] = ['SARL', 'SARL_U', 'SA', 'BRANCH', 'REP_OFFICE']
 
@@ -71,4 +72,5 @@ applicationsRouter.post('/:id/submit', async (req, res) => {
   res.json(app)
 })
 
+applicationsRouter.use('/:id/checkout', checkoutRouter)
 applicationsRouter.use('/:id/documents', documentsRouter)

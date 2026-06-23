@@ -1,49 +1,39 @@
 import { Router, raw } from 'express'
-// import { Formation } from '../models/Formation.js'  // TODO: Updated in B4
+import { Application } from '../models/Application.js'
 import { getStripe } from '../lib/stripe.js'
 import { requireAuth } from '../middleware/auth.js'
 import { pushStatus } from './applications.js'
 
-// Checkout creation — mounted under /api/formations/:id/checkout
-// TODO: Updated in B4 to use Application instead of Formation
 export const checkoutRouter = Router({ mergeParams: true })
 checkoutRouter.use(requireAuth)
 
-// checkoutRouter.post('/', async (req, res) => {
-//   const { id } = req.params as { id: string }
-//   const f = await Formation.findOne({ _id: id, userId: req.userId })
-//   if (!f) return res.status(404).json({ error: 'Not found' })
+checkoutRouter.post('/', async (req, res) => {
+  const id = (req.params as { id: string }).id
+  const app = await Application.findOne({ _id: id, userId: req.userId })
+  if (!app) return res.status(404).json({ error: 'Not found' })
+  const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:5173'
+  const session = await getStripe().checkout.sessions.create({
+    mode: 'payment',
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: { name: `${app.entityType} formation — ${app.companyDetails.proposedName}` },
+          unit_amount: app.priceCents,
+        },
+        quantity: 1,
+      },
+    ],
+    success_url: `${clientUrl}/dashboard?paid=1`,
+    cancel_url: `${clientUrl}/dashboard?canceled=1`,
+  })
+  if (!session.url) return res.status(502).json({ error: 'No checkout URL returned by Stripe' })
+  app.stripeSessionId = session.id
+  pushStatus(app, 'payment_pending')
+  await app.save()
+  res.json({ url: session.url })
+})
 
-//   const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:5173'
-
-//   const session = await getStripe().checkout.sessions.create({
-//     mode: 'payment',
-//     line_items: [
-//       {
-//         price_data: {
-//           currency: 'usd',
-//           product_data: { name: `${f.entityType} formation — ${f.companyName}` },
-//           unit_amount: f.priceCents,
-//         },
-//         quantity: 1,
-//       },
-//     ],
-//     success_url: `${clientUrl}/dashboard?paid=1`,
-//     cancel_url: `${clientUrl}/dashboard?canceled=1`,
-//   })
-
-//   if (!session.url) {
-//     return res.status(502).json({ error: 'No checkout URL returned by Stripe' })
-//   }
-
-//   f.stripeSessionId = session.id
-//   pushStatus(f, 'payment_pending')
-//   await f.save()
-//   res.json({ url: session.url })
-// })
-
-// Webhook — mounted at /api/webhooks/stripe with a raw body parser.
-// TODO: Updated in B5 to use Application instead of Formation
 export const webhookRouter = Router()
 webhookRouter.post('/', raw({ type: 'application/json' }), async (req, res) => {
   let event
@@ -56,16 +46,14 @@ webhookRouter.post('/', raw({ type: 'application/json' }), async (req, res) => {
   } catch {
     return res.status(400).json({ error: 'Bad signature' })
   }
-
-  // TODO: Updated in B5 to use Application instead of Formation
-  // if (event.type === 'checkout.session.completed') {
-  //   const session = event.data.object as { id: string }
-  //   const f = await Formation.findOne({ stripeSessionId: session.id })
-  //   if (f) {
-  //     f.paymentStatus = 'paid'
-  //     pushStatus(f, 'paid')
-  //     await f.save()
-  //   }
-  // }
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as { id: string }
+    const app = await Application.findOne({ stripeSessionId: session.id })
+    if (app) {
+      app.paymentStatus = 'paid'
+      pushStatus(app, 'paid')
+      await app.save()
+    }
+  }
   res.json({ received: true })
 })
