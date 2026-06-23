@@ -2,7 +2,7 @@ import express, { type Express } from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { authRouter } from './routes/auth.js'
-import { formationsRouter } from './routes/formations.js'
+import { applicationsRouter } from './routes/applications.js'
 import { adminRouter } from './routes/admin.js'
 import { webhookRouter } from './routes/payments.js'
 
@@ -25,7 +25,7 @@ export function createApp(): Express {
   })
 
   app.use('/api/auth', authRouter)
-  app.use('/api/formations', formationsRouter)
+  app.use('/api/applications', applicationsRouter)
   app.use('/api/admin', adminRouter)
 
   return app

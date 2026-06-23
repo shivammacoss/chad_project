@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { Formation } from '../models/Formation.js'
+// import { Formation } from '../models/Formation.js'  // TODO: Updated in B7
 import { DocumentModel } from '../models/Document.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
-import { pushStatus } from './formations.js'
+import { pushStatus } from './applications.js'
 
 const ADMIN_STATUSES = [
   'in_review',
@@ -15,25 +15,26 @@ const ADMIN_STATUSES = [
 export const adminRouter = Router()
 adminRouter.use(requireAuth, requireAdmin)
 
-adminRouter.get('/formations', async (req, res) => {
-  const filter = req.query.status ? { status: String(req.query.status) } : {}
-  const list = await Formation.find(filter)
-    .sort({ createdAt: -1 })
-    .populate('userId', 'email fullName')
-  res.json(list)
-})
+// TODO: Updated in B7 to use Application instead of Formation
+// adminRouter.get('/formations', async (req, res) => {
+//   const filter = req.query.status ? { status: String(req.query.status) } : {}
+//   const list = await Formation.find(filter)
+//     .sort({ createdAt: -1 })
+//     .populate('userId', 'email fullName')
+//   res.json(list)
+// })
 
-adminRouter.patch('/formations/:id/status', async (req, res) => {
-  const { status, note } = req.body ?? {}
-  if (!ADMIN_STATUSES.includes(status)) {
-    return res.status(400).json({ error: 'Invalid admin status' })
-  }
-  const f = await Formation.findById(req.params.id)
-  if (!f) return res.status(404).json({ error: 'Not found' })
-  pushStatus(f, status, note)
-  await f.save()
-  res.json(f)
-})
+// adminRouter.patch('/formations/:id/status', async (req, res) => {
+//   const { status, note } = req.body ?? {}
+//   if (!ADMIN_STATUSES.includes(status)) {
+//     return res.status(400).json({ error: 'Invalid admin status' })
+//   }
+//   const f = await Formation.findById(req.params.id)
+//   if (!f) return res.status(404).json({ error: 'Not found' })
+//   pushStatus(f, status, note)
+//   await f.save()
+//   res.json(f)
+// })
 
 adminRouter.patch('/documents/:id', async (req, res) => {
   const { status } = req.body ?? {}

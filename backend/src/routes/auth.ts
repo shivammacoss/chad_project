@@ -20,7 +20,7 @@ const COOKIE_OPTS = {
 }
 
 authRouter.post('/signup', async (req, res) => {
-  const { email, password, fullName, country } = req.body ?? {}
+  const { email, password, fullName, country, phone } = req.body ?? {}
   if (!email || !password || !fullName || !country) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
@@ -33,6 +33,7 @@ authRouter.post('/signup', async (req, res) => {
     passwordHash: await hashPassword(password),
     fullName,
     country,
+    phone: phone ?? '',
     emailVerifyToken: hashed,
     emailVerifyExpires: expires,
   })
