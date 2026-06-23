@@ -9,6 +9,9 @@ import ContactPage from '@/pages/ContactPage'
 import InsightsPage from '@/pages/InsightsPage'
 import AffiliatePage from '@/pages/AffiliatePage'
 import ChadFreeZonePage from '@/pages/ChadFreeZonePage'
+import LoginPage from '@/pages/LoginPage'
+import SignupPage from '@/pages/SignupPage'
+import VerifyEmailPage from '@/pages/VerifyEmailPage'
 import { SERVICE_CATEGORIES } from '@/content/menu'
 
 /**
@@ -49,6 +52,11 @@ export function AppRoutes() {
         <Route path="/insights" element={<InsightsPage />} />
         <Route path="/affiliate" element={<AffiliatePage />} />
         <Route path="/chad-free-zone" element={<ChadFreeZonePage />} />
+
+        {/* Auth pages */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Route>
