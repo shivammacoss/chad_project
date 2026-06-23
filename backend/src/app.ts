@@ -5,6 +5,7 @@ import { authRouter } from './routes/auth.js'
 import { applicationsRouter } from './routes/applications.js'
 import { adminRouter } from './routes/admin.js'
 import { webhookRouter } from './routes/payments.js'
+import { servicesRouter } from './routes/services.js'
 
 export function createApp(): Express {
   const app = express()
@@ -23,6 +24,8 @@ export function createApp(): Express {
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true })
   })
+
+  app.use('/api/services', servicesRouter)
 
   app.use('/api/auth', authRouter)
   app.use('/api/applications', applicationsRouter)
