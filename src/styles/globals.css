@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    @apply border-frost/10;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-navy font-body text-frost antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  /* Custom selection */
+  ::selection {
+    @apply bg-teal-electric/30 text-frost;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-navy;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-frost/20;
+    border: 2px solid #ffffff;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-frost/40;
+  }
+
+  /* Focus visibility baseline */
+  :focus-visible {
+    @apply outline-none;
+  }
+}
+
+@layer utilities {
+  /* Teal → indigo gradient text used in display headlines */
+  .text-gradient {
+    @apply bg-gradient-to-r from-teal-electric via-teal-electric to-indigo-pulse bg-clip-text text-transparent;
+  }
+
+  /* Subtle hairline divider matching the grid aesthetic */
+  .hairline {
+    @apply border-frost/10;
+  }
+
+  /* Animated SVG grid node helper (used by GridCanvas) */
+  .node {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+/* Honor user motion preferences across the whole app */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
