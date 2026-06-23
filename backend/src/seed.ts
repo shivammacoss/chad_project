@@ -43,6 +43,8 @@ export async function seedDemo(): Promise<void> {
   for (const s of specs) {
     await Application.create({
       userId: user._id,
+      serviceKey: 'company-formation',
+      serviceName: 'Company Formation',
       entityType: s.entityType,
       packageTier: 'standard',
       companyDetails: { proposedName: s.name, businessActivity: 'General trading', shareCapitalFCFA: 1000000, city: "N'Djamena" },
@@ -55,7 +57,20 @@ export async function seedDemo(): Promise<void> {
       statusHistory: [{ status: s.status, at: new Date() }],
     })
   }
-  console.log('Seeded:', { admin: admin.email, user: user.email, applications: specs.length })
+
+  await Application.create({
+    userId: user._id,
+    serviceKey: 'virtual-office',
+    serviceName: 'Virtual Office',
+    priceCents: 20000,
+    intake: { package: 'Standard', companyName: 'Demo User' },
+    status: 'in_review',
+    paymentStatus: 'paid',
+    currentStep: 3,
+    statusHistory: [{ status: 'in_review', at: new Date() }],
+  })
+
+  console.log('Seeded:', { admin: admin.email, user: user.email, applications: specs.length + 1 })
 }
 
 // Direct execution: `npm run seed`

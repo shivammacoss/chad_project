@@ -2,6 +2,7 @@ import { Router } from 'express'
 import type { HydratedDocument } from 'mongoose'
 import { Application, type IApplication } from '../models/Application.js'
 import { totalPrice, type EntityType, type Tier, type VoPlan } from '../lib/pricing.js'
+import { getService, priceForOrder } from '../lib/services.js'
 import { requireAuth } from '../middleware/auth.js'
 import { documentsRouter } from './documents.js'
 import { checkoutRouter } from './payments.js'
@@ -25,15 +26,33 @@ export const applicationsRouter = Router()
 applicationsRouter.use(requireAuth)
 
 applicationsRouter.post('/', async (req, res) => {
-  const { entityType, packageTier } = req.body ?? {}
-  if (!ENTITIES.includes(entityType)) return res.status(400).json({ error: 'Invalid entityType' })
-  const tier: Tier = packageTier === 'premium' ? 'premium' : 'standard'
+  const { serviceKey = 'company-formation', entityType, packageTier } = req.body ?? {}
+  const service = getService(serviceKey)
+  if (!service) return res.status(400).json({ error: 'Unknown service' })
+
+  if (service.flow === 'formation') {
+    if (!ENTITIES.includes(entityType)) return res.status(400).json({ error: 'Invalid entityType' })
+    const tier: Tier = packageTier === 'premium' ? 'premium' : 'standard'
+    const app = await Application.create({
+      userId: req.userId,
+      serviceKey,
+      serviceName: service.name,
+      entityType,
+      packageTier: tier,
+      companyDetails: { proposedName: 'Untitled' },
+      priceCents: totalPrice(entityType, tier, { wanted: false }),
+      statusHistory: [{ status: 'draft', at: new Date() }],
+    })
+    return res.status(201).json(app)
+  }
+
+  // generic service
   const app = await Application.create({
     userId: req.userId,
-    entityType,
-    packageTier: tier,
-    companyDetails: { proposedName: 'Untitled' },
-    priceCents: totalPrice(entityType, tier, { wanted: false }),
+    serviceKey,
+    serviceName: service.name,
+    priceCents: priceForOrder(serviceKey),
+    intake: {},
     statusHistory: [{ status: 'draft', at: new Date() }],
   })
   res.status(201).json(app)
@@ -42,12 +61,13 @@ applicationsRouter.post('/', async (req, res) => {
 applicationsRouter.patch('/:id', async (req, res) => {
   const app = await Application.findOne({ _id: req.params.id, userId: req.userId })
   if (!app) return res.status(404).json({ error: 'Not found' })
-  const { companyDetails, owners, virtualOffice, currentStep } = req.body ?? {}
+  const { companyDetails, owners, virtualOffice, currentStep, intake } = req.body ?? {}
   if (companyDetails) app.companyDetails = { ...app.companyDetails, ...companyDetails }
   if (Array.isArray(owners)) app.owners = owners as typeof app.owners
   if (virtualOffice) app.virtualOffice = virtualOffice
   if (typeof currentStep === 'number') app.currentStep = currentStep
-  recompute(app)
+  if (intake && typeof intake === 'object') app.intake = { ...(app.intake ?? {}), ...intake }
+  if (app.serviceKey === 'company-formation' || app.entityType) recompute(app)
   await app.save()
   res.json(app)
 })

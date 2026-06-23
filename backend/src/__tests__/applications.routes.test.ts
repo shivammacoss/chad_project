@@ -53,4 +53,28 @@ describe('applications routes', () => {
     const bad = await agent.get('/api/applications/64b000000000000000000000')
     expect(bad.status).toBe(404)
   })
+
+  it('creates a generic-service order priced from the registry', async () => {
+    const agent = await authedAgent()
+    const res = await agent.post('/api/applications').send({ serviceKey: 'virtual-office' })
+    expect(res.status).toBe(201)
+    expect(res.body.serviceKey).toBe('virtual-office')
+    expect(res.body.serviceName).toBe('Virtual Office')
+    expect(res.body.priceCents).toBe(20000)
+  })
+
+  it('saves intake on a generic order', async () => {
+    const agent = await authedAgent()
+    const created = await agent.post('/api/applications').send({ serviceKey: 'tax-registration' })
+    const res = await agent.patch(`/api/applications/${created.body._id}`).send({ intake: { taxType: 'VAT', companyName: 'Acme' }, currentStep: 2 })
+    expect(res.status).toBe(200)
+    expect(res.body.intake.taxType).toBe('VAT')
+    expect(res.body.priceCents).toBe(25000) // unchanged for generic
+  })
+
+  it('rejects an unknown service', async () => {
+    const agent = await authedAgent()
+    const res = await agent.post('/api/applications').send({ serviceKey: 'nope' })
+    expect(res.status).toBe(400)
+  })
 })

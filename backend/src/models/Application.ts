@@ -19,10 +19,12 @@ const statusEntry = new Schema(
 
 const applicationSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
-  entityType: { type: String, enum: ['SARL', 'SARL_U', 'SA', 'BRANCH', 'REP_OFFICE'], required: true },
+  serviceKey: { type: String, required: true, default: 'company-formation' },
+  serviceName: { type: String, default: 'Company Formation' },
+  entityType: { type: String, enum: ['SARL', 'SARL_U', 'SA', 'BRANCH', 'REP_OFFICE'] },
   packageTier: { type: String, enum: ['standard', 'premium'], default: 'standard' },
   companyDetails: {
-    proposedName: { type: String, required: true },
+    proposedName: { type: String },
     alternateName: { type: String },
     businessActivity: { type: String },
     shareCapitalFCFA: { type: Number },
@@ -33,6 +35,7 @@ const applicationSchema = new Schema({
     wanted: { type: Boolean, default: false },
     plan: { type: String, enum: ['basic', 'premium'] },
   },
+  intake: { type: Schema.Types.Mixed, default: {} },
   priceCents: { type: Number, required: true },
   status: {
     type: String,
