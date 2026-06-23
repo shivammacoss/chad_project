@@ -3,6 +3,7 @@ import type { HydratedDocument } from 'mongoose'
 import { Formation, type IFormation } from '../models/Formation.js'
 import { priceFor, type EntityType, type Tier } from '../lib/pricing.js'
 import { requireAuth } from '../middleware/auth.js'
+import { documentsRouter } from './documents.js'
 
 export function pushStatus(
   formation: HydratedDocument<IFormation>,
@@ -53,3 +54,5 @@ formationsRouter.post('/:id/submit', async (req, res) => {
   await f.save()
   res.json(f)
 })
+
+formationsRouter.use('/:id/documents', documentsRouter)
