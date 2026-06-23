@@ -81,7 +81,7 @@ export default function GenericServiceWizardPage() {
             <h2 className="text-xl font-semibold text-frost">Upload documents</h2>
             {service.requiredDocuments.map((d) => (
               <label key={d} className="flex flex-col gap-1">
-                <span className="text-sm text-frost/70">{d.replace('_', ' ')}</span>
+                <span className="text-sm text-frost/70">{d.replace(/_/g, ' ')}</span>
                 <input type="file" accept="image/*,application/pdf" className="text-sm text-frost/70" onChange={(e) => e.target.files?.[0] && uploadDoc(d, e.target.files[0])} />
               </label>
             ))}

@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
-import { ENTITY_TYPES, formatPrice } from '@/content/formations'
+import { formatPrice } from '@/content/formations'
 import { apiGet } from '@/lib/api'
 import { useAuth } from '@/store/AuthContext'
 import type { Application } from '@/types/app'
-
-const entityLabel = (v: string) => ENTITY_TYPES.find((e) => e.value === v)?.label ?? v
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
@@ -43,8 +41,8 @@ export default function DashboardPage() {
                 <Link key={a._id} to={`/applications/${a._id}`}
                   className="flex items-center justify-between rounded-xl border border-frost/10 bg-steel/20 px-6 py-5 transition-colors hover:border-teal-electric/30">
                   <div>
-                    <p className="font-medium text-frost">{a.companyDetails?.proposedName || 'Untitled'}</p>
-                    <p className="text-sm text-frost/55">{entityLabel(a.entityType)} · {formatPrice(a.priceCents)}</p>
+                    <p className="font-medium text-frost">{a.companyDetails?.proposedName || a.serviceName || 'Untitled'}</p>
+                    <p className="text-sm text-frost/55">{a.serviceName ?? 'Service'} · {formatPrice(a.priceCents)}</p>
                   </div>
                   <StatusBadge status={a.status} />
                 </Link>

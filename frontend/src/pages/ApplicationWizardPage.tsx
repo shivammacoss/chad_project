@@ -128,8 +128,8 @@ export default function ApplicationWizardPage() {
           <div className="mt-4 flex flex-col gap-4">
             <h2 className="text-xl font-semibold text-frost">Review & pay</h2>
             <div className="rounded-xl border border-frost/10 bg-steel/20 p-5 text-frost">
-              <p>{app.companyDetails.proposedName}</p>
-              <p className="text-sm text-frost/55">{ENTITY_TYPES.find((e) => e.value === app.entityType)?.label} · {app.owners.length} owner(s) · {app.virtualOffice.wanted ? `VO: ${app.virtualOffice.plan}` : 'no virtual office'}</p>
+              <p>{app.companyDetails?.proposedName}</p>
+              <p className="text-sm text-frost/55">{ENTITY_TYPES.find((e) => e.value === app.entityType)?.label} · {app.owners?.length ?? 0} owner(s) · {app.virtualOffice?.wanted ? `VO: ${app.virtualOffice.plan}` : 'no virtual office'}</p>
               <p className="mt-3 text-xl font-semibold text-teal-electric">{formatPrice(app.priceCents)}</p>
             </div>
             <Button disabled={busy} onClick={payAndSubmit}>{busy ? 'Redirecting…' : 'Pay & submit'}</Button>

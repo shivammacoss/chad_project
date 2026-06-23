@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { StatusBadge } from '@/components/formations/StatusBadge'
-import { ENTITY_TYPES, STATUS_LABEL, formatPrice } from '@/content/formations'
+import { STATUS_LABEL, formatPrice } from '@/content/formations'
 import { apiGet } from '@/lib/api'
 import type { Application, DocItem, ApplicationStatus } from '@/types/app'
 
@@ -30,30 +30,46 @@ export default function ApplicationDetailPage() {
         <Link to="/dashboard" className="text-sm text-teal-electric">← Back to dashboard</Link>
         <div className="mt-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-frost">{a.companyDetails.proposedName}</h1>
-            <p className="text-sm text-frost/55">{ENTITY_TYPES.find((e) => e.value === a.entityType)?.label} · {formatPrice(a.priceCents)}</p>
+            <h1 className="text-2xl font-semibold text-frost">{a.companyDetails?.proposedName || a.serviceName}</h1>
+            <p className="text-sm text-frost/55">{a.serviceName} · {formatPrice(a.priceCents)}</p>
           </div>
           <StatusBadge status={a.status} />
         </div>
 
-        <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Company</h2>
-        <div className="mt-2 rounded-lg border border-frost/10 bg-steel/20 p-4 text-sm text-frost/80">
-          <p>Activity: {a.companyDetails.businessActivity || '—'}</p>
-          <p>Capital: {a.companyDetails.shareCapitalFCFA?.toLocaleString() ?? '—'} FCFA</p>
-          <p>City: {a.companyDetails.city}</p>
-          <p>Virtual office: {a.virtualOffice.wanted ? a.virtualOffice.plan : 'none'}</p>
-        </div>
-
-        <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Owners</h2>
-        <div className="mt-2 grid gap-2">
-          {a.owners.length === 0 && <p className="text-sm text-frost/55">No owners added.</p>}
-          {a.owners.map((o, i) => (
-            <div key={i} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
-              <span className="text-frost">{o.fullName} <span className="text-frost/50">({o.role})</span></span>
-              <span className="text-frost/60">{o.nationality} · {o.ownershipPercent}%{o.isPrimaryContact ? ' · primary' : ''}</span>
+        {a.companyDetails?.proposedName && (
+          <>
+            <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Company</h2>
+            <div className="mt-2 rounded-lg border border-frost/10 bg-steel/20 p-4 text-sm text-frost/80">
+              <p>Activity: {a.companyDetails.businessActivity || '—'}</p>
+              <p>Capital: {a.companyDetails.shareCapitalFCFA?.toLocaleString() ?? '—'} FCFA</p>
+              <p>City: {a.companyDetails.city}</p>
+              <p>Virtual office: {a.virtualOffice.wanted ? a.virtualOffice.plan : 'none'}</p>
             </div>
-          ))}
-        </div>
+          </>
+        )}
+
+        {a.owners && a.owners.length > 0 && (
+          <>
+            <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Owners</h2>
+            <div className="mt-2 grid gap-2">
+              {a.owners.map((o, i) => (
+                <div key={i} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
+                  <span className="text-frost">{o.fullName} <span className="text-frost/50">({o.role})</span></span>
+                  <span className="text-frost/60">{o.nationality} · {o.ownershipPercent}%{o.isPrimaryContact ? ' · primary' : ''}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {a.intake && Object.keys(a.intake).length > 0 && (
+          <>
+            <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Details</h2>
+            <div className="mt-2 rounded-lg border border-frost/10 bg-steel/20 p-4 text-sm text-frost/80">
+              {Object.entries(a.intake).map(([k, v]) => <p key={k}>{k}: {String(v)}</p>)}
+            </div>
+          </>
+        )}
 
         <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Documents</h2>
         <div className="mt-2 grid gap-2">
