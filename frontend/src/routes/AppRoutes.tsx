@@ -4,6 +4,8 @@ import HomePage from '@/pages/HomePage'
 import DashboardPage from '@/pages/DashboardPage'
 import ApplicationWizardPage from '@/pages/ApplicationWizardPage'
 import ApplicationDetailPage from '@/pages/ApplicationDetailPage'
+import StartServicePage from '@/pages/StartServicePage'
+import GenericServiceWizardPage from '@/pages/GenericServiceWizardPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import ServicePage from '@/pages/ServicePage'
 import CategoryPage from '@/pages/CategoryPage'
@@ -36,6 +38,8 @@ export function AppRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/applications/new" element={<ApplicationWizardPage />} />
           <Route path="/applications/:id" element={<ApplicationDetailPage />} />
+          <Route path="/services/new" element={<StartServicePage />} />
+          <Route path="/services/:id" element={<GenericServiceWizardPage />} />
         </Route>
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route element={<AdminRoute />}>

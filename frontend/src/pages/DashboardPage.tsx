@@ -27,7 +27,7 @@ export default function DashboardPage() {
             <p className="mt-1 text-sm text-frost/55">Your company applications in Chad.</p>
           </div>
           <div className="flex gap-3">
-            <Link to="/applications/new"><Button>Start application</Button></Link>
+            <Link to="/services/new"><Button>Start application</Button></Link>
             <Button variant="ghost" onClick={() => logout()}>Log out</Button>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default function DashboardPage() {
           : items.length === 0 ? (
             <div className="mt-10 rounded-xl border border-frost/10 bg-steel/20 p-10 text-center">
               <p className="text-frost/70">No applications yet.</p>
-              <Link to="/applications/new" className="mt-4 inline-block"><Button>Start your first application</Button></Link>
+              <Link to="/services/new" className="mt-4 inline-block"><Button>Start your first application</Button></Link>
             </div>
           ) : (
             <div className="mt-8 grid gap-4">
