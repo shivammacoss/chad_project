@@ -17,6 +17,6 @@ describe('DashboardPage', () => {
     }))
     render(<MemoryRouter><AuthProvider><DashboardPage /></AuthProvider></MemoryRouter>)
     await waitFor(() => expect(screen.getByText('Acme SARL')).toBeInTheDocument())
-    expect(screen.getByText('Registered')).toBeInTheDocument()
+    expect(screen.getByText('Approved')).toBeInTheDocument()
   })
 })

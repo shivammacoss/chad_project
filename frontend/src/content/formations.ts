@@ -13,11 +13,14 @@ export const STATUS_LABEL: Record<ApplicationStatus, string> = {
   documents_submitted: 'Documents submitted',
   payment_pending: 'Payment pending',
   paid: 'Paid',
-  in_review: 'In review',
-  filing_submitted: 'Filing submitted (ANIE)',
-  registered: 'Registered',
+  in_review: 'Document Review',
+  filing_submitted: 'Government Processing',
+  registered: 'Approved',
   needs_more_docs: 'Needs more documents',
   rejected: 'Rejected',
+  legal_review: 'Legal Review',
+  waiting_government: 'Waiting Government',
+  completed: 'Completed',
 }
 
 export const ENTITY_PRICE_CENTS: Record<EntityType, number> = {

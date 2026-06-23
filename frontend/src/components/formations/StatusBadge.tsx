@@ -12,6 +12,9 @@ const TONE: Record<ApplicationStatus, BadgeTone> = {
   registered: 'live',
   needs_more_docs: 'warning',
   rejected: 'warning',
+  legal_review: 'neutral',
+  waiting_government: 'neutral',
+  completed: 'live',
 }
 
 export function StatusBadge({ status }: { status: ApplicationStatus }) {
