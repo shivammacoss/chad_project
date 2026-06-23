@@ -5,6 +5,7 @@ const userSchema = new Schema({
   passwordHash: { type: String, required: true },
   fullName: { type: String, required: true },
   country: { type: String, required: true },
+  phone: { type: String, default: '' },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   emailVerified: { type: Boolean, default: false },
   emailVerifyToken: { type: String, default: null },
