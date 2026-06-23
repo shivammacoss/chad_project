@@ -1,106 +1,265 @@
 import { Link } from 'react-router-dom'
-import { Badge } from '@/components/ui/Badge'
-import { MENU } from '@/content/menu'
 
-interface FooterColumn {
-  title: string
-  links: Array<{ label: string; to: string }>
+/* ----------------------------- icons ----------------------------- */
+
+function Chevron() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} className="h-3.5 w-3.5">
+      <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
 }
 
-const serviceCategory = (id: string) => MENU.find((c) => c.id === id)
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21H17.6v-5.3c0-1.27-.02-2.9-1.77-2.9-1.78 0-2.05 1.38-2.05 2.8V21H9z" />
+    </svg>
+  )
+}
 
-const FOOTER_COLUMNS: FooterColumn[] = [
-  {
-    title: 'Services',
-    links: MENU.filter((c) => c.overviewPath).map((c) => ({
-      label: c.label,
-      to: c.overviewPath as string,
-    })),
-  },
-  {
-    title: 'Incorporation',
-    links: (serviceCategory('company-incorporation')?.pages ?? []).map((p) => ({
-      label: p.menuLabel,
-      to: p.path,
-    })),
-  },
-  {
-    title: 'Company',
-    links: [
-      { label: 'Latest Insights', to: '/insights' },
-      { label: 'Affiliate Programme', to: '/affiliate' },
-      { label: 'Chad Free Zone', to: '/chad-free-zone' },
-      { label: 'Contact', to: '/contact' },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Privacy', to: '/contact' },
-      { label: 'Terms', to: '/contact' },
-      { label: 'Compliance', to: '/contact' },
-      { label: 'Dashboard', to: '/dashboard' },
-    ],
-  },
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className={className} aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.87.24-1.46 1.49-1.46H16V5.04c-.28-.04-1.24-.12-2.36-.12-2.33 0-3.93 1.42-3.93 4.04V11H7.3v3h2.41v7z" />
+    </svg>
+  )
+}
+
+function YouTubeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.27 5 12 5 12 5s-6.27 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.76 1.77C5.73 19 12 19 12 19s6.27 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z" />
+    </svg>
+  )
+}
+
+function StarIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12 2.5l2.9 6.06 6.6.86-4.85 4.6 1.22 6.55L12 17.9l-5.87 3.17 1.22-6.55L2.5 9.42l6.6-.86L12 2.5z" />
+    </svg>
+  )
+}
+
+function MailIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 6 9-6" />
+    </svg>
+  )
+}
+
+function ChatIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z" />
+    </svg>
+  )
+}
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12.04 2a9.9 9.9 0 0 0-8.46 15.1L2 22l5.05-1.32A9.9 9.9 0 1 0 12.04 2zm0 1.8a8.1 8.1 0 0 1 6.85 12.4l-.2.32.78 2.85-2.92-.77-.31.18a8.1 8.1 0 1 1-4.2-15.2zm-3.2 4.13c-.16 0-.43.06-.66.31-.22.25-.86.85-.86 2.06 0 1.21.88 2.38 1 2.55.12.16 1.7 2.7 4.2 3.68 2.07.82 2.5.66 2.95.62.45-.04 1.45-.59 1.66-1.17.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28-.25-.12-1.45-.72-1.67-.8-.22-.08-.39-.12-.55.13-.16.25-.63.8-.77.96-.14.16-.28.18-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.71-.14-.25-.01-.38.11-.5.11-.11.25-.28.37-.42.12-.14.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.55-1.34-.76-1.83-.2-.48-.4-.41-.55-.42h-.47z" />
+    </svg>
+  )
+}
+
+function PhoneIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z" />
+    </svg>
+  )
+}
+
+/* ----------------------------- data ----------------------------- */
+
+const SOCIALS = [
+  { label: 'LinkedIn', href: '#', Icon: LinkedInIcon },
+  { label: 'Instagram', href: '#', Icon: InstagramIcon },
+  { label: 'Facebook', href: '#', Icon: FacebookIcon },
+  { label: 'YouTube', href: '#', Icon: YouTubeIcon },
 ]
+
+const OFFICE_LOCATIONS = [
+  "N'Djamena, Chad",
+  'Chad International Free Zone',
+  'Moundou, Chad',
+  'Sarh, Chad',
+  'Abéché, Chad',
+]
+
+const QUICK_LINKS = [
+  { label: 'About Us', to: '/chad-free-zone' },
+  { label: 'Latest Insights', to: '/insights' },
+  { label: 'Contact Us', to: '/contact' },
+  { label: 'Affiliate Programme', to: '/affiliate' },
+  { label: 'Privacy Policy', to: '/contact' },
+  { label: 'Terms & Conditions', to: '/contact' },
+  { label: 'Site Map', to: '/' },
+]
+
+const CONTACT_CARDS = [
+  { title: 'Email', sub: 'hello@gridglobalgate.com', href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
+  { title: 'Live Chat', sub: 'Talk to a specialist', href: '#chat', Icon: ChatIcon },
+  { title: 'WhatsApp', sub: 'Drop a message now', href: 'https://wa.me/235650000000', Icon: WhatsAppIcon },
+  { title: 'Phone', sub: '+235 65 00 00 00', href: 'tel:+235650000000', Icon: PhoneIcon },
+]
+
+const PAYMENTS = ['VISA', 'Mastercard', 'Amex', 'PayPal', 'Wise']
 
 const YEAR = 2026
 
+/* ----------------------------- footer ----------------------------- */
+
 export function Footer() {
   return (
-    <footer className="bg-[#0B0E13] text-white">
-      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-6">
+    <footer className="relative overflow-hidden bg-chad-blue text-white">
+      {/* Faint dotted map backdrop on the right */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 opacity-[0.12] [background-image:radial-gradient(rgba(255,255,255,0.7)_1px,transparent_1.5px)] [background-size:9px_9px] [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_72%)] lg:block"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8">
+        {/* Top: brand + locations + quick links */}
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr]">
           {/* Brand block */}
-          <div className="col-span-2 flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <Link to="/" className="flex items-center gap-2" aria-label="GRIDGLOBAL GATE home">
-              <span className="font-display text-lg font-bold tracking-tight">
-                <span className="text-teal-electric">GRID</span>
+              <span className="font-display text-xl font-bold tracking-tight">
+                <span className="text-chad-yellow">GRID</span>
                 <span className="text-white">GLOBAL</span>
               </span>
-              <span className="rounded border border-teal-electric/40 px-1.5 py-0.5 font-mono text-[0.65rem] font-medium uppercase tracking-widest text-teal-electric/90">
-                GATE
-              </span>
             </Link>
-            <p className="max-w-xs font-body text-sm leading-relaxed text-white/55">
-              Your gateway to global business — virtual offices, company incorporation, compliance
-              and back-office services for founders worldwide.
+            <p className="max-w-xs font-body text-sm leading-relaxed text-white/70">
+              Avenue Charles de Gaulle, N&apos;Djamena, Republic of Chad — your gateway to
+              international business support in Chad.
             </p>
-            <Badge tone="live" className="w-fit">
-              Registered Companies House agent
-            </Badge>
+
+            {/* Socials */}
+            <div className="flex items-center gap-3">
+              {SOCIALS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-chad-yellow hover:text-chad-blue"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
+
+            {/* Google reviews */}
+            <div className="flex w-fit items-center gap-3 rounded-xl bg-white/5 px-4 py-3">
+              <span className="font-display text-2xl font-bold leading-none">
+                <span className="text-[#4285F4]">G</span>
+              </span>
+              <div className="flex flex-col">
+                <span className="font-body text-sm font-semibold text-white">Google Reviews</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="font-display text-sm font-bold text-white">4.8</span>
+                  <span className="flex text-chad-yellow">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <StarIcon key={i} className="h-3.5 w-3.5" />
+                    ))}
+                  </span>
+                  <span className="font-body text-xs text-white/60">500+ reviews</span>
+                </span>
+              </div>
+            </div>
           </div>
 
-          {/* Link columns */}
-          {FOOTER_COLUMNS.map((column) => (
-            <div key={column.title} className="flex flex-col gap-3">
-              <h3 className="font-mono text-xs font-medium uppercase tracking-wider text-white/40">
-                {column.title}
-              </h3>
-              <ul className="flex flex-col gap-2.5">
-                {column.links.map((link, i) => (
-                  <li key={`${column.title}-${i}`}>
-                    <Link
-                      to={link.to}
-                      className="font-body text-sm text-white/65 transition-colors hover:text-teal-electric"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Office Locations */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-display text-lg font-bold text-white">Office Locations</h3>
+            <ul className="flex flex-col gap-3">
+              {OFFICE_LOCATIONS.map((loc) => (
+                <li key={loc} className="flex items-center gap-2.5 font-body text-sm text-white/70">
+                  <span className="text-chad-yellow">
+                    <Chevron />
+                  </span>
+                  {loc}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-display text-lg font-bold text-white">Quick Links</h3>
+            <ul className="flex flex-col gap-3">
+              {QUICK_LINKS.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.to}
+                    className="flex items-center gap-2.5 font-body text-sm text-white/70 transition-colors hover:text-chad-yellow"
+                  >
+                    <span className="text-chad-yellow">
+                      <Chevron />
+                    </span>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Contact cards */}
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {CONTACT_CARDS.map(({ title, sub, href, Icon }) => (
+            <a
+              key={title}
+              href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel={href.startsWith('http') ? 'noreferrer' : undefined}
+              className="group flex flex-col items-center gap-2 rounded-2xl border border-white/15 px-6 py-7 text-center transition-colors hover:border-chad-yellow/60 hover:bg-white/5"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-chad-yellow transition-colors group-hover:bg-chad-yellow group-hover:text-chad-blue">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                {title}
+              </span>
+              <span className="font-body text-sm text-white/60">{sub}</span>
+            </a>
           ))}
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
-          <p className="font-mono text-xs text-white/40">
-            © {YEAR} GRIDGLOBAL GATE — All rights reserved.
+        <div className="mt-14 flex flex-col items-center gap-4 border-t border-white/10 pt-8 text-center">
+          <p className="font-body text-sm text-white/70">
+            © {YEAR} GRIDGLOBAL GATE. All rights reserved.
           </p>
-          <p className="font-mono text-xs text-white/40">
-            UK · USA · Canada · <span className="text-teal-electric/80">Chad Free Zone</span>
+          <p className="max-w-xl font-body text-xs leading-relaxed text-white/45">
+            GRIDGLOBAL GATE is a registered company-formation agent operating in the Republic of
+            Chad.
           </p>
+          <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+            {PAYMENTS.map((p) => (
+              <span
+                key={p}
+                className="rounded-md border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-white/55"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

@@ -8,8 +8,8 @@ import { ScrollToTop } from '@/components/common/ScrollToTop'
  * Top-level chrome shared by all routed pages:
  * fixed TopBar + Navbar, routed page content, and the brand Footer.
  *
- * The fixed header stack is 10 (TopBar) + 16 (Navbar) tall. Each page already
- * adds `pt-16` to clear the navbar, so `main` adds `pt-10` for the TopBar.
+ * The fixed header stack is 12 (TopBar) + 16 (Navbar) tall. Each page already
+ * adds `pt-16` to clear the navbar, so `main` adds `pt-12` for the TopBar.
  */
 export default function MainLayout() {
   return (
@@ -17,7 +17,7 @@ export default function MainLayout() {
       <ScrollToTop />
       <TopBar />
       <Navbar />
-      <main className="flex-1 pt-10">
+      <main className="flex-1 pt-12">
         <Outlet />
       </main>
       <Footer />

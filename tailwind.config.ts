@@ -5,15 +5,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Light theme — original token names kept so existing classes resolve.
-        navy: '#FFFFFF', // page background (now light)
-        teal: {
-          electric: '#1ED760', // green accent
+        // White base — page background stays white per the brand brief.
+        navy: '#FFFFFF', // page background (white base)
+
+        // Chad flag tricolor — the brand palette.
+        chad: {
+          blue: '#002664',
+          yellow: '#FECB00',
+          red: '#C8102E',
         },
-        steel: '#EDF0EA', // soft light surface
-        frost: '#0E1116', // primary ink (now dark)
+
+        // Accent tokens remapped onto the Chad palette so the ~30 files using
+        // the original token names re-theme automatically (no content moved).
+        teal: {
+          electric: '#002664', // primary accent → Chad blue
+        },
+        steel: '#EEF1F7', // soft cool surface
+        frost: '#0B1220', // primary ink (near-black, faint navy)
         indigo: {
-          pulse: '#0E7A43', // deep-green secondary
+          pulse: '#C8102E', // secondary accent → Chad red
         },
       },
       fontFamily: {
@@ -28,9 +38,9 @@ const config: Config = {
       },
       backgroundImage: {
         'grid-pattern':
-          'linear-gradient(to right, rgba(14, 17, 22, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(14, 17, 22, 0.05) 1px, transparent 1px)',
+          'linear-gradient(to right, rgba(0, 38, 100, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 38, 100, 0.05) 1px, transparent 1px)',
         'hero-gradient':
-          'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(30, 215, 96, 0.18), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 20%, rgba(30, 215, 96, 0.10), transparent 55%)',
+          'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0, 38, 100, 0.16), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 20%, rgba(254, 203, 0, 0.12), transparent 55%)',
       },
       backgroundSize: {
         grid: '48px 48px',

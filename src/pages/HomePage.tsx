@@ -1,23 +1,27 @@
 import { HeroSection } from '@/components/sections/HeroSection'
-import { TrustedBySection } from '@/components/sections/TrustedBySection'
-import { MetricsSection } from '@/components/sections/MetricsSection'
-import { ServicesSection } from '@/components/sections/ServicesSection'
+import { AboutSection } from '@/components/sections/AboutSection'
 import { JurisdictionsSection } from '@/components/sections/JurisdictionsSection'
-import { JoinBandSection } from '@/components/sections/JoinBandSection'
+import { MetricsSection } from '@/components/sections/MetricsSection'
+import { GrowTogetherSection } from '@/components/sections/GrowTogetherSection'
+import { TrustedBySection } from '@/components/sections/TrustedBySection'
+import { ServicesSection } from '@/components/sections/ServicesSection'
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection'
+import { CTASection } from '@/components/sections/CTASection'
 import { NewsletterSection } from '@/components/sections/NewsletterSection'
 
-/** Landing page — rendr-style section flow with GRIDGLOBAL GATE content. */
+/** Landing page — business-support flow, localised to Chad. */
 export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <TrustedBySection />
-      <MetricsSection />
-      <ServicesSection />
+      <AboutSection />
       <JurisdictionsSection />
-      <JoinBandSection />
+      <MetricsSection />
+      <GrowTogetherSection />
+      <TrustedBySection />
+      <ServicesSection />
       <TestimonialsSection />
+      <CTASection />
       <NewsletterSection />
     </>
   )

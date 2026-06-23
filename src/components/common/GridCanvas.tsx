@@ -133,7 +133,7 @@ export function GridCanvas({ className }: { className?: string }) {
               y1={a.y}
               x2={b.x}
               y2={b.y}
-              stroke="#1ED760"
+              stroke="#002664"
               strokeWidth={1}
               opacity={0.16}
             />
@@ -153,7 +153,7 @@ export function GridCanvas({ className }: { className?: string }) {
             cx={node.x}
             cy={node.y}
             r={BASE_RADIUS}
-            fill="#1ED760"
+            fill="#002664"
             opacity={0.6}
           />
         ))}

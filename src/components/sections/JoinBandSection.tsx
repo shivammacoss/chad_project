@@ -36,7 +36,7 @@ export function JoinBandSection() {
         </button>
 
         <span className="inline-flex items-center gap-2 font-body text-sm font-medium text-white/80">
-          <span className="h-1.5 w-1.5 rounded-full bg-teal-electric" />
+          <span className="h-1.5 w-1.5 rounded-full bg-chad-yellow" />
           Start exploring
         </span>
 
@@ -47,10 +47,10 @@ export function JoinBandSection() {
         <button
           type="button"
           onClick={() => navigate('/contact')}
-          className="group inline-flex h-12 items-center gap-2 rounded-full bg-teal-electric px-7 font-display text-base font-semibold text-frost shadow-lg shadow-teal-electric/25 transition-colors hover:bg-teal-electric/90"
+          className="group inline-flex h-12 items-center gap-2 rounded-full bg-teal-electric px-7 font-display text-base font-semibold text-white shadow-lg shadow-teal-electric/25 transition-colors hover:bg-teal-electric/90"
         >
           Get started now
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0E1116] text-teal-electric transition-transform group-hover:translate-x-0.5">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-chad-yellow text-chad-blue transition-transform group-hover:translate-x-0.5">
             →
           </span>
         </button>

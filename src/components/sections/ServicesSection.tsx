@@ -9,11 +9,20 @@ interface ServiceCard {
   to: string
 }
 
+/** Chad-localised descriptions, keyed by menu category id. */
+const CHAD_BLURBS: Record<string, string> = {
+  'virtual-offices': 'Prestigious Chad business addresses with secure mail handling and forwarding.',
+  'company-incorporation': 'Form your company in Chad — residents and non-residents welcome.',
+  'company-services': 'Compliance, secretarial, branding and banking to run your Chad company.',
+  communication: 'Call answering and virtual numbers for a professional business image.',
+  'back-office': 'Data, documents, transcription and quality assurance — handled with precision.',
+}
+
 const SERVICE_CARDS: ServiceCard[] = [
   ...MENU.filter((c) => c.overviewPath).map((c) => ({
     id: c.id,
     title: c.label,
-    description: c.blurb,
+    description: CHAD_BLURBS[c.id] ?? c.blurb,
     to: c.overviewPath as string,
   })),
   {
@@ -55,7 +64,7 @@ export function ServicesSection() {
       <div className="mx-auto grid max-w-7xl items-start gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:gap-14">
         {/* Left: copy */}
         <div className="flex flex-col gap-6">
-          <SectionLabel>What we do</SectionLabel>
+          <SectionLabel>Business operation solutions</SectionLabel>
           <h2 className="max-w-md font-display text-display-lg font-bold text-frost">
             One gateway with common goals
           </h2>
@@ -66,10 +75,10 @@ export function ServicesSection() {
           <div>
             <Link
               to="/virtual-offices"
-              className="group inline-flex h-12 items-center gap-2 rounded-full bg-[#0E1116] px-6 font-display text-base font-semibold text-white transition-colors hover:bg-[#14181F]"
+              className="group inline-flex h-12 items-center gap-2 rounded-full bg-chad-blue px-6 font-display text-base font-semibold text-white transition-colors hover:bg-[#013a87]"
             >
               Explore services
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-electric text-[#0E1116] transition-transform group-hover:translate-x-0.5">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-chad-yellow text-chad-blue transition-transform group-hover:translate-x-0.5">
                 →
               </span>
             </Link>
@@ -82,9 +91,9 @@ export function ServicesSection() {
             <Link
               key={service.id}
               to={service.to}
-              className="group flex flex-col gap-4 rounded-3xl bg-[#0E1116] p-6 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#14181F]"
+              className="group flex flex-col gap-4 rounded-3xl bg-chad-blue p-6 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#013a87]"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-teal-electric transition-colors group-hover:bg-teal-electric group-hover:text-[#0E1116]">
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-chad-yellow transition-colors group-hover:bg-chad-yellow group-hover:text-chad-blue">
                 <GlyphIcon index={i} />
               </span>
               <h3 className="font-display text-lg font-semibold">{service.title}</h3>

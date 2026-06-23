@@ -72,7 +72,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="fixed inset-x-0 top-10 z-40 border-b border-frost/10 bg-navy/80 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-12 z-40 border-b border-frost/10 bg-navy/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Logo onClick={closeAll} />
 
