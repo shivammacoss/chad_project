@@ -12,7 +12,7 @@ import InsightsPage from '@/pages/InsightsPage'
 import AffiliatePage from '@/pages/AffiliatePage'
 import ChadFreeZonePage from '@/pages/ChadFreeZonePage'
 import LoginPage from '@/pages/LoginPage'
-import SignupPage from '@/pages/SignupPage'
+import GetStartedPage from '@/pages/GetStartedPage'
 import VerifyEmailPage from '@/pages/VerifyEmailPage'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import AdminRoute from '@/components/auth/AdminRoute'
@@ -67,7 +67,7 @@ export function AppRoutes() {
 
         {/* Auth pages */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/get-started" element={<GetStartedPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
 
         <Route path="*" element={<NotFoundPage />} />

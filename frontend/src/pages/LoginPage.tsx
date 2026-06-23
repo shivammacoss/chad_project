@@ -38,7 +38,7 @@ export default function LoginPage() {
         {error && <p className="text-sm text-indigo-pulse">{error}</p>}
         <Button type="submit" fullWidth disabled={busy}>{busy ? 'Signing in…' : 'Log in'}</Button>
         <p className="text-center text-sm text-frost/55">
-          No account? <Link to="/signup" className="text-teal-electric">Sign up</Link>
+          New here? <Link to="/get-started" className="text-teal-electric">Get started</Link>
         </p>
       </form>
     </AuthShell>
