@@ -10,8 +10,8 @@ const FEATURES: Feature[] = [
   },
   {
     id: 'W-02',
-    title: 'Same-Day Filing',
-    description: 'UK companies filed directly to Companies House — often on the very same day.',
+    title: 'Fast Chad Filing',
+    description: 'Company formation filed directly with the Chad authorities — handled end to end.',
   },
   {
     id: 'W-03',

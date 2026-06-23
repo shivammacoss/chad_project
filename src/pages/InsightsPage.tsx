@@ -17,23 +17,23 @@ const CATEGORIES = ['All', 'Formation', 'Compliance', 'Banking', 'Back Office']
 
 const POSTS: Post[] = [
   {
-    title: 'How non-residents can form a UK limited company',
+    title: 'How non-residents can register a company in Chad',
     excerpt:
-      'A step-by-step guide to incorporating in the UK from abroad — documents, addresses and timelines.',
+      'A step-by-step guide to incorporating in Chad from abroad — documents, addresses and timelines.',
     category: 'Formation',
     readTime: '6 min',
     date: 'Jun 2026',
   },
   {
-    title: 'Confirmation statements: what they are and why they matter',
-    excerpt: 'Stay compliant with Companies House by understanding this essential annual filing.',
+    title: 'Annual compliance filings: what they are and why they matter',
+    excerpt: 'Stay in good standing with the Chad company registry by understanding your annual filings.',
     category: 'Compliance',
     readTime: '4 min',
     date: 'May 2026',
   },
   {
-    title: 'Choosing between a US address only and an LLC',
-    excerpt: 'When you need just a presence versus a full entity — and how to decide.',
+    title: 'Chad International Free Zone: is it right for your business?',
+    excerpt: 'When a free-zone company makes sense versus a standard Chad company — and how to decide.',
     category: 'Formation',
     readTime: '5 min',
     date: 'May 2026',
