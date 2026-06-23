@@ -29,7 +29,8 @@ Chad legal reality (drives the data model and workflow):
 ## 2. Scope
 
 ### In scope (this MVP / demo)
-1. User signup / login (email + password).
+1. User signup / login (email + password) **with email verification** (confirm-email
+   link sent via SMTP using Nodemailer; provider-agnostic).
 2. KYC document upload (passport, address proof, photo, etc.).
 3. Stripe **test-mode** payment (hosted Checkout).
 4. Company-formation workflow with a real status state-machine, covering 5 Chad entity
@@ -42,7 +43,8 @@ Chad legal reality (drives the data model and workflow):
 ### Out of scope (later / launch)
 - Virtual office / registered-address product, mail handling.
 - Mobile-money payments, live-capable card gateway (demo uses Stripe test mode).
-- Recurring compliance billing, email/SMS notifications.
+- Recurring compliance billing, transactional notifications beyond email verification
+  (e.g. status-change emails, SMS). Password reset is launch-phase.
 - Multi-language (FR/AR) content — marketing layer, handled separately.
 - Real automated ANIE filing integration (manual during demo).
 
@@ -82,6 +84,9 @@ chad_project/
 | fullName | string | |
 | country | string | user's home country |
 | role | enum | `user` \| `admin` (default `user`) |
+| emailVerified | boolean | default `false` |
+| emailVerifyToken | string | nullable, hashed token for the confirm link |
+| emailVerifyExpires | Date | nullable, token expiry (e.g. 24h) |
 | createdAt | Date | |
 
 ### Formation (the order)
@@ -133,8 +138,12 @@ draft
 ## 6. API Surface
 
 Auth (JWT in httpOnly cookie):
-- `POST /api/auth/signup` — { email, password, fullName, country }
-- `POST /api/auth/login`
+- `POST /api/auth/signup` — { email, password, fullName, country }; creates an
+  unverified user and emails a verification link.
+- `GET  /api/auth/verify-email?token=...` — marks `emailVerified = true`.
+- `POST /api/auth/resend-verification` — re-sends the link.
+- `POST /api/auth/login` — unverified users are blocked with a clear "verify your
+  email" message (resend offered).
 - `POST /api/auth/logout`
 - `GET  /api/auth/me`
 
@@ -165,8 +174,12 @@ Admin (role=admin):
 - File uploads: type + size validation (images/PDF, e.g. ≤ 10 MB), stored under
   `server/uploads/` (gitignored). Storage is abstracted so it can swap to S3 at launch.
 - Stripe webhook signature verified with the webhook secret.
+- Email verification via **Nodemailer** (provider-agnostic SMTP — Brevo / Gmail
+  app-password / Mailtrap all work). Verification token is random, hashed before storage,
+  with an expiry. `lib/email.ts` wraps sending so the provider can be swapped freely.
 - Secrets in `server/.env` (gitignored): `MONGODB_URI`, `JWT_SECRET`, `STRIPE_SECRET_KEY`,
-  `STRIPE_WEBHOOK_SECRET`, `CLIENT_URL`.
+  `STRIPE_WEBHOOK_SECRET`, `CLIENT_URL`, and SMTP config
+  (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`).
 
 ## 8. Frontend Additions (React)
 
@@ -183,7 +196,8 @@ Admin (role=admin):
 ## 9. Demo Seed
 
 `server/src/seed.ts` creates:
-- 1 admin user (known credentials) + 1–2 sample regular users.
+- 1 admin user (known credentials) + 1–2 sample regular users — all `emailVerified:
+  true` so they can log in immediately during the demo.
 - 3–5 formations across statuses: e.g. one `registered`, one `in_review`, one
   `documents_submitted`, one `draft` — so the full lifecycle is visible immediately when
   presenting to government.
