@@ -108,8 +108,8 @@ export default function ApplicationWizardPage() {
           <div className="mt-4 flex flex-col gap-4">
             <h2 className="text-xl font-semibold text-frost">Upload documents</h2>
             {owners.length === 0 && <p className="text-sm text-frost/55">No owners added — you can still proceed.</p>}
-            {owners.map((o) => (
-              <div key={o.fullName} className="rounded-xl border border-frost/10 bg-steel/20 p-4">
+            {owners.map((o, i) => (
+              <div key={i} className="rounded-xl border border-frost/10 bg-steel/20 p-4">
                 <p className="text-sm font-medium text-frost">{o.fullName || 'Owner'}</p>
                 {DOC_FIELDS.map((d) => (
                   <label key={d.type} className="mt-2 flex flex-col gap-1">

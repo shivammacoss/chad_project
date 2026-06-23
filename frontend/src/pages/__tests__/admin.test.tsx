@@ -15,7 +15,7 @@ describe('AdminPage', () => {
         if (opts?.method === 'PATCH') return patch()
         return new Response(
           JSON.stringify([
-            { _id: 'f1', entityType: 'SARL', companyName: 'Acme SARL', packageTier: 'standard', priceCents: 49900, status: 'in_review', paymentStatus: 'paid', statusHistory: [], createdAt: '', userId: { _id: 'u1', email: 'c@x.com', fullName: 'C' } },
+            { _id: 'f1', entityType: 'SARL', companyDetails: { proposedName: 'Acme SARL', city: "N'Djamena" }, owners: [], virtualOffice: { wanted: false }, packageTier: 'standard', priceCents: 49900, status: 'in_review', paymentStatus: 'paid', statusHistory: [], currentStep: 1, createdAt: '', userId: { _id: 'u1', email: 'c@x.com', fullName: 'C' } },
           ]),
           { status: 200 },
         )

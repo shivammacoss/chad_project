@@ -184,7 +184,7 @@ export function Navbar() {
               <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
                 Log in
               </Button>
-              <Button variant="primary" size="sm" onClick={() => navigate('/contact')}>
+              <Button variant="primary" size="sm" onClick={() => navigate('/get-started')}>
                 Get Started
               </Button>
             </>
@@ -333,7 +333,7 @@ export function Navbar() {
                   fullWidth
                   onClick={() => {
                     closeAll()
-                    navigate('/contact')
+                    navigate('/get-started')
                   }}
                 >
                   Get Started

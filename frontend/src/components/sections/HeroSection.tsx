@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 
 const HERO_IMAGE =
@@ -28,7 +28,6 @@ function CheckIcon({ className }: { className?: string }) {
 }
 
 export function HeroSection() {
-  const navigate = useNavigate()
 
   return (
     <section id="top" className="relative pt-16">
@@ -76,14 +75,15 @@ export function HeroSection() {
                 Everything to launch and run your company, in one place.
               </p>
             </div>
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full bg-chad-blue text-white shadow-none hover:bg-[#013a87] sm:w-auto"
-              onClick={() => navigate('/contact')}
-            >
-              Get started now
-            </Button>
+            <Link to="/get-started" className="w-full sm:w-auto">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full bg-chad-blue text-white shadow-none hover:bg-[#013a87] sm:w-auto"
+              >
+                Get started now
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
