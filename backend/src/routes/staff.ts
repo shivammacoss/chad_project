@@ -1,10 +1,13 @@
 import { Router } from 'express'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { Application } from '../models/Application.js'
 import { DocumentModel } from '../models/Document.js'
 import { User } from '../models/User.js'
 import { requireAuth } from '../middleware/auth.js'
 import { requireStaff, requireRole } from '../middleware/roles.js'
 import { pushStatus } from './applications.js'
+import { generateCertificatePdf } from '../lib/certificate.js'
 
 export const staffRouter = Router()
 staffRouter.use(requireAuth, requireStaff)
@@ -61,4 +64,30 @@ staffRouter.patch('/documents/:id', async (req, res) => {
 staffRouter.get('/agents', requireRole('legal', 'compliance'), async (_req, res) => {
   const agents = await User.find({ role: 'government_agent' }).select('fullName email')
   res.json(agents)
+})
+
+staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
+  const app = await Application.findById(req.params.id).populate('userId', 'fullName email')
+  if (!app) return res.status(404).json({ error: 'Not found' })
+  if (!app.companyRegNo) {
+    const seq = (await Application.countDocuments({ companyRegNo: { $ne: null } })) + 1
+    app.companyRegNo = `RCCM/NDJ/${new Date().getFullYear()}/B-${String(seq).padStart(4, '0')}`
+  }
+  app.registeredAt = new Date()
+  pushStatus(app, 'registered', `Certificate issued (${app.companyRegNo})`)
+  await app.save()
+
+  const applicantName = (app.userId as unknown as { fullName?: string })?.fullName ?? 'Applicant'
+  const pdf = await generateCertificatePdf(app as never, applicantName)
+  const dir = join(process.cwd(), 'uploads', String(app._id))
+  mkdirSync(dir, { recursive: true })
+  const filePath = join(dir, 'certificate.pdf')
+  writeFileSync(filePath, pdf)
+
+  const existing = await DocumentModel.findOne({ applicationId: app._id, type: 'certificate', fileName: 'certificate-of-incorporation.pdf' })
+  if (existing) { existing.storagePath = filePath; existing.status = 'approved'; await existing.save() }
+  else {
+    await DocumentModel.create({ applicationId: app._id, userId: app.userId, ownerName: '', type: 'certificate', fileName: 'certificate-of-incorporation.pdf', storagePath: filePath, status: 'approved' })
+  }
+  res.json(app)
 })

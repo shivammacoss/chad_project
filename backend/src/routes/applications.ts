@@ -4,6 +4,8 @@ import { Application, type IApplication } from '../models/Application.js'
 import { totalPrice, type EntityType, type Tier, type VoPlan } from '../lib/pricing.js'
 import { getService, priceForOrder } from '../lib/services.js'
 import { requireAuth } from '../middleware/auth.js'
+import { User } from '../models/User.js'
+import { generateCertificatePdf } from '../lib/certificate.js'
 import { documentsRouter } from './documents.js'
 import { checkoutRouter } from './payments.js'
 
@@ -90,6 +92,20 @@ applicationsRouter.post('/:id/submit', async (req, res) => {
   pushStatus(app, 'documents_submitted')
   await app.save()
   res.json(app)
+})
+
+applicationsRouter.get('/:id/certificate.pdf', async (req, res) => {
+  const app = await Application.findById(req.params.id)
+  if (!app) return res.status(404).json({ error: 'Not found' })
+  const isOwner = String(app.userId) === req.userId
+  const isStaff = req.userRole && !['customer', 'user'].includes(req.userRole)
+  if (!isOwner && !isStaff) return res.status(404).json({ error: 'Not found' })
+  if (!app.companyRegNo) return res.status(404).json({ error: 'Certificate not issued yet' })
+  const user = await User.findById(app.userId).select('fullName')
+  const pdf = await generateCertificatePdf(app as never, user?.fullName ?? 'Applicant')
+  res.setHeader('Content-Type', 'application/pdf')
+  res.setHeader('Content-Disposition', 'inline; filename="certificate-of-incorporation.pdf"')
+  res.send(pdf)
 })
 
 applicationsRouter.use('/:id/checkout', checkoutRouter)
