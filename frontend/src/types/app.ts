@@ -39,3 +39,7 @@ export interface DocItem {
   status: 'pending' | 'approved' | 'rejected'; uploadedAt: string
   rejectionReason?: string
 }
+
+export interface Notification {
+  _id: string; type: string; title: string; body: string; link: string; read: boolean; createdAt: string
+}

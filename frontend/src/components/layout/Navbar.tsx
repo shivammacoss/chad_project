@@ -5,6 +5,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { MENU } from '@/content/menu'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/store/AuthContext'
+import NotificationBell from '@/components/layout/NotificationBell'
 
 /** Brand logo. */
 function Logo({ onClick }: { onClick?: () => void }) {
@@ -176,6 +177,7 @@ export function Navbar() {
         <div className="hidden items-center gap-2 lg:flex">
           {user ? (
             <>
+              <NotificationBell />
               <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
                 Dashboard
               </Button>
@@ -289,6 +291,9 @@ export function Navbar() {
           <div className="mt-4 flex flex-col gap-2 pt-2">
             {user ? (
               <>
+                <div className="flex items-center justify-center py-2">
+                  <NotificationBell />
+                </div>
                 <Button
                   variant="outline"
                   size="md"
