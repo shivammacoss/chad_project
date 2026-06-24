@@ -35,3 +35,12 @@ export async function sendVerificationEmail(to: string, link: string): Promise<v
            <p>This link expires in 24 hours.</p>`,
   })
 }
+
+export async function sendNotificationEmail(to: string, title: string, body: string): Promise<void> {
+  await getTransport().sendMail({
+    from: process.env.EMAIL_FROM ?? 'no-reply@example.com',
+    to,
+    subject: `${title} — Chad Business Assist`,
+    html: `<h2>${title}</h2><p>${body}</p><p style="color:#888">— Chad Business Assist</p>`,
+  })
+}
