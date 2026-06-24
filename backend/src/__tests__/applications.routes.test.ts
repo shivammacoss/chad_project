@@ -77,4 +77,22 @@ describe('applications routes', () => {
     const res = await agent.post('/api/applications').send({ serviceKey: 'nope' })
     expect(res.status).toBe(400)
   })
+
+  it('saves enriched shareholders/directors + capital via PATCH', async () => {
+    const agent = await authedAgent()
+    const created = await agent.post('/api/applications').send({ entityType: 'SARL', packageTier: 'standard' })
+    const res = await agent.patch(`/api/applications/${created.body._id}`).send({
+      companyDetails: { proposedName: 'Acme SARL', alternateName2: 'Acme 3', paidUpCapitalFCFA: 500000, currency: 'FCFA' },
+      owners: [
+        { fullName: 'A', role: 'shareholder', nationality: 'IN', ownershipPercent: 100, passportNo: 'P1', isCorporate: false, isPrimaryContact: true },
+        { fullName: 'B', role: 'director', nationality: 'Chad', dob: '1980-01-01', passportNo: 'P2', isPrimaryContact: false },
+      ],
+      currentStep: 4,
+    })
+    expect(res.status).toBe(200)
+    expect(res.body.companyDetails.paidUpCapitalFCFA).toBe(500000)
+    expect(res.body.companyDetails.alternateName2).toBe('Acme 3')
+    expect(res.body.owners[1].dob).toBe('1980-01-01')
+    expect(res.body.owners[0].passportNo).toBe('P1')
+  })
 })

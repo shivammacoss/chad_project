@@ -25,8 +25,8 @@ export async function seedDemo(): Promise<void> {
     {
       entityType: 'SARL' as const, name: 'Sahel Trading SARL', status: 'registered',
       owners: [
-        { fullName: 'Amadou Diallo', role: 'both' as const, nationality: 'Chad', ownershipPercent: 60, isPrimaryContact: true },
-        { fullName: 'Rajesh Kumar', role: 'shareholder' as const, nationality: 'India', ownershipPercent: 40, isPrimaryContact: false },
+        { fullName: 'Amadou Diallo', role: 'both' as const, nationality: 'Chad', ownershipPercent: 60, isPrimaryContact: true, passportNo: 'TD1234567', phone: '+235 60 00 00 00', dob: '1985-04-12', address: 'Av. Charles de Gaulle, N\'Djamena' },
+        { fullName: 'Rajesh Kumar', role: 'shareholder' as const, nationality: 'India', ownershipPercent: 40, isPrimaryContact: false, passportNo: 'IN9876543', email: 'rajesh@example.com' },
       ],
       vo: { wanted: true, plan: 'premium' as const },
     },
@@ -51,7 +51,7 @@ export async function seedDemo(): Promise<void> {
       serviceName: 'Company Formation',
       entityType: s.entityType,
       packageTier: 'standard',
-      companyDetails: { proposedName: s.name, businessActivity: 'General trading', shareCapitalFCFA: 1000000, city: "N'Djamena" },
+      companyDetails: { proposedName: s.name, businessActivity: 'General trading', shareCapitalFCFA: 1000000, paidUpCapitalFCFA: 500000, currency: 'FCFA', city: "N'Djamena" },
       owners: s.owners,
       virtualOffice: s.vo,
       priceCents: totalPrice(s.entityType, 'standard', s.vo),
