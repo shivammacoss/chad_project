@@ -11,11 +11,14 @@ export interface AuthUser { id: string; email: string; fullName: string; country
 
 export interface Owner {
   fullName: string; role: OwnerRole; nationality: string
-  ownershipPercent: number; email?: string; isPrimaryContact: boolean
+  ownershipPercent?: number; email?: string; phone?: string; address?: string
+  passportNo?: string; idNumber?: string; dob?: string; isCorporate?: boolean
+  isPrimaryContact: boolean
 }
 export interface CompanyDetails {
-  proposedName: string; alternateName?: string; businessActivity?: string
-  shareCapitalFCFA?: number; city: string
+  proposedName: string; alternateName?: string; alternateName2?: string
+  businessActivity?: string; shareCapitalFCFA?: number; paidUpCapitalFCFA?: number
+  currency?: string; city: string
 }
 export interface VirtualOffice { wanted: boolean; plan?: VoPlan }
 

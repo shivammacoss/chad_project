@@ -38,6 +38,12 @@ export const OWNER_ROLES: { value: OwnerRole; label: string }[] = [
   { value: 'both', label: 'Director & Shareholder' },
 ]
 
+export const BUSINESS_ACTIVITIES: string[] = [
+  'Trading', 'IT', 'Consulting', 'Import/Export', 'Manufacturing', 'Construction', 'Agriculture', 'Services', 'Other',
+]
+
+export const CURRENCIES: string[] = ['FCFA', 'USD', 'EUR']
+
 export function formatPrice(cents: number): string {
   return `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
 }
