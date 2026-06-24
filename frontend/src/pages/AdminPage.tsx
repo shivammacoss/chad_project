@@ -71,7 +71,7 @@ export default function AdminPage() {
               {selected.companyDetails?.proposedName && (
                 <div className="rounded-lg border border-frost/10 bg-steel/20 p-4 text-sm text-frost/80">
                   <p>Activity: {selected.companyDetails.businessActivity || '—'}</p>
-                  <p>Capital: {selected.companyDetails.shareCapitalFCFA?.toLocaleString() ?? '—'} FCFA · City: {selected.companyDetails.city}</p>
+                  <p>Capital: {selected.companyDetails?.shareCapitalFCFA?.toLocaleString() ?? '—'} {selected.companyDetails?.currency ?? 'FCFA'} (paid-up {selected.companyDetails?.paidUpCapitalFCFA?.toLocaleString() ?? '—'}) · City: {selected.companyDetails.city}</p>
                   <p>Virtual office: {selected.virtualOffice.wanted ? selected.virtualOffice.plan : 'none'}</p>
                 </div>
               )}
@@ -83,7 +83,7 @@ export default function AdminPage() {
                     {selected.owners.map((o, i) => (
                       <div key={i} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-2 text-sm">
                         <span className="text-frost">{o.fullName} <span className="text-frost/50">({o.role})</span></span>
-                        <span className="text-frost/60">{o.nationality} · {o.ownershipPercent}%</span>
+                        <span className="text-frost/60">{o.nationality} · {o.role === 'director' ? (o.dob ? `DOB ${o.dob}` : 'director') : `${o.ownershipPercent ?? 0}%`}{o.isCorporate ? ' · company' : ''}{o.isPrimaryContact ? ' · primary' : ''}</span>
                       </div>
                     ))}
                   </div>

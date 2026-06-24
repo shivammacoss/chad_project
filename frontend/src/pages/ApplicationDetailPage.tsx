@@ -52,7 +52,7 @@ export default function ApplicationDetailPage() {
             <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Company</h2>
             <div className="mt-2 rounded-lg border border-frost/10 bg-steel/20 p-4 text-sm text-frost/80">
               <p>Activity: {a.companyDetails.businessActivity || '—'}</p>
-              <p>Capital: {a.companyDetails.shareCapitalFCFA?.toLocaleString() ?? '—'} FCFA</p>
+              <p>Capital: {a.companyDetails?.shareCapitalFCFA?.toLocaleString() ?? '—'} {a.companyDetails?.currency ?? 'FCFA'} (paid-up {a.companyDetails?.paidUpCapitalFCFA?.toLocaleString() ?? '—'})</p>
               <p>City: {a.companyDetails.city}</p>
               <p>Virtual office: {a.virtualOffice.wanted ? a.virtualOffice.plan : 'none'}</p>
             </div>
@@ -66,7 +66,7 @@ export default function ApplicationDetailPage() {
               {a.owners.map((o, i) => (
                 <div key={i} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
                   <span className="text-frost">{o.fullName} <span className="text-frost/50">({o.role})</span></span>
-                  <span className="text-frost/60">{o.nationality} · {o.ownershipPercent}%{o.isPrimaryContact ? ' · primary' : ''}</span>
+                  <span className="text-frost/60">{o.nationality} · {o.role === 'director' ? (o.dob ? `DOB ${o.dob}` : 'director') : `${o.ownershipPercent ?? 0}%`}{o.isCorporate ? ' · company' : ''}{o.isPrimaryContact ? ' · primary' : ''}</span>
                 </div>
               ))}
             </div>
