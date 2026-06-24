@@ -83,6 +83,8 @@ staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
   await app.save()
 
   const applicantName = (app.userId as unknown as { fullName?: string })?.fullName ?? 'Applicant'
+  // userId is populated above; use its _id for downstream writes.
+  const applicantId = (app.userId as unknown as { _id?: unknown })?._id ?? app.userId
   const pdf = await generateCertificatePdf(app as never, applicantName)
   const dir = join(process.cwd(), 'uploads', String(app._id))
   mkdirSync(dir, { recursive: true })
@@ -92,9 +94,9 @@ staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
   const existing = await DocumentModel.findOne({ applicationId: app._id, type: 'certificate', fileName: 'certificate-of-incorporation.pdf' })
   if (existing) { existing.storagePath = filePath; existing.status = 'approved'; await existing.save() }
   else {
-    await DocumentModel.create({ applicationId: app._id, userId: app.userId, ownerName: '', type: 'certificate', fileName: 'certificate-of-incorporation.pdf', storagePath: filePath, status: 'approved' })
+    await DocumentModel.create({ applicationId: app._id, userId: applicantId, ownerName: '', type: 'certificate', fileName: 'certificate-of-incorporation.pdf', storagePath: filePath, status: 'approved' })
   }
 
-  await notifyUser(app.userId, { type: 'certificate', title: 'Your company is registered!', body: `Certificate ${app.companyRegNo} is ready to download.`, link: `/applications/${app._id}` })
+  await notifyUser(applicantId, { type: 'certificate', title: 'Your company is registered!', body: `Certificate ${app.companyRegNo} is ready to download.`, link: `/applications/${app._id}` })
   res.json(app)
 })
