@@ -43,6 +43,7 @@ export default function ApplicationDetailPage() {
           <div>
             <h1 className="text-2xl font-semibold text-frost">{a.companyDetails?.proposedName || a.serviceName}</h1>
             <p className="text-sm text-frost/55">{a.serviceName} · {formatPrice(a.priceCents)}</p>
+            {a.companyRegNo && <p className="text-sm text-teal-electric">Reg no: {a.companyRegNo}</p>}
           </div>
           <StatusBadge status={a.status} />
         </div>
@@ -105,6 +106,16 @@ export default function ApplicationDetailPage() {
             </div>
           ))}
         </div>
+
+        {a.companyRegNo && (
+          <>
+            <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Certificate</h2>
+            <div className="mt-2 flex items-center justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
+              <span className="text-frost">Certificate of Incorporation — {a.companyRegNo}</span>
+              <a href={`/api/applications/${id}/certificate.pdf`} target="_blank" rel="noreferrer" className="text-teal-electric">Download / Print</a>
+            </div>
+          </>
+        )}
 
         {docs.some((d) => ['certificate', 'government_receipt', 'license'].includes(d.type)) && (
           <>
