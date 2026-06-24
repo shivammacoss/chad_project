@@ -6,6 +6,7 @@ import { getService, priceForOrder } from '../lib/services.js'
 import { requireAuth } from '../middleware/auth.js'
 import { User } from '../models/User.js'
 import { generateCertificatePdf } from '../lib/certificate.js'
+import { notifyUser } from '../lib/notify.js'
 import { documentsRouter } from './documents.js'
 import { checkoutRouter } from './payments.js'
 
@@ -91,6 +92,7 @@ applicationsRouter.post('/:id/submit', async (req, res) => {
   if (app.status !== 'draft') return res.status(400).json({ error: 'Not in draft' })
   pushStatus(app, 'documents_submitted')
   await app.save()
+  await notifyUser(app.userId, { type: 'status', title: 'Application received', body: `We received your ${app.serviceName} application and will review your documents.`, link: `/applications/${app._id}` })
   res.json(app)
 })
 

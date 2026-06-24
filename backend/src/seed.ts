@@ -3,6 +3,7 @@ import { connectDb, disconnectDb } from './lib/db.js'
 import { User } from './models/User.js'
 import { Application } from './models/Application.js'
 import { DocumentModel } from './models/Document.js'
+import { Notification } from './models/Notification.js'
 import { hashPassword } from './lib/auth.js'
 import { totalPrice } from './lib/pricing.js'
 
@@ -83,6 +84,11 @@ export async function seedDemo(): Promise<void> {
   if (registered) {
     await DocumentModel.create({ applicationId: registered._id, userId: user._id, ownerName: '', type: 'certificate', fileName: 'certificate-of-incorporation.pdf', storagePath: 'seed/certificate.pdf', status: 'approved' })
   }
+
+  const regApp = created.find((a) => a.status === 'registered')
+  await Notification.deleteMany({})
+  await Notification.create({ userId: user._id, type: 'payment', title: 'Payment received', body: 'Your payment was received. Application in processing.', link: regApp ? `/applications/${regApp._id}` : '/dashboard', read: false })
+  await Notification.create({ userId: user._id, type: 'certificate', title: 'Your company is registered!', body: 'Your Certificate of Incorporation is ready to download.', link: regApp ? `/applications/${regApp._id}` : '/dashboard', read: false })
 
   console.log('Seeded:', { admin: admin.email, user: user.email, legal: legal.email, agent: agent.email, applications: specs.length + 1 })
 }

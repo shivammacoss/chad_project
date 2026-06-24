@@ -6,6 +6,7 @@ import { DocumentModel } from '../models/Document.js'
 import { User } from '../models/User.js'
 import { requireAuth } from '../middleware/auth.js'
 import { requireStaff, requireRole } from '../middleware/roles.js'
+import { notifyUser } from '../lib/notify.js'
 import { pushStatus } from './applications.js'
 import { generateCertificatePdf } from '../lib/certificate.js'
 
@@ -58,6 +59,10 @@ staffRouter.patch('/documents/:id', async (req, res) => {
   if (status === 'rejected') update.rejectionReason = reason ?? ''
   const doc = await DocumentModel.findByIdAndUpdate(req.params.id, update, { new: true })
   if (!doc) return res.status(404).json({ error: 'Not found' })
+  if (doc && status === 'rejected') {
+    const parent = await Application.findById(doc.applicationId).select('userId')
+    if (parent) await notifyUser(parent.userId, { type: 'document', title: 'A document needs attention', body: reason || 'Please re-upload the requested document.', link: `/applications/${doc.applicationId}` })
+  }
   res.json(doc)
 })
 
@@ -89,5 +94,7 @@ staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
   else {
     await DocumentModel.create({ applicationId: app._id, userId: app.userId, ownerName: '', type: 'certificate', fileName: 'certificate-of-incorporation.pdf', storagePath: filePath, status: 'approved' })
   }
+
+  await notifyUser(app.userId, { type: 'certificate', title: 'Your company is registered!', body: `Certificate ${app.companyRegNo} is ready to download.`, link: `/applications/${app._id}` })
   res.json(app)
 })

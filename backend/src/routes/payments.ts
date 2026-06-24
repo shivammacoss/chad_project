@@ -2,6 +2,7 @@ import { Router, raw } from 'express'
 import { Application } from '../models/Application.js'
 import { getStripe } from '../lib/stripe.js'
 import { requireAuth } from '../middleware/auth.js'
+import { notifyUser } from '../lib/notify.js'
 import { pushStatus } from './applications.js'
 
 export const checkoutRouter = Router({ mergeParams: true })
@@ -53,6 +54,7 @@ webhookRouter.post('/', raw({ type: 'application/json' }), async (req, res) => {
       app.paymentStatus = 'paid'
       pushStatus(app, 'paid')
       await app.save()
+      await notifyUser(app.userId, { type: 'payment', title: 'Payment received', body: `Your payment for ${app.serviceName} was received. Your application is now in processing.`, link: `/applications/${app._id}` })
     }
   }
   res.json({ received: true })
