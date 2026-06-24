@@ -14,20 +14,20 @@ interface GridState {
   selectedNodeId: string | null
 }
 
-/** Seed topology — a representative slice of the global grid. */
+/** Seed topology — a representative slice of our Chad presence. */
 const SEED_NODES: GridNode[] = [
-  { id: 'n-us-east', label: 'US-EAST-1', x: 196, y: 188, status: 'online' },
-  { id: 'n-us-west', label: 'US-WEST-2', x: 96, y: 320, status: 'online' },
-  { id: 'n-sa-east', label: 'SA-EAST-1', x: 320, y: 470, status: 'degraded' },
-  { id: 'n-eu-west', label: 'EU-WEST-3', x: 612, y: 168, status: 'online' },
-  { id: 'n-eu-north', label: 'EU-NORTH-1', x: 700, y: 92, status: 'standby' },
-  { id: 'n-af-south', label: 'AF-SOUTH-1', x: 690, y: 470, status: 'online' },
-  { id: 'n-me-central', label: 'ME-CENTRAL-1', x: 820, y: 300, status: 'online' },
-  { id: 'n-ap-south', label: 'AP-SOUTH-1', x: 940, y: 340, status: 'degraded' },
-  { id: 'n-ap-se', label: 'AP-SOUTHEAST-2', x: 1120, y: 460, status: 'online' },
-  { id: 'n-ap-ne', label: 'AP-NORTHEAST-1', x: 1140, y: 230, status: 'online' },
-  { id: 'n-ap-east', label: 'AP-EAST-1', x: 1040, y: 280, status: 'online' },
-  { id: 'n-ca-central', label: 'CA-CENTRAL-1', x: 260, y: 110, status: 'standby' },
+  { id: 'n-ndjamena', label: "N'DJAMENA", x: 196, y: 188, status: 'online' },
+  { id: 'n-moundou', label: 'MOUNDOU', x: 96, y: 320, status: 'online' },
+  { id: 'n-sarh', label: 'SARH', x: 320, y: 470, status: 'degraded' },
+  { id: 'n-abeche', label: 'ABÉCHÉ', x: 612, y: 168, status: 'online' },
+  { id: 'n-kelo', label: 'KÉLO', x: 700, y: 92, status: 'standby' },
+  { id: 'n-koumra', label: 'KOUMRA', x: 690, y: 470, status: 'online' },
+  { id: 'n-pala', label: 'PALA', x: 820, y: 300, status: 'online' },
+  { id: 'n-am-timan', label: 'AM TIMAN', x: 940, y: 340, status: 'degraded' },
+  { id: 'n-bongor', label: 'BONGOR', x: 1120, y: 460, status: 'online' },
+  { id: 'n-mongo', label: 'MONGO', x: 1140, y: 230, status: 'online' },
+  { id: 'n-doba', label: 'DOBA', x: 1040, y: 280, status: 'online' },
+  { id: 'n-ati', label: 'ATI', x: 260, y: 110, status: 'standby' },
 ]
 
 let state: GridState = {
