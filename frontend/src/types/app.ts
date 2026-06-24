@@ -31,6 +31,8 @@ export interface Application {
   currentStep: number; createdAt: string
   userId?: string | { _id: string; email: string; fullName: string }
   assignedAgentId?: string | { _id: string; fullName: string; email: string } | null
+  companyRegNo?: string | null
+  registeredAt?: string | null
 }
 export interface DocItem {
   _id: string; type: DocType; ownerName?: string; fileName: string

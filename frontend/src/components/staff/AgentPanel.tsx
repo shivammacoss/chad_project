@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
-import { apiGet, apiPatch, apiUpload } from '@/lib/api'
+import { apiGet, apiPatch, apiPost, apiUpload } from '@/lib/api'
 import type { Application, DocItem } from '@/types/app'
 
 const STATUSES = ['filing_submitted', 'registered', 'completed']
@@ -26,6 +26,7 @@ export default function AgentPanel() {
     await apiUpload(`/api/applications/${sel._id}/documents`, form)
     setDocs(await apiGet<DocItem[]>(`/api/staff/applications/${sel._id}/documents`))
   }
+  async function issueCert() { if (!sel) return; await apiPost(`/api/staff/applications/${sel._id}/issue-certificate`); await open(sel._id); await load() }
 
   return (
     <section className="mt-10">
@@ -64,6 +65,12 @@ export default function AgentPanel() {
               <div>
                 <p className="text-sm uppercase tracking-wider text-frost/50">Advance</p>
                 <div className="mt-2 flex flex-wrap gap-2">{STATUSES.map((s) => <Button key={s} size="sm" variant="outline" onClick={() => advance(s)}>{s}</Button>)}</div>
+              </div>
+              <div>
+                <p className="text-sm uppercase tracking-wider text-frost/50">Certificate</p>
+                {sel.companyRegNo
+                  ? <p className="mt-1 text-sm text-teal-electric">Issued · {sel.companyRegNo}</p>
+                  : <Button size="sm" className="mt-2" onClick={issueCert}>Issue certificate</Button>}
               </div>
             </div>
           )}
