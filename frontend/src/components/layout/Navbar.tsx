@@ -189,14 +189,9 @@ export function Navbar() {
               </Button>
             </>
           ) : (
-            <>
-              <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
-                Log in
-              </Button>
-              <Button variant="primary" size="sm" onClick={() => navigate('/get-started')}>
-                Get Started
-              </Button>
-            </>
+            <Button variant="primary" size="sm" onClick={() => navigate('/get-started')}>
+              Get Started
+            </Button>
           )}
         </div>
 
@@ -331,30 +326,17 @@ export function Navbar() {
                 </Button>
               </>
             ) : (
-              <>
-                <Button
-                  variant="outline"
-                  size="md"
-                  fullWidth
-                  onClick={() => {
-                    closeAll()
-                    navigate('/login')
-                  }}
-                >
-                  Log in
-                </Button>
-                <Button
-                  variant="primary"
-                  size="md"
-                  fullWidth
-                  onClick={() => {
-                    closeAll()
-                    navigate('/get-started')
-                  }}
-                >
-                  Get Started
-                </Button>
-              </>
+              <Button
+                variant="primary"
+                size="md"
+                fullWidth
+                onClick={() => {
+                  closeAll()
+                  navigate('/get-started')
+                }}
+              >
+                Get Started
+              </Button>
             )}
           </div>
         </div>

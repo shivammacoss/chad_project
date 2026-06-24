@@ -12,7 +12,7 @@ export interface ServiceSection {
 
 export interface ServicePage {
   id: string
-  /** Full route path, e.g. "/virtual-offices/uk". */
+  /** Full route path, e.g. "/virtual-offices/chad". */
   path: string
   /** Short label shown in the nav dropdown. */
   menuLabel: string
@@ -25,7 +25,7 @@ export interface ServicePage {
   cta: string
   /** Where the CTA points (defaults to the contact page). */
   ctaTo?: string
-  /** Optional pricing/eyebrow note, e.g. "From £0.25 per page". */
+  /** Optional pricing/eyebrow note, e.g. "From $0.25 per page". */
   note?: string
 }
 
@@ -446,7 +446,7 @@ export const MENU: MenuCategory[] = [
         heroTitle: 'Accurate Data, Reliably Managed',
         intro:
           'Professional data entry, verification, and database updates with precision.',
-        note: 'From £0.25 per page',
+        note: 'From $0.25 per page',
         sections: [
           {
             title: 'Manual Data Entry & Verification',
@@ -503,7 +503,7 @@ export const MENU: MenuCategory[] = [
         heroTitle: 'Polished, Professional Documents',
         intro:
           'Formatting and preparation of reports, proposals, and manuals to a professional standard.',
-        note: 'From £0.25 per page',
+        note: 'From $0.25 per page',
         sections: [
           { title: 'Formatting', description: 'Consistent, professional formatting for any document.' },
           { title: 'Merging & Splitting', description: 'Combine or separate documents as required.' },
@@ -577,7 +577,7 @@ export const MENU: MenuCategory[] = [
         heroTitle: 'Accurate Audio-to-Text Transcription',
         intro:
           'Precise transcription for meetings, interviews, and webinars, properly formatted.',
-        note: 'From £0.01 per word',
+        note: 'From $0.01 per word',
         sections: [
           { title: 'Meetings & Interviews', description: 'Clear, accurate transcripts of conversations.' },
           { title: 'Webinars', description: 'Full transcription of webinars and presentations.' },
