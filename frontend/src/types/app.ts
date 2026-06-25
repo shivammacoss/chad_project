@@ -51,3 +51,5 @@ export interface Notification {
 
 export interface TicketMessage { authorRole: string; body: string; at: string }
 export interface Ticket { _id: string; category: string; subject: string; status: string; messages: TicketMessage[]; updatedAt: string }
+
+export interface AuditEntry { _id: string; actorRole: string; action: string; target: string; ip: string; at: string; actorId?: { email?: string } | string | null }
