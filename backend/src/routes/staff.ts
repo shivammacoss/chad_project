@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { Application } from '../models/Application.js'
 import { DocumentModel } from '../models/Document.js'
 import { User } from '../models/User.js'
+import { Ticket } from '../models/Ticket.js'
 import { requireAuth } from '../middleware/auth.js'
 import { requireStaff, requireRole } from '../middleware/roles.js'
 import { notifyUser } from '../lib/notify.js'
@@ -112,4 +113,35 @@ staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
 
   await notifyUser(applicantId, { type: 'certificate', title: 'Your company is registered!', body: `Certificate ${app.companyRegNo} is ready to download.`, link: `/applications/${app._id}` })
   res.json(app)
+})
+
+staffRouter.get('/tickets', async (req, res) => {
+  const filter = req.query.status ? { status: String(req.query.status) } : {}
+  res.json(await Ticket.find(filter).sort({ updatedAt: -1 }).populate('userId', 'email fullName'))
+})
+
+staffRouter.get('/tickets/:id', async (req, res) => {
+  const t = await Ticket.findById(req.params.id).populate('userId', 'email fullName')
+  if (!t) return res.status(404).json({ error: 'Not found' })
+  res.json(t)
+})
+
+staffRouter.post('/tickets/:id/messages', async (req, res) => {
+  const { body } = req.body ?? {}
+  if (!body) return res.status(400).json({ error: 'body required' })
+  const t = await Ticket.findById(req.params.id)
+  if (!t) return res.status(404).json({ error: 'Not found' })
+  t.messages.push({ authorId: req.userId as never, authorRole: req.userRole ?? 'staff', body, at: new Date() })
+  t.updatedAt = new Date()
+  await t.save()
+  await notifyUser(t.userId, { type: 'info', title: 'Support replied', body: `Re: ${t.subject}`, link: '/support' })
+  res.json(t)
+})
+
+staffRouter.patch('/tickets/:id', async (req, res) => {
+  const { status } = req.body ?? {}
+  if (!['open', 'closed'].includes(status)) return res.status(400).json({ error: 'Invalid status' })
+  const t = await Ticket.findByIdAndUpdate(req.params.id, { status, updatedAt: new Date() }, { new: true })
+  if (!t) return res.status(404).json({ error: 'Not found' })
+  res.json(t)
 })
