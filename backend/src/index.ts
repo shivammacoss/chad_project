@@ -1,12 +1,13 @@
 import 'dotenv/config'
 import { createApp } from './app.js'
 import { connectDb } from './lib/db.js'
-import { seedServicesIfEmpty } from './lib/serviceStore.js'
+import { seedServicesIfEmpty, seedCountriesIfEmpty } from './lib/serviceStore.js'
 
 const PORT = Number(process.env.PORT ?? 4000)
 
 async function main() {
   await connectDb(process.env.MONGODB_URI!)
+  await seedCountriesIfEmpty()
   await seedServicesIfEmpty()
   const app = createApp()
   app.listen(PORT, () => {

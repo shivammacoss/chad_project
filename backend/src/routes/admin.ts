@@ -77,6 +77,7 @@ adminRouter.post('/services', async (req, res) => {
   const svc = await Service.create({
     key, name, category: req.body.category ?? '', blurb: req.body.blurb ?? '',
     priceCents, flow: req.body.flow === 'formation' ? 'formation' : 'generic',
+    country: req.body.country ?? 'TD',
     requiredDocuments: req.body.requiredDocuments ?? [], intakeFields: req.body.intakeFields ?? [],
   })
   await logAudit(req, 'service.create', `service:${key}`, { priceCents })
@@ -85,7 +86,7 @@ adminRouter.post('/services', async (req, res) => {
 
 adminRouter.patch('/services/:key', async (req, res) => {
   const allowed: Record<string, unknown> = {}
-  for (const f of ['name', 'priceCents', 'blurb', 'active', 'requiredDocuments', 'category']) {
+  for (const f of ['name', 'priceCents', 'blurb', 'active', 'requiredDocuments', 'category', 'country']) {
     if (req.body?.[f] !== undefined) allowed[f] = req.body[f]
   }
   const svc = await Service.findOneAndUpdate({ key: req.params.key }, allowed, { new: true })

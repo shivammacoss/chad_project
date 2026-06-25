@@ -7,6 +7,7 @@ import { adminRouter } from './routes/admin.js'
 import { staffRouter } from './routes/staff.js'
 import { webhookRouter } from './routes/payments.js'
 import { servicesRouter } from './routes/services.js'
+import { countriesRouter } from './routes/countries.js'
 import { notificationsRouter } from './routes/notifications.js'
 import { invoicesRouter } from './routes/invoices.js'
 import { ticketsRouter } from './routes/tickets.js'
@@ -30,6 +31,7 @@ export function createApp(): Express {
   })
 
   app.use('/api/services', servicesRouter)
+  app.use('/api/countries', countriesRouter)
 
   app.use('/api/auth', authRouter)
   app.use('/api/applications', applicationsRouter)

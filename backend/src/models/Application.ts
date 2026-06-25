@@ -28,6 +28,7 @@ const applicationSchema = new Schema({
   assignedAgentId: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   serviceKey: { type: String, required: true, default: 'company-formation' },
   serviceName: { type: String, default: 'Company Formation' },
+  country: { type: String, default: 'TD' },
   entityType: { type: String, enum: ['SARL', 'SARL_U', 'SA', 'BRANCH', 'REP_OFFICE'] },
   packageTier: { type: String, enum: ['standard', 'premium'], default: 'standard' },
   companyDetails: {

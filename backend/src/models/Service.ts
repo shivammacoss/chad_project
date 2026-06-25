@@ -10,6 +10,7 @@ const serviceSchema = new Schema({
   intakeFields: { type: [Schema.Types.Mixed], default: [] },
   requiredDocuments: { type: [String], default: [] },
   active: { type: Boolean, default: true },
+  country: { type: String, default: 'TD', index: true },
   createdAt: { type: Date, default: () => new Date() },
 })
 

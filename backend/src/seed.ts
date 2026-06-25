@@ -10,11 +10,12 @@ import { AuditLog } from './models/AuditLog.js'
 import { hashPassword } from './lib/auth.js'
 import { totalPrice } from './lib/pricing.js'
 import { upsertInvoice, markInvoicePaid } from './lib/invoice.js'
-import { seedServicesIfEmpty } from './lib/serviceStore.js'
+import { seedServicesIfEmpty, seedCountriesIfEmpty } from './lib/serviceStore.js'
 
 export async function seedDemo(): Promise<void> {
   await User.deleteMany({})
   await Application.deleteMany({})
+  await seedCountriesIfEmpty()
   await seedServicesIfEmpty()
 
   const admin = await User.create({
