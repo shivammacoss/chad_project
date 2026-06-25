@@ -8,7 +8,7 @@ afterEach(() => vi.restoreAllMocks())
 
 describe('SupportPage', () => {
   it('lists tickets and opens a thread', async () => {
-    vi.stubGlobal('fetch', vi.fn(async (url: string, opts?: RequestInit) => {
+    vi.stubGlobal('fetch', vi.fn(async (_url: string, opts?: RequestInit) => {
       if (opts?.method === 'POST') return new Response(JSON.stringify({ _id: 't1', category: 'other', subject: 'New', status: 'open', messages: [{ authorRole: 'customer', body: 'hi', at: '' }], updatedAt: '' }), { status: 201 })
       return new Response(JSON.stringify([{ _id: 't1', category: 'documents', subject: 'Help', status: 'open', messages: [{ authorRole: 'customer', body: 'issue', at: '' }], updatedAt: '' }]), { status: 200 })
     }))
