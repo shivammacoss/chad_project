@@ -30,6 +30,7 @@ export default function LegalPanel() {
   }
   async function assign(agentId: string) { if (!sel) return; await apiPatch(`/api/staff/applications/${sel._id}/assign`, { agentId }); await open(sel._id); await load() }
   async function issueCert() { if (!sel) return; await apiPost(`/api/staff/applications/${sel._id}/issue-certificate`); await open(sel._id); await load() }
+  async function confirmPayment() { if (!sel) return; await apiPost(`/api/staff/applications/${sel._id}/confirm-payment`); await open(sel._id); await load() }
 
   return (
     <section className="mt-8">
@@ -77,6 +78,7 @@ export default function LegalPanel() {
                   ? <p className="mt-1 text-sm text-teal-electric">Issued · {sel.companyRegNo}</p>
                   : <Button size="sm" className="mt-2" onClick={issueCert}>Issue certificate</Button>}
               </div>
+              {sel.paymentStatus !== 'paid' && <Button size="sm" variant="outline" className="mt-2" onClick={confirmPayment}>Confirm bank payment</Button>}
             </div>
           )}
         </div>

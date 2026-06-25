@@ -15,6 +15,8 @@ export default function GenericServiceWizardPage() {
   const [service, setService] = useState<ServiceDef | null>(null)
   const [intake, setIntake] = useState<Record<string, string>>({})
   const [step, setStep] = useState(1)
+  const [method, setMethod] = useState<'stripe' | 'bank_transfer'>('stripe')
+  const [bankInfo, setBankInfo] = useState<{ invoiceNo: string; bankDetails: Record<string, string> } | null>(null)
   const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
 
   useEffect(() => {
@@ -42,8 +44,12 @@ export default function GenericServiceWizardPage() {
   async function pay() {
     if (!order) return
     setBusy(true); setError('')
-    try { const { url } = await apiPost<{ url: string }>(`/api/applications/${order._id}/checkout`); if (!url) { setError('Checkout unavailable'); setBusy(false); return } window.location.href = url }
-    catch (err) { setError(err instanceof ApiError ? err.message : 'Checkout failed'); setBusy(false) }
+    try {
+      const r = await apiPost<{ method: string; url?: string; invoiceNo?: string; bankDetails?: Record<string, string> }>(`/api/applications/${order._id}/checkout`, { method })
+      if (r.method === 'stripe' && r.url) { window.location.href = r.url; return }
+      if (r.method === 'bank_transfer') { setBankInfo({ invoiceNo: r.invoiceNo!, bankDetails: r.bankDetails! }); setBusy(false); return }
+      setError('Checkout unavailable'); setBusy(false)
+    } catch (err) { setError(err instanceof ApiError ? err.message : 'Checkout failed'); setBusy(false) }
   }
 
   if (!order || !service) return <div className="min-h-screen bg-navy pt-24 text-center text-frost/60">{error || 'Loading…'}</div>
@@ -96,7 +102,22 @@ export default function GenericServiceWizardPage() {
               <p>{service.name}</p>
               <p className="mt-3 text-xl font-semibold text-teal-electric">{formatPrice(order.priceCents)}</p>
             </div>
-            <Button disabled={busy} onClick={pay}>{busy ? 'Redirecting…' : 'Pay & submit'}</Button>
+            {bankInfo ? (
+              <div className="rounded-xl border border-frost/10 bg-steel/20 p-5 text-sm text-frost">
+                <p className="font-medium">Bank transfer instructions — Invoice {bankInfo.invoiceNo}</p>
+                {Object.entries(bankInfo.bankDetails).map(([k, v]) => <p key={k} className="text-frost/70">{k}: {v}</p>)}
+                <Button className="mt-3" onClick={() => navigate('/dashboard')}>Go to dashboard</Button>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col gap-2">
+                  <label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'stripe'} onChange={() => setMethod('stripe')} /> Card (Stripe)</label>
+                  <label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'bank_transfer'} onChange={() => setMethod('bank_transfer')} /> Bank transfer</label>
+                  <label className="flex items-center gap-2 text-sm text-frost/40"><input type="radio" disabled /> Flutterwave — coming soon</label>
+                </div>
+                <Button disabled={busy} onClick={pay}>{busy ? 'Processing…' : 'Pay & submit'}</Button>
+              </>
+            )}
             <Button variant="ghost" onClick={() => navigate('/dashboard')}>Save & finish later</Button>
           </div>
         )}
