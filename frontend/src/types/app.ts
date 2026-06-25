@@ -60,3 +60,6 @@ export interface Ticket { _id: string; category: string; subject: string; status
 export interface AuditEntry { _id: string; actorRole: string; action: string; target: string; ip: string; at: string; actorId?: { email?: string } | string | null }
 
 export interface AdminService { _id: string; key: string; category: string; name: string; priceCents: number; flow: string; active: boolean; country?: string }
+
+export interface AdminStats { applications: { total: number; byStatus: Record<string, number> }; revenueCents: number; users: number; openTickets: number }
+export interface AdminUser { _id: string; email: string; fullName: string; role: string; country?: string; emailVerified: boolean }
