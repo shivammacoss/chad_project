@@ -29,7 +29,7 @@ export const applicationsRouter = Router()
 applicationsRouter.use(requireAuth)
 
 applicationsRouter.post('/', async (req, res) => {
-  const { serviceKey = 'company-formation', entityType, packageTier } = req.body ?? {}
+  const { serviceKey = 'company-formation', entityType, packageTier, renewsApplicationId } = req.body ?? {}
   const service = getService(serviceKey)
   if (!service) return res.status(400).json({ error: 'Unknown service' })
 
@@ -45,6 +45,7 @@ applicationsRouter.post('/', async (req, res) => {
       companyDetails: { proposedName: 'Untitled' },
       priceCents: totalPrice(entityType, tier, { wanted: false }),
       statusHistory: [{ status: 'draft', at: new Date() }],
+      renewsApplicationId: renewsApplicationId ?? null,
     })
     return res.status(201).json(app)
   }
@@ -57,6 +58,7 @@ applicationsRouter.post('/', async (req, res) => {
     priceCents: priceForOrder(serviceKey),
     intake: {},
     statusHistory: [{ status: 'draft', at: new Date() }],
+    renewsApplicationId: renewsApplicationId ?? null,
   })
   res.status(201).json(app)
 })

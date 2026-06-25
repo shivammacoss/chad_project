@@ -105,6 +105,26 @@ export const SERVICES: ServiceDef[] = [
     ],
     requiredDocuments: ['passport'],
   },
+  {
+    key: 'annual-renewal',
+    category: 'Compliance',
+    name: 'Annual Renewal & Filing',
+    blurb: 'Renew your company registration and file annual returns.',
+    priceCents: 25000,
+    flow: 'generic',
+    intakeFields: [{ name: 'renewingCompany', label: 'Company being renewed', type: 'text', required: true }],
+    requiredDocuments: ['other'],
+  },
+  {
+    key: 'license-renewal',
+    category: 'Compliance',
+    name: 'Business License Renewal',
+    blurb: 'Renew your Chad business operating license.',
+    priceCents: 20000,
+    flow: 'generic',
+    intakeFields: [{ name: 'companyName', label: 'Company name', type: 'text', required: true }],
+    requiredDocuments: ['other'],
+  },
 ]
 
 export function getService(key: string): ServiceDef | undefined {

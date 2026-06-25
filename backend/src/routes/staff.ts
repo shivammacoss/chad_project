@@ -91,6 +91,7 @@ staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
     app.companyRegNo = `RCCM/NDJ/${new Date().getFullYear()}/B-${String(seq).padStart(4, '0')}`
   }
   app.registeredAt = new Date()
+  app.expiresAt = new Date(app.registeredAt.getTime() + 365 * 24 * 60 * 60 * 1000)
   pushStatus(app, 'registered', `Certificate issued (${app.companyRegNo})`)
   await app.save()
 
