@@ -6,8 +6,15 @@ import { SectionLabel } from '@/components/common/SectionLabel'
  */
 export function AboutSection() {
   return (
-    <section id="about" className="py-16 sm:py-20">
-      <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-5 text-center sm:px-8">
+    <section id="about" className="relative overflow-hidden py-16 sm:py-20">
+      {/* Blurred background image — kept vivid (no fade), only blurred */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 scale-110 bg-cover bg-center blur-md"
+        style={{ backgroundImage: "url('/blurbg.png')" }}
+      />
+
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-6 px-5 text-center sm:px-8">
         <SectionLabel>Who we are</SectionLabel>
         <h2 className="max-w-2xl font-display text-display-md font-bold text-frost sm:text-display-lg">
           International business support solutions for SMEs and large enterprises
