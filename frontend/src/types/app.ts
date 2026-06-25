@@ -53,3 +53,5 @@ export interface TicketMessage { authorRole: string; body: string; at: string }
 export interface Ticket { _id: string; category: string; subject: string; status: string; messages: TicketMessage[]; updatedAt: string }
 
 export interface AuditEntry { _id: string; actorRole: string; action: string; target: string; ip: string; at: string; actorId?: { email?: string } | string | null }
+
+export interface AdminService { _id: string; key: string; category: string; name: string; priceCents: number; flow: string; active: boolean }
