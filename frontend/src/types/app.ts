@@ -9,6 +9,8 @@ export type VoPlan = 'basic' | 'premium'
 
 export interface Country { _id?: string; code: string; name: string; flag: string }
 
+export interface PaymentSettings { stripe: boolean; bank_transfer: boolean; flutterwave: boolean }
+
 export interface AuthUser { id: string; email: string; fullName: string; country?: string; role: 'user' | 'customer' | 'sales' | 'legal' | 'compliance' | 'government_agent' | 'finance' | 'support' | 'admin' }
 
 export interface Owner {

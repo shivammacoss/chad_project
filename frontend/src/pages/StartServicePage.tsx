@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchServices, type ServiceDef } from '@/lib/services'
-import { fetchCountries } from '@/lib/countries'
 import { formatPrice } from '@/content/formations'
 import { apiPost } from '@/lib/api'
-import type { Application, Country } from '@/types/app'
+import type { Application } from '@/types/app'
 
 export default function StartServicePage() {
   const navigate = useNavigate()
   const [services, setServices] = useState<ServiceDef[]>([])
-  const [country, setCountry] = useState('TD')
-  const [countries, setCountries] = useState<Country[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => { fetchCountries().then(setCountries) }, [])
-  useEffect(() => { fetchServices(country).then(setServices) }, [country])
+  useEffect(() => { fetchServices('TD').then(setServices) }, [])
 
   async function choose(s: ServiceDef) {
     if (s.flow === 'formation') { navigate('/applications/new'); return }
@@ -33,15 +29,6 @@ export default function StartServicePage() {
     <div className="min-h-screen bg-navy pt-16">
       <div className="mx-auto max-w-3xl px-5 py-12">
         <h1 className="text-2xl font-semibold text-frost">Start a new application</h1>
-        <div className="mt-4">
-          <label className="block text-xs uppercase tracking-wider text-frost/50 mb-2">Country</label>
-          <select value={country} onChange={(e) => setCountry(e.target.value)}
-            className={`w-full rounded-lg border border-frost/15 bg-navy px-4 py-3 text-sm text-frost outline-none focus:border-teal-electric/50`}>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
-            ))}
-          </select>
-        </div>
         {error && <p className="mt-2 text-sm text-indigo-pulse">{error}</p>}
         {cats.map((cat) => (
           <div key={cat} className="mt-6">

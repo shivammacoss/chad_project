@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { formatPrice } from '@/content/formations'
 import { fetchServices, type ServiceDef } from '@/lib/services'
 import { apiGet, apiPatch, apiUpload, apiPost, ApiError } from '@/lib/api'
-import type { Application } from '@/types/app'
+import type { Application, PaymentSettings } from '@/types/app'
 
 const inputCls = 'w-full rounded-lg border border-frost/15 bg-navy px-4 py-3 text-sm text-frost outline-none focus:border-teal-electric/50'
 
@@ -15,7 +15,8 @@ export default function GenericServiceWizardPage() {
   const [service, setService] = useState<ServiceDef | null>(null)
   const [intake, setIntake] = useState<Record<string, string>>({})
   const [step, setStep] = useState(1)
-  const [method, setMethod] = useState<'stripe' | 'bank_transfer'>('stripe')
+  const [pm, setPm] = useState<PaymentSettings>({ stripe: true, bank_transfer: true, flutterwave: false })
+  const [method, setMethod] = useState<'stripe' | 'bank_transfer' | 'flutterwave'>('stripe')
   const [bankInfo, setBankInfo] = useState<{ invoiceNo: string; bankDetails: Record<string, string> } | null>(null)
   const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
 
@@ -28,6 +29,16 @@ export default function GenericServiceWizardPage() {
       setService(svcs.find((s) => s.key === o.serviceKey) ?? null)
     }).catch(() => setError('Could not load'))
   }, [id])
+
+  useEffect(() => {
+    apiGet<PaymentSettings>('/api/settings/payment').then(setPm).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (!pm[method as keyof PaymentSettings]) {
+      setMethod(pm.stripe ? 'stripe' : pm.bank_transfer ? 'bank_transfer' : 'flutterwave')
+    }
+  }, [pm])
 
   async function saveIntake() {
     if (!order) return
@@ -111,9 +122,9 @@ export default function GenericServiceWizardPage() {
             ) : (
               <>
                 <div className="flex flex-col gap-2">
-                  <label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'stripe'} onChange={() => setMethod('stripe')} /> Card (Stripe)</label>
-                  <label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'bank_transfer'} onChange={() => setMethod('bank_transfer')} /> Bank transfer</label>
-                  <label className="flex items-center gap-2 text-sm text-frost/40"><input type="radio" disabled /> Flutterwave — coming soon</label>
+                  {pm.stripe && (<label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'stripe'} onChange={() => setMethod('stripe')} /> Card (Stripe)</label>)}
+                  {pm.bank_transfer && (<label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'bank_transfer'} onChange={() => setMethod('bank_transfer')} /> Bank transfer</label>)}
+                  {pm.flutterwave && (<label className="flex items-center gap-2 text-sm text-frost"><input type="radio" name="pm" checked={method === 'flutterwave'} onChange={() => setMethod('flutterwave')} /> Flutterwave</label>)}
                 </div>
                 <Button disabled={busy} onClick={pay}>{busy ? 'Processing…' : 'Pay & submit'}</Button>
               </>
