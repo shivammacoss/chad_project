@@ -11,10 +11,15 @@ import { hashPassword } from './lib/auth.js'
 import { totalPrice } from './lib/pricing.js'
 import { upsertInvoice, markInvoicePaid } from './lib/invoice.js'
 import { seedServicesIfEmpty, seedCountriesIfEmpty } from './lib/serviceStore.js'
+import { Service } from './models/Service.js'
+import { Country } from './models/Country.js'
 
 export async function seedDemo(): Promise<void> {
   await User.deleteMany({})
   await Application.deleteMany({})
+  // Refresh the catalog + countries from current code so re-seeding reflects the latest services.
+  await Country.deleteMany({})
+  await Service.deleteMany({})
   await seedCountriesIfEmpty()
   await seedServicesIfEmpty()
 
