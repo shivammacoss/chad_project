@@ -9,6 +9,7 @@ import { requireStaff, requireRole } from '../middleware/roles.js'
 import { notifyUser } from '../lib/notify.js'
 import { pushStatus } from './applications.js'
 import { generateCertificatePdf } from '../lib/certificate.js'
+import { markInvoicePaid } from '../lib/invoice.js'
 
 export const staffRouter = Router()
 staffRouter.use(requireAuth, requireStaff)
@@ -69,6 +70,17 @@ staffRouter.patch('/documents/:id', async (req, res) => {
 staffRouter.get('/agents', requireRole('legal', 'compliance'), async (_req, res) => {
   const agents = await User.find({ role: 'government_agent' }).select('fullName email')
   res.json(agents)
+})
+
+staffRouter.post('/applications/:id/confirm-payment', async (req, res) => {
+  const app = await Application.findById(req.params.id)
+  if (!app) return res.status(404).json({ error: 'Not found' })
+  app.paymentStatus = 'paid'
+  pushStatus(app, 'paid', 'Bank transfer confirmed')
+  await app.save()
+  await markInvoicePaid(app._id)
+  await notifyUser(app.userId, { type: 'payment', title: 'Payment received', body: `Your bank transfer for ${app.serviceName} was confirmed.`, link: `/applications/${app._id}` })
+  res.json(app)
 })
 
 staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {

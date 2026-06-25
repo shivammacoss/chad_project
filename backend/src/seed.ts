@@ -4,8 +4,10 @@ import { User } from './models/User.js'
 import { Application } from './models/Application.js'
 import { DocumentModel } from './models/Document.js'
 import { Notification } from './models/Notification.js'
+import { Invoice } from './models/Invoice.js'
 import { hashPassword } from './lib/auth.js'
 import { totalPrice } from './lib/pricing.js'
+import { upsertInvoice, markInvoicePaid } from './lib/invoice.js'
 
 export async function seedDemo(): Promise<void> {
   await User.deleteMany({})
@@ -89,6 +91,12 @@ export async function seedDemo(): Promise<void> {
   await Notification.deleteMany({})
   await Notification.create({ userId: user._id, type: 'payment', title: 'Payment received', body: 'Your payment was received. Application in processing.', link: regApp ? `/applications/${regApp._id}` : '/dashboard', read: false })
   await Notification.create({ userId: user._id, type: 'certificate', title: 'Your company is registered!', body: 'Your Certificate of Incorporation is ready to download.', link: regApp ? `/applications/${regApp._id}` : '/dashboard', read: false })
+
+  await Invoice.deleteMany({})
+  const reg = created.find((a) => a.status === 'registered')
+  const rev = created.find((a) => a.status === 'in_review')
+  if (reg) { await upsertInvoice(reg as never, 'stripe'); await markInvoicePaid(reg._id) }
+  if (rev) { await upsertInvoice(rev as never, 'bank_transfer') }
 
   console.log('Seeded:', { admin: admin.email, user: user.email, legal: legal.email, agent: agent.email, applications: specs.length + 1 })
 }

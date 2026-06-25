@@ -4,27 +4,32 @@ import { getStripe } from '../lib/stripe.js'
 import { requireAuth } from '../middleware/auth.js'
 import { notifyUser } from '../lib/notify.js'
 import { pushStatus } from './applications.js'
+import { upsertInvoice, markInvoicePaid } from '../lib/invoice.js'
+
+const BANK_DETAILS = { bankName: 'Commercial Bank of Chad', accountName: 'Chad Business Assist Ltd', accountNumber: 'CBT-000-123456', swift: 'CBTDTDND', reference: 'Use your invoice number as reference' }
 
 export const checkoutRouter = Router({ mergeParams: true })
 checkoutRouter.use(requireAuth)
 
 checkoutRouter.post('/', async (req, res) => {
   const id = (req.params as { id: string }).id
+  const method = req.body?.method === 'bank_transfer' ? 'bank_transfer' : 'stripe'
   const app = await Application.findOne({ _id: id, userId: req.userId })
   if (!app) return res.status(404).json({ error: 'Not found' })
+
+  const invoice = await upsertInvoice(app as never, method)
+  app.paymentMethod = method
+
+  if (method === 'bank_transfer') {
+    pushStatus(app, 'payment_pending')
+    await app.save()
+    return res.json({ method: 'bank_transfer', invoiceNo: invoice.invoiceNo, bankDetails: BANK_DETAILS })
+  }
+
   const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:5173'
   const session = await getStripe().checkout.sessions.create({
     mode: 'payment',
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: { name: `${app.entityType} formation — ${app.companyDetails?.proposedName ?? 'Untitled'}` },
-          unit_amount: app.priceCents,
-        },
-        quantity: 1,
-      },
-    ],
+    line_items: [{ price_data: { currency: 'usd', product_data: { name: `${app.serviceName} — ${app.companyDetails?.proposedName ?? ''}` }, unit_amount: app.priceCents }, quantity: 1 }],
     success_url: `${clientUrl}/dashboard?paid=1`,
     cancel_url: `${clientUrl}/dashboard?canceled=1`,
   })
@@ -32,7 +37,7 @@ checkoutRouter.post('/', async (req, res) => {
   app.stripeSessionId = session.id
   pushStatus(app, 'payment_pending')
   await app.save()
-  res.json({ url: session.url })
+  res.json({ method: 'stripe', url: session.url })
 })
 
 export const webhookRouter = Router()
@@ -54,6 +59,7 @@ webhookRouter.post('/', raw({ type: 'application/json' }), async (req, res) => {
       app.paymentStatus = 'paid'
       pushStatus(app, 'paid')
       await app.save()
+      await markInvoicePaid(app._id)
       await notifyUser(app.userId, { type: 'payment', title: 'Payment received', body: `Your payment for ${app.serviceName} was received. Your application is now in processing.`, link: `/applications/${app._id}` })
     }
   }
