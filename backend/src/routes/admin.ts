@@ -7,6 +7,9 @@ import { AuditLog } from '../models/AuditLog.js'
 import { pushStatus } from './applications.js'
 import { runRenewalReminders } from '../lib/renewals.js'
 import { Service } from '../models/Service.js'
+import { User } from '../models/User.js'
+import { Invoice } from '../models/Invoice.js'
+import { Ticket } from '../models/Ticket.js'
 
 const ADMIN_STATUSES = ['in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected']
 
@@ -93,4 +96,32 @@ adminRouter.patch('/services/:key', async (req, res) => {
   if (!svc) return res.status(404).json({ error: 'Not found' })
   await logAudit(req, 'service.update', `service:${req.params.key}`, allowed)
   res.json(svc)
+})
+
+adminRouter.get('/stats', async (_req, res) => {
+  const byStatusAgg = await Application.aggregate([{ $group: { _id: '$status', n: { $sum: 1 } } }])
+  const byStatus: Record<string, number> = {}
+  for (const r of byStatusAgg) byStatus[r._id] = r.n
+  const total = Object.values(byStatus).reduce((a, b) => a + b, 0)
+  const paidAgg = await Invoice.aggregate([{ $match: { status: 'paid' } }, { $group: { _id: null, sum: { $sum: '$amountCents' } } }])
+  const revenueCents = paidAgg[0]?.sum ?? 0
+  const users = await User.countDocuments({})
+  const openTickets = await Ticket.countDocuments({ status: 'open' })
+  res.json({ applications: { total, byStatus }, revenueCents, users, openTickets })
+})
+
+adminRouter.get('/users', async (_req, res) => {
+  const users = await User.find({}).select('email fullName role country emailVerified createdAt').sort({ createdAt: -1 })
+  res.json(users)
+})
+
+const ROLES = ['user', 'customer', 'sales', 'legal', 'compliance', 'government_agent', 'finance', 'support', 'admin']
+adminRouter.patch('/users/:id/role', async (req, res) => {
+  const { role } = req.body ?? {}
+  if (!ROLES.includes(role)) return res.status(400).json({ error: 'Invalid role' })
+  if (req.params.id === req.userId) return res.status(400).json({ error: 'Cannot change your own role' })
+  const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('email fullName role')
+  if (!user) return res.status(404).json({ error: 'Not found' })
+  await logAudit(req, 'user.role', `user:${req.params.id}`, { role })
+  res.json(user)
 })
