@@ -8,6 +8,7 @@ import { staffRouter } from './routes/staff.js'
 import { webhookRouter } from './routes/payments.js'
 import { servicesRouter } from './routes/services.js'
 import { notificationsRouter } from './routes/notifications.js'
+import { invoicesRouter } from './routes/invoices.js'
 
 export function createApp(): Express {
   const app = express()
@@ -34,6 +35,7 @@ export function createApp(): Express {
   app.use('/api/admin', adminRouter)
   app.use('/api/staff', staffRouter)
   app.use('/api/notifications', notificationsRouter)
+  app.use('/api/invoices', invoicesRouter)
 
   return app
 }

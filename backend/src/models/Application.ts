@@ -54,6 +54,7 @@ const applicationSchema = new Schema({
   },
   paymentStatus: { type: String, enum: ['unpaid', 'paid'], default: 'unpaid' },
   stripeSessionId: { type: String, default: null },
+  paymentMethod: { type: String, enum: ['stripe', 'bank_transfer'], default: null },
   companyRegNo: { type: String, default: null },
   registeredAt: { type: Date, default: null },
   statusHistory: { type: [statusEntry], default: [] },
