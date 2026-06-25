@@ -37,7 +37,7 @@ export default function ApplicationWizardPage() {
     if (!pm[method as keyof PaymentSettings]) {
       setMethod(pm.stripe ? 'stripe' : pm.bank_transfer ? 'bank_transfer' : 'flutterwave')
     }
-  }, [pm])
+  }, [pm, method])
 
   async function save(patch: Record<string, unknown>, next: number) {
     if (!app) return

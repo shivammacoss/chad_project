@@ -38,7 +38,7 @@ export default function GenericServiceWizardPage() {
     if (!pm[method as keyof PaymentSettings]) {
       setMethod(pm.stripe ? 'stripe' : pm.bank_transfer ? 'bank_transfer' : 'flutterwave')
     }
-  }, [pm])
+  }, [pm, method])
 
   async function saveIntake() {
     if (!order) return
