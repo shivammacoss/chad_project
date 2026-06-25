@@ -3,27 +3,35 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import AuthShell from '@/components/auth/AuthShell'
 import { fetchServices, type ServiceDef } from '@/lib/services'
+import { fetchCountries } from '@/lib/countries'
 import { formatPrice } from '@/content/formations'
 import { apiPost, ApiError } from '@/lib/api'
+import type { Country } from '@/types/app'
 
 const inputCls = 'w-full rounded-lg border border-frost/15 bg-navy px-4 py-3 text-sm text-frost outline-none focus:border-teal-electric/50'
 
 export default function GetStartedPage() {
   const [services, setServices] = useState<ServiceDef[]>([])
   const [service, setService] = useState<ServiceDef | null>(null)
+  const [country, setCountry] = useState('TD')
+  const [countries, setCountries] = useState<Country[]>([])
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({ fullName: '', email: '', country: '', phone: '', password: '' })
   const [done, setDone] = useState(false); const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
   const set = (k: keyof typeof form) => (e: { target: { value: string } }) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
   useEffect(() => {
-    fetchServices().then((s) => {
+    fetchCountries().then(setCountries)
+  }, [])
+
+  useEffect(() => {
+    fetchServices(country).then((s) => {
       setServices(s)
       const params = new URLSearchParams(window.location.search)
       const pre = params.get('service')
       setService(s.find((x) => x.key === pre) ?? s[0] ?? null)
     })
-  }, [])
+  }, [country])
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault(); setError(''); setBusy(true)
@@ -44,6 +52,15 @@ export default function GetStartedPage() {
     return (
       <AuthShell title="Start your application" subtitle="Choose a service">
         <div className="flex flex-col gap-5">
+          <div>
+            <label className="block text-xs uppercase tracking-wider text-frost/50 mb-2">Country</label>
+            <select value={country} onChange={(e) => setCountry(e.target.value)}
+              className={`w-full rounded-lg border border-frost/15 bg-navy px-4 py-3 text-sm text-frost outline-none focus:border-teal-electric/50`}>
+              {countries.map((c) => (
+                <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+              ))}
+            </select>
+          </div>
           {cats.map((cat) => (
             <div key={cat}>
               <p className="mb-2 text-xs uppercase tracking-wider text-frost/50">{cat}</p>

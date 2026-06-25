@@ -8,7 +8,7 @@ const inputCls = 'rounded-lg border border-frost/15 bg-navy px-3 py-2 text-sm te
 
 export default function ServicesPanel() {
   const [items, setItems] = useState<AdminService[]>([])
-  const [form, setForm] = useState({ key: '', name: '', category: '', priceUsd: '' })
+  const [form, setForm] = useState({ key: '', name: '', category: '', priceUsd: '', country: 'TD' })
   const load = useCallback(() => apiGet<AdminService[]>('/api/admin/services').then(setItems).catch(() => setItems([])), [])
   useEffect(() => { load() }, [load])
 
@@ -17,8 +17,8 @@ export default function ServicesPanel() {
   async function add(e: FormEvent) {
     e.preventDefault()
     if (!form.key || !form.name) return
-    await apiPost('/api/admin/services', { key: form.key, name: form.name, category: form.category || 'Other', priceCents: Math.round(Number(form.priceUsd || '0') * 100) })
-    setForm({ key: '', name: '', category: '', priceUsd: '' }); load()
+    await apiPost('/api/admin/services', { key: form.key, name: form.name, category: form.category || 'Other', priceCents: Math.round(Number(form.priceUsd || '0') * 100), country: form.country })
+    setForm({ key: '', name: '', category: '', priceUsd: '', country: 'TD' }); load()
   }
 
   return (
@@ -28,7 +28,7 @@ export default function ServicesPanel() {
         {items.map((s) => (
           <div key={s._id} className="flex items-center justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-2 text-sm">
             <div>
-              <p className="font-medium text-frost">{s.name} <span className="text-frost/50">· {s.category} · {s.flow}</span></p>
+              <p className="font-medium text-frost">{s.name} <span className="text-frost/50">· {s.category} · {s.flow}{s.country && ` · ${s.country}`}</span></p>
               <p className="text-frost/55">{formatPrice(s.priceCents)} {!s.active && <span className="text-indigo-pulse">· inactive</span>}</p>
             </div>
             <div className="flex items-center gap-2">
@@ -43,6 +43,7 @@ export default function ServicesPanel() {
         <input className={inputCls} placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <input className={inputCls} placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
         <input className={`${inputCls} w-24`} type="number" placeholder="USD" value={form.priceUsd} onChange={(e) => setForm({ ...form, priceUsd: e.target.value })} />
+        <input className={`${inputCls} w-24`} placeholder="Country" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} />
         <Button type="submit" size="sm">Add service</Button>
       </form>
     </section>

@@ -12,6 +12,6 @@ export const SERVICE_FALLBACK: ServiceDef[] = [
   { key: 'virtual-office', category: 'Office Solutions', name: 'Virtual Office', blurb: 'A registered address with mail handling.', priceCents: 20000, flow: 'generic', intakeFields: [{ name: 'package', label: 'Package', type: 'select', options: ['Basic', 'Standard', 'Premium'], required: true }], requiredDocuments: ['passport'] },
 ]
 
-export function fetchServices(): Promise<ServiceDef[]> {
-  return apiGet<ServiceDef[]>('/api/services').catch(() => SERVICE_FALLBACK)
+export function fetchServices(country = 'TD'): Promise<ServiceDef[]> {
+  return apiGet<ServiceDef[]>(`/api/services?country=${country}`).catch(() => SERVICE_FALLBACK)
 }

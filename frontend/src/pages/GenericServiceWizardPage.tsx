@@ -24,7 +24,7 @@ export default function GenericServiceWizardPage() {
     apiGet<Application>(`/api/applications/${id}`).then(async (o) => {
       setOrder(o)
       setIntake((o.intake as Record<string, string>) ?? {})
-      const svcs = await fetchServices()
+      const svcs = await fetchServices('all')
       setService(svcs.find((s) => s.key === o.serviceKey) ?? null)
     }).catch(() => setError('Could not load'))
   }, [id])

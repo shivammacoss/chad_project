@@ -61,7 +61,7 @@ export default function AdminPage() {
                   <span className="font-medium text-frost">{a.companyDetails?.proposedName || a.serviceName || 'Untitled'}</span>
                   <StatusBadge status={a.status} />
                 </div>
-                <span className="text-sm text-frost/55">{a.serviceName ?? entityLabel(a.entityType ?? '')} · {clientEmail(a)}</span>
+                <span className="text-sm text-frost/55">{a.serviceName ?? entityLabel(a.entityType ?? '')} · {clientEmail(a)}{a.country && ` · ${a.country}`}</span>
               </button>
             ))}
           </div>
@@ -73,7 +73,7 @@ export default function AdminPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-semibold text-frost">{selected.companyDetails?.proposedName || selected.serviceName}</h2>
-                  <p className="text-sm text-frost/55">{selected.serviceName ?? entityLabel(selected.entityType ?? '')} · {formatPrice(selected.priceCents)} · {clientEmail(selected)}</p>
+                  <p className="text-sm text-frost/55">{selected.serviceName ?? entityLabel(selected.entityType ?? '')} · {formatPrice(selected.priceCents)} · {clientEmail(selected)}{selected.country && ` · ${selected.country}`}</p>
                 </div>
                 <StatusBadge status={selected.status} />
               </div>

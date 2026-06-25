@@ -7,6 +7,8 @@ export type DocType = 'passport' | 'address_proof' | 'photo' | 'other' | 'certif
 export type OwnerRole = 'director' | 'shareholder' | 'both'
 export type VoPlan = 'basic' | 'premium'
 
+export interface Country { _id?: string; code: string; name: string; flag: string }
+
 export interface AuthUser { id: string; email: string; fullName: string; country?: string; role: 'user' | 'customer' | 'sales' | 'legal' | 'compliance' | 'government_agent' | 'finance' | 'support' | 'admin' }
 
 export interface Owner {
@@ -37,6 +39,7 @@ export interface Application {
   expiresAt?: string | null
   remindersSent?: number[]
   renewsApplicationId?: string | null
+  country?: string
 }
 export interface Invoice { _id: string; invoiceNo: string; serviceName: string; amountCents: number; currency: string; method: string; status: string; issuedAt: string }
 export interface DocItem {
@@ -54,4 +57,4 @@ export interface Ticket { _id: string; category: string; subject: string; status
 
 export interface AuditEntry { _id: string; actorRole: string; action: string; target: string; ip: string; at: string; actorId?: { email?: string } | string | null }
 
-export interface AdminService { _id: string; key: string; category: string; name: string; priceCents: number; flow: string; active: boolean }
+export interface AdminService { _id: string; key: string; category: string; name: string; priceCents: number; flow: string; active: boolean; country?: string }

@@ -8,12 +8,15 @@ afterEach(() => vi.restoreAllMocks())
 
 describe('GetStartedPage', () => {
   it('lists services then submits signup with phone', async () => {
-    const fetchMock = vi.fn(async (url: string, opts?: RequestInit) => {
+    const fetchMock = vi.fn(async (url: string, _opts?: RequestInit) => {
+      if (url.includes('/api/countries')) return new Response(JSON.stringify([
+        { code: 'TD', name: 'Chad', flag: '🇹🇩' },
+      ]), { status: 200 })
       if (url.includes('/api/services')) return new Response(JSON.stringify([
         { key: 'company-formation', category: 'Company Formation', name: 'Company Formation', blurb: 'x', priceCents: 49900, flow: 'formation', intakeFields: [], requiredDocuments: [] },
         { key: 'virtual-office', category: 'Office Solutions', name: 'Virtual Office', blurb: 'y', priceCents: 20000, flow: 'generic', intakeFields: [], requiredDocuments: [] },
       ]), { status: 200 })
-      if (url.includes('/signup') && opts?.method === 'POST') return new Response('{}', { status: 201 })
+      if (url.includes('/signup') && _opts?.method === 'POST') return new Response('{}', { status: 201 })
       return new Response('{}', { status: 200 })
     })
     vi.stubGlobal('fetch', fetchMock)

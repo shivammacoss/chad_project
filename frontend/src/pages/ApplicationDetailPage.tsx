@@ -49,7 +49,7 @@ export default function ApplicationDetailPage() {
         <div className="mt-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-frost">{a.companyDetails?.proposedName || a.serviceName}</h1>
-            <p className="text-sm text-frost/55">{a.serviceName} · {formatPrice(a.priceCents)}</p>
+            <p className="text-sm text-frost/55">{a.serviceName} · {formatPrice(a.priceCents)}{a.country && ` · ${a.country}`}</p>
             {a.companyRegNo && <p className="text-sm text-teal-electric">Reg no: {a.companyRegNo}</p>}
             {a.status === 'registered' && a.expiresAt && (
               <div className="mt-2 flex items-center gap-3">
