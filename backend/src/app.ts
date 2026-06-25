@@ -11,6 +11,7 @@ import { countriesRouter } from './routes/countries.js'
 import { notificationsRouter } from './routes/notifications.js'
 import { invoicesRouter } from './routes/invoices.js'
 import { ticketsRouter } from './routes/tickets.js'
+import { settingsRouter } from './routes/settings.js'
 
 export function createApp(): Express {
   const app = express()
@@ -32,6 +33,7 @@ export function createApp(): Express {
 
   app.use('/api/services', servicesRouter)
   app.use('/api/countries', countriesRouter)
+  app.use('/api/settings', settingsRouter)
 
   app.use('/api/auth', authRouter)
   app.use('/api/applications', applicationsRouter)

@@ -18,16 +18,17 @@ describe('multi-country', () => {
     const codes = res.body.map((c: { code: string }) => c.code)
     expect(codes).toContain('TD'); expect(codes).toContain('AE'); expect(codes).toContain('KE')
   })
-  it('filters services by country', async () => {
-    const ae = await request(app).get('/api/services?country=AE')
-    expect(ae.body.every((s: { country: string }) => s.country === 'AE')).toBe(true)
-    expect(ae.body.find((s: { key: string }) => s.key === 'uae-company-formation')).toBeTruthy()
+  it('chad-only catalog excludes ae/ke services', async () => {
+    const all = await request(app).get('/api/services?country=all')
+    const keys = all.body.map((s: { key: string }) => s.key)
+    expect(keys).not.toContain('uae-company-formation')
+    expect(keys).not.toContain('kenya-company-formation')
     const td = await request(app).get('/api/services?country=TD')
     expect(td.body.find((s: { key: string }) => s.key === 'company-formation')).toBeTruthy()
   })
-  it('sets application.country from the service', async () => {
+  it('sets application.country to default from service', async () => {
     const agent = await authed('c@x.com')
-    const order = await agent.post('/api/applications').send({ serviceKey: 'uae-company-formation' })
-    expect(order.body.country).toBe('AE')
+    const order = await agent.post('/api/applications').send({ serviceKey: 'company-formation', entityType: 'SARL', packageTier: 'standard' })
+    expect(order.body.country).toBe('TD')
   })
 })

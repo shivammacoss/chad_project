@@ -5,6 +5,7 @@ import { requireAuth } from '../middleware/auth.js'
 import { notifyUser } from '../lib/notify.js'
 import { pushStatus } from './applications.js'
 import { upsertInvoice, markInvoicePaid } from '../lib/invoice.js'
+import { getPaymentSettings } from '../lib/settings.js'
 
 const BANK_DETAILS = { bankName: 'Commercial Bank of Chad', accountName: 'Chad Business Assist Ltd', accountNumber: 'CBT-000-123456', swift: 'CBTDTDND', reference: 'Use your invoice number as reference' }
 
@@ -16,6 +17,9 @@ checkoutRouter.post('/', async (req, res) => {
   const method = req.body?.method === 'bank_transfer' ? 'bank_transfer' : 'stripe'
   const app = await Application.findOne({ _id: id, userId: req.userId })
   if (!app) return res.status(404).json({ error: 'Not found' })
+
+  const settings = await getPaymentSettings()
+  if (!settings[method]) return res.status(400).json({ error: 'Payment method not available' })
 
   const invoice = await upsertInvoice(app as never, method)
   app.paymentMethod = method

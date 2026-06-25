@@ -10,6 +10,7 @@ import { Service } from '../models/Service.js'
 import { User } from '../models/User.js'
 import { Invoice } from '../models/Invoice.js'
 import { Ticket } from '../models/Ticket.js'
+import { setPaymentSettings } from '../lib/settings.js'
 
 const ADMIN_STATUSES = ['in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected']
 
@@ -124,4 +125,14 @@ adminRouter.patch('/users/:id/role', async (req, res) => {
   if (!user) return res.status(404).json({ error: 'Not found' })
   await logAudit(req, 'user.role', `user:${req.params.id}`, { role })
   res.json(user)
+})
+
+adminRouter.patch('/settings/payment', async (req, res) => {
+  const patch: Record<string, boolean> = {}
+  for (const k of ['stripe', 'bank_transfer', 'flutterwave']) {
+    if (typeof req.body?.[k] === 'boolean') patch[k] = req.body[k]
+  }
+  const next = await setPaymentSettings(patch)
+  await logAudit(req, 'settings.payment', 'settings:payment', patch)
+  res.json(next)
 })

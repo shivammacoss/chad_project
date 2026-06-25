@@ -13,6 +13,7 @@ import { upsertInvoice, markInvoicePaid } from './lib/invoice.js'
 import { seedServicesIfEmpty, seedCountriesIfEmpty } from './lib/serviceStore.js'
 import { Service } from './models/Service.js'
 import { Country } from './models/Country.js'
+import { getPaymentSettings } from './lib/settings.js'
 
 export async function seedDemo(): Promise<void> {
   await User.deleteMany({})
@@ -22,6 +23,7 @@ export async function seedDemo(): Promise<void> {
   await Service.deleteMany({})
   await seedCountriesIfEmpty()
   await seedServicesIfEmpty()
+  await getPaymentSettings()
 
   const admin = await User.create({
     email: 'admin@chad.demo', passwordHash: await hashPassword('Admin@123'),

@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { createApp } from './app.js'
 import { connectDb } from './lib/db.js'
 import { seedServicesIfEmpty, seedCountriesIfEmpty } from './lib/serviceStore.js'
+import { getPaymentSettings } from './lib/settings.js'
 
 const PORT = Number(process.env.PORT ?? 4000)
 
@@ -9,6 +10,7 @@ async function main() {
   await connectDb(process.env.MONGODB_URI!)
   await seedCountriesIfEmpty()
   await seedServicesIfEmpty()
+  await getPaymentSettings()
   const app = createApp()
   app.listen(PORT, () => {
     console.log(`API listening on http://localhost:${PORT}`)

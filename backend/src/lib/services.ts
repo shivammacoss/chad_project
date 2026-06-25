@@ -126,28 +126,6 @@ export const SERVICES: ServiceDef[] = [
     intakeFields: [{ name: 'companyName', label: 'Company name', type: 'text', required: true }],
     requiredDocuments: ['other'],
   },
-  {
-    key: 'uae-company-formation',
-    category: 'Company Formation',
-    name: 'UAE Company Formation',
-    blurb: 'Set up a company in the UAE (example multi-country service).',
-    priceCents: 120000,
-    flow: 'generic',
-    country: 'AE',
-    intakeFields: [{ name: 'companyName', label: 'Proposed company name', type: 'text', required: true }],
-    requiredDocuments: ['passport'],
-  },
-  {
-    key: 'kenya-company-formation',
-    category: 'Company Formation',
-    name: 'Kenya Company Formation',
-    blurb: 'Register a company in Kenya (example multi-country service).',
-    priceCents: 60000,
-    flow: 'generic',
-    country: 'KE',
-    intakeFields: [{ name: 'companyName', label: 'Proposed company name', type: 'text', required: true }],
-    requiredDocuments: ['passport'],
-  },
 ]
 
 export function getService(key: string): ServiceDef | undefined {
