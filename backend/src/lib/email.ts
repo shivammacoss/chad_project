@@ -15,8 +15,17 @@ export function __setTransport(t: Transport): void {
   transport = t
 }
 
-function getTransport(): Transport {
+/**
+ * Email is "on" when a transport has been injected (tests) or SMTP is explicitly
+ * enabled via EMAIL_ENABLED=true. Otherwise email is OFF and all sends are no-ops.
+ */
+export function isEmailEnabled(): boolean {
+  return transport !== null || process.env.EMAIL_ENABLED === 'true'
+}
+
+function getTransport(): Transport | null {
   if (transport) return transport
+  if (process.env.EMAIL_ENABLED !== 'true') return null // SMTP off
   transport = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT ?? 587),
@@ -26,7 +35,9 @@ function getTransport(): Transport {
 }
 
 export async function sendVerificationEmail(to: string, link: string): Promise<void> {
-  await getTransport().sendMail({
+  const t = getTransport()
+  if (!t) return // email off — no-op
+  await t.sendMail({
     from: process.env.EMAIL_FROM ?? 'no-reply@example.com',
     to,
     subject: 'Verify your email — Chad Business Assist',
@@ -37,7 +48,9 @@ export async function sendVerificationEmail(to: string, link: string): Promise<v
 }
 
 export async function sendNotificationEmail(to: string, title: string, body: string): Promise<void> {
-  await getTransport().sendMail({
+  const t = getTransport()
+  if (!t) return // email off — no-op
+  await t.sendMail({
     from: process.env.EMAIL_FROM ?? 'no-reply@example.com',
     to,
     subject: `${title} — Chad Business Assist`,

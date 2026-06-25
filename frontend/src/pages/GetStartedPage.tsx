@@ -17,7 +17,7 @@ export default function GetStartedPage() {
   const [countries, setCountries] = useState<Country[]>([])
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({ fullName: '', email: '', country: '', phone: '', password: '' })
-  const [done, setDone] = useState(false); const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
+  const [done, setDone] = useState(false); const [verified, setVerified] = useState(false); const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
   const set = (k: keyof typeof form) => (e: { target: { value: string } }) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
   useEffect(() => {
@@ -35,12 +35,17 @@ export default function GetStartedPage() {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault(); setError(''); setBusy(true)
-    try { await apiPost('/api/auth/signup', form); setDone(true) }
+    try { const r = await apiPost<{ verified?: boolean }>('/api/auth/signup', form); setVerified(!!r?.verified); setDone(true) }
     catch (err) { setError(err instanceof ApiError ? err.message : 'Signup failed') }
     finally { setBusy(false) }
   }
 
-  if (done) return (
+  if (done) return verified ? (
+    <AuthShell title="Account ready" subtitle={`You can log in now as ${form.email}.`}>
+      <p className="text-sm text-frost/70">Log in to complete your {service?.name} request.</p>
+      <Link to="/login" className="mt-4 inline-block text-teal-electric">Go to login</Link>
+    </AuthShell>
+  ) : (
     <AuthShell title="Check your inbox" subtitle={`We sent a verification link to ${form.email}.`}>
       <p className="text-sm text-frost/70">Verify your email, then log in to complete your {service?.name} request.</p>
       <Link to="/login" className="mt-4 inline-block text-teal-electric">Go to login</Link>

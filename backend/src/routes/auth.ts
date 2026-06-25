@@ -7,7 +7,7 @@ import {
   makeVerifyToken,
   hashToken,
 } from '../lib/auth.js'
-import { sendVerificationEmail } from '../lib/email.js'
+import { sendVerificationEmail, isEmailEnabled } from '../lib/email.js'
 import { requireAuth } from '../middleware/auth.js'
 
 export const authRouter = Router()
@@ -27,6 +27,20 @@ authRouter.post('/signup', async (req, res) => {
   const existing = await User.findOne({ email: String(email).toLowerCase() })
   if (existing) return res.status(409).json({ error: 'Email already registered' })
 
+  // When email is OFF there is no way to deliver a verification link, so the
+  // account is auto-verified and the user can log in straight away.
+  if (!isEmailEnabled()) {
+    await User.create({
+      email,
+      passwordHash: await hashPassword(password),
+      fullName,
+      country,
+      phone: phone ?? '',
+      emailVerified: true,
+    })
+    return res.status(201).json({ ok: true, verified: true, message: 'Account ready — you can log in now.' })
+  }
+
   const { raw, hashed, expires } = makeVerifyToken()
   await User.create({
     email,
@@ -39,7 +53,7 @@ authRouter.post('/signup', async (req, res) => {
   })
   const link = `${process.env.CLIENT_URL ?? 'http://localhost:5173'}/verify-email?token=${raw}`
   await sendVerificationEmail(String(email), link)
-  res.status(201).json({ ok: true, message: 'Verification email sent' })
+  res.status(201).json({ ok: true, verified: false, message: 'Verification email sent' })
 })
 
 authRouter.get('/verify-email', async (req, res) => {
