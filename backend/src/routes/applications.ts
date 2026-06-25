@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import type { HydratedDocument } from 'mongoose'
 import { Application, type IApplication } from '../models/Application.js'
+import { DocumentModel } from '../models/Document.js'
+import { Invoice } from '../models/Invoice.js'
 import { totalPrice, type EntityType, type Tier, type VoPlan } from '../lib/pricing.js'
 import { getServiceDef } from '../lib/serviceStore.js'
 import { requireAuth } from '../middleware/auth.js'
@@ -98,6 +100,16 @@ applicationsRouter.post('/:id/submit', async (req, res) => {
   await app.save()
   await notifyUser(app.userId, { type: 'status', title: 'Application received', body: `We received your ${app.serviceName} application and will review your documents.`, link: `/applications/${app._id}` })
   res.json(app)
+})
+
+applicationsRouter.delete('/:id', async (req, res) => {
+  const app = await Application.findOne({ _id: req.params.id, userId: req.userId })
+  if (!app) return res.status(404).json({ error: 'Not found' })
+  if (app.status !== 'draft') return res.status(400).json({ error: 'Only draft applications can be deleted' })
+  await DocumentModel.deleteMany({ applicationId: app._id })
+  await Invoice.deleteMany({ applicationId: app._id })
+  await app.deleteOne()
+  res.json({ ok: true })
 })
 
 applicationsRouter.get('/:id/certificate.pdf', async (req, res) => {

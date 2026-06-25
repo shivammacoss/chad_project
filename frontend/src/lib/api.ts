@@ -39,3 +39,7 @@ export function apiPatch<T>(path: string, body: unknown): Promise<T> {
 export function apiUpload<T>(path: string, form: FormData): Promise<T> {
   return fetch(path, { method: 'POST', credentials: 'include', body: form }).then(handle<T>)
 }
+
+export function apiDelete<T>(path: string): Promise<T> {
+  return fetch(path, { method: 'DELETE', credentials: 'include' }).then(handle<T>)
+}

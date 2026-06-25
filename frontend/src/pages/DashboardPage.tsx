@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { formatPrice } from '@/content/formations'
-import { apiGet } from '@/lib/api'
+import { apiGet, apiDelete } from '@/lib/api'
 import { useAuth } from '@/store/AuthContext'
 import type { Application } from '@/types/app'
 
@@ -12,9 +12,16 @@ export default function DashboardPage() {
   const [items, setItems] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    apiGet<Application[]>('/api/applications').then(setItems).catch(() => setItems([])).finally(() => setLoading(false))
-  }, [])
+  function load() {
+    return apiGet<Application[]>('/api/applications').then(setItems).catch(() => setItems([]))
+  }
+  useEffect(() => { load().finally(() => setLoading(false)) }, [])
+
+  async function remove(id: string) {
+    if (!window.confirm('Delete this draft application?')) return
+    await apiDelete(`/api/applications/${id}`).catch(() => {})
+    load()
+  }
 
   return (
     <div className="min-h-screen bg-navy pt-16">
@@ -40,14 +47,19 @@ export default function DashboardPage() {
           ) : (
             <div className="mt-8 grid gap-4">
               {items.map((a) => (
-                <Link key={a._id} to={`/applications/${a._id}`}
+                <div key={a._id}
                   className="flex items-center justify-between rounded-xl border border-frost/10 bg-steel/20 px-6 py-5 transition-colors hover:border-teal-electric/30">
-                  <div>
+                  <Link to={`/applications/${a._id}`} className="min-w-0 flex-1">
                     <p className="font-medium text-frost">{a.companyDetails?.proposedName || a.serviceName || 'Untitled'}</p>
                     <p className="text-sm text-frost/55">{a.serviceName ?? 'Service'} · {formatPrice(a.priceCents)}{a.status === 'registered' && a.expiresAt ? ` · expires ${new Date(a.expiresAt).toISOString().slice(0, 10)}` : ''}</p>
+                  </Link>
+                  <div className="ml-4 flex items-center gap-3">
+                    <StatusBadge status={a.status} />
+                    {a.status === 'draft' && (
+                      <button type="button" onClick={() => remove(a._id)} className="text-sm text-indigo-pulse hover:underline">Delete</button>
+                    )}
                   </div>
-                  <StatusBadge status={a.status} />
-                </Link>
+                </div>
               ))}
             </div>
           )}
