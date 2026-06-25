@@ -8,6 +8,7 @@ import { Ticket } from '../models/Ticket.js'
 import { requireAuth } from '../middleware/auth.js'
 import { requireStaff, requireRole } from '../middleware/roles.js'
 import { notifyUser } from '../lib/notify.js'
+import { logAudit } from '../lib/audit.js'
 import { pushStatus } from './applications.js'
 import { generateCertificatePdf } from '../lib/certificate.js'
 import { markInvoicePaid } from '../lib/invoice.js'
@@ -43,6 +44,7 @@ staffRouter.patch('/applications/:id/status', async (req, res) => {
   if (!app) return res.status(404).json({ error: 'Not found' })
   pushStatus(app, status, note)
   await app.save()
+  await logAudit(req, 'application.status', `application:${app._id}`, { to: status })
   res.json(app)
 })
 
@@ -51,6 +53,7 @@ staffRouter.patch('/applications/:id/assign', requireRole('legal', 'compliance')
   const app = await Application.findByIdAndUpdate(req.params.id, { assignedAgentId: agentId ?? null }, { new: true })
     .populate('assignedAgentId', 'fullName email')
   if (!app) return res.status(404).json({ error: 'Not found' })
+  await logAudit(req, 'application.assign', `application:${req.params.id}`, { agentId })
   res.json(app)
 })
 
@@ -61,6 +64,7 @@ staffRouter.patch('/documents/:id', async (req, res) => {
   if (status === 'rejected') update.rejectionReason = reason ?? ''
   const doc = await DocumentModel.findByIdAndUpdate(req.params.id, update, { new: true })
   if (!doc) return res.status(404).json({ error: 'Not found' })
+  await logAudit(req, 'document.review', `document:${req.params.id}`, { status, reason })
   if (doc && status === 'rejected') {
     const parent = await Application.findById(doc.applicationId).select('userId')
     if (parent) await notifyUser(parent.userId, { type: 'document', title: 'A document needs attention', body: reason || 'Please re-upload the requested document.', link: `/applications/${doc.applicationId}` })
@@ -79,6 +83,7 @@ staffRouter.post('/applications/:id/confirm-payment', async (req, res) => {
   app.paymentStatus = 'paid'
   pushStatus(app, 'paid', 'Bank transfer confirmed')
   await app.save()
+  await logAudit(req, 'payment.confirm', `application:${app._id}`, {})
   await markInvoicePaid(app._id)
   await notifyUser(app.userId, { type: 'payment', title: 'Payment received', body: `Your bank transfer for ${app.serviceName} was confirmed.`, link: `/applications/${app._id}` })
   res.json(app)
@@ -95,6 +100,7 @@ staffRouter.post('/applications/:id/issue-certificate', async (req, res) => {
   app.expiresAt = new Date(app.registeredAt.getTime() + 365 * 24 * 60 * 60 * 1000)
   pushStatus(app, 'registered', `Certificate issued (${app.companyRegNo})`)
   await app.save()
+  await logAudit(req, 'certificate.issue', `application:${app._id}`, { regNo: app.companyRegNo })
 
   const applicantName = (app.userId as unknown as { fullName?: string })?.fullName ?? 'Applicant'
   // userId is populated above; use its _id for downstream writes.
@@ -134,6 +140,7 @@ staffRouter.post('/tickets/:id/messages', async (req, res) => {
   t.messages.push({ authorId: req.userId as never, authorRole: req.userRole ?? 'staff', body, at: new Date() })
   t.updatedAt = new Date()
   await t.save()
+  await logAudit(req, 'ticket.reply', `ticket:${req.params.id}`, {})
   await notifyUser(t.userId, { type: 'info', title: 'Support replied', body: `Re: ${t.subject}`, link: '/support' })
   res.json(t)
 })
@@ -143,5 +150,6 @@ staffRouter.patch('/tickets/:id', async (req, res) => {
   if (!['open', 'closed'].includes(status)) return res.status(400).json({ error: 'Invalid status' })
   const t = await Ticket.findByIdAndUpdate(req.params.id, { status, updatedAt: new Date() }, { new: true })
   if (!t) return res.status(404).json({ error: 'Not found' })
+  await logAudit(req, 'ticket.status', `ticket:${req.params.id}`, { status })
   res.json(t)
 })

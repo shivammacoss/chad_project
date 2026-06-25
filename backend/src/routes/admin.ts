@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { Application } from '../models/Application.js'
 import { DocumentModel } from '../models/Document.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
+import { logAudit } from '../lib/audit.js'
+import { AuditLog } from '../models/AuditLog.js'
 import { pushStatus } from './applications.js'
 import { runRenewalReminders } from '../lib/renewals.js'
 
@@ -34,6 +36,7 @@ adminRouter.patch('/applications/:id/status', async (req, res) => {
   if (!app) return res.status(404).json({ error: 'Not found' })
   pushStatus(app, status, note)
   await app.save()
+  await logAudit(req, 'application.status', `application:${req.params.id}`, { to: status })
   res.json(app)
 })
 
@@ -54,4 +57,10 @@ adminRouter.patch('/documents/:id', async (req, res) => {
 adminRouter.post('/run-renewal-check', async (_req, res) => {
   const result = await runRenewalReminders()
   res.json(result)
+})
+
+adminRouter.get('/audit', async (req, res) => {
+  const limit = Math.min(Number(req.query.limit) || 100, 100)
+  const list = await AuditLog.find({}).sort({ at: -1 }).limit(limit).populate('actorId', 'email fullName')
+  res.json(list)
 })

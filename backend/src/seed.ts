@@ -5,6 +5,8 @@ import { Application } from './models/Application.js'
 import { DocumentModel } from './models/Document.js'
 import { Notification } from './models/Notification.js'
 import { Invoice } from './models/Invoice.js'
+import { Ticket } from './models/Ticket.js'
+import { AuditLog } from './models/AuditLog.js'
 import { hashPassword } from './lib/auth.js'
 import { totalPrice } from './lib/pricing.js'
 import { upsertInvoice, markInvoicePaid } from './lib/invoice.js'
@@ -102,6 +104,11 @@ export async function seedDemo(): Promise<void> {
   const rev = created.find((a) => a.status === 'in_review')
   if (reg) { await upsertInvoice(reg as never, 'stripe'); await markInvoicePaid(reg._id) }
   if (rev) { await upsertInvoice(rev as never, 'bank_transfer') }
+
+  await Ticket.deleteMany({})
+  await AuditLog.deleteMany({})
+  await Ticket.create({ userId: user._id, category: 'documents', subject: 'Passport upload issue', status: 'open', messages: [{ authorId: user._id, authorRole: 'customer', body: 'My passport upload keeps failing.', at: new Date() }] })
+  await AuditLog.create({ actorId: admin._id, actorRole: 'admin', action: 'seed.init', target: 'system', meta: {}, ip: '127.0.0.1' })
 
   console.log('Seeded:', { admin: admin.email, user: user.email, legal: legal.email, agent: agent.email, applications: specs.length + 1 })
 }
