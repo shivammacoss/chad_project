@@ -43,7 +43,7 @@ export default function DashboardPage() {
                   className="flex items-center justify-between rounded-xl border border-frost/10 bg-steel/20 px-6 py-5 transition-colors hover:border-teal-electric/30">
                   <div>
                     <p className="font-medium text-frost">{a.companyDetails?.proposedName || a.serviceName || 'Untitled'}</p>
-                    <p className="text-sm text-frost/55">{a.serviceName ?? 'Service'} · {formatPrice(a.priceCents)}</p>
+                    <p className="text-sm text-frost/55">{a.serviceName ?? 'Service'} · {formatPrice(a.priceCents)}{a.status === 'registered' && a.expiresAt ? ` · expires ${new Date(a.expiresAt).toISOString().slice(0, 10)}` : ''}</p>
                   </div>
                   <StatusBadge status={a.status} />
                 </Link>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { STATUS_LABEL, formatPrice } from '@/content/formations'
-import { apiGet, apiUpload } from '@/lib/api'
+import { apiGet, apiUpload, apiPost } from '@/lib/api'
 import type { Application, DocItem, ApplicationStatus } from '@/types/app'
 
 export default function ApplicationDetailPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [a, setA] = useState<Application | null>(null)
   const [docs, setDocs] = useState<DocItem[]>([])
   const [failed, setFailed] = useState(false)
@@ -28,6 +29,12 @@ export default function ApplicationDetailPage() {
     setDocs(fresh)
   }
 
+  async function renew() {
+    if (!a) return
+    const order = await apiPost<Application>('/api/applications', { serviceKey: 'annual-renewal', renewsApplicationId: a._id })
+    navigate(`/services/${order._id}`)
+  }
+
   if (failed) return (
     <div className="min-h-screen bg-navy pt-24 text-center text-frost/60">
       Couldn't load this application. <Link to="/dashboard" className="text-teal-electric">Back to dashboard</Link>
@@ -44,6 +51,12 @@ export default function ApplicationDetailPage() {
             <h1 className="text-2xl font-semibold text-frost">{a.companyDetails?.proposedName || a.serviceName}</h1>
             <p className="text-sm text-frost/55">{a.serviceName} · {formatPrice(a.priceCents)}</p>
             {a.companyRegNo && <p className="text-sm text-teal-electric">Reg no: {a.companyRegNo}</p>}
+            {a.status === 'registered' && a.expiresAt && (
+              <div className="mt-2 flex items-center gap-3">
+                <span className="text-sm text-frost/60">Expires: {new Date(a.expiresAt).toISOString().slice(0, 10)}</span>
+                <button onClick={renew} className="text-sm text-teal-electric">Renew</button>
+              </div>
+            )}
           </div>
           <StatusBadge status={a.status} />
         </div>

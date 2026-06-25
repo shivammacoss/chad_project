@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { ENTITY_TYPES, formatPrice } from '@/content/formations'
-import { apiGet, apiPatch } from '@/lib/api'
+import { apiGet, apiPatch, apiPost } from '@/lib/api'
 import type { Application, DocItem } from '@/types/app'
 
 const ADMIN_STATUSES = ['in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected'] as const
@@ -16,6 +16,7 @@ export default function AdminPage() {
   const [selected, setSelected] = useState<Application | null>(null)
   const [docs, setDocs] = useState<DocItem[]>([])
   const [busy, setBusy] = useState(false)
+  const [renewalMsg, setRenewalMsg] = useState('')
 
   const loadList = useCallback(async () => { setItems(await apiGet<Application[]>('/api/admin/applications')) }, [])
   useEffect(() => { loadList() }, [loadList])
@@ -38,11 +39,20 @@ export default function AdminPage() {
     await loadList()
   }
 
+  async function runRenewalCheck() {
+    const r = await apiPost<{ sent: number }>('/api/admin/run-renewal-check')
+    setRenewalMsg(`${r.sent} renewal reminder(s) sent`)
+  }
+
   return (
     <div className="min-h-screen bg-navy pt-16">
       <div className="mx-auto grid max-w-6xl gap-6 px-5 py-12 lg:grid-cols-[1fr_1.4fr]">
         <div>
           <h1 className="text-2xl font-semibold text-frost">Applications</h1>
+          <div className="mt-3">
+            <Button size="sm" variant="outline" onClick={runRenewalCheck}>Run renewal check</Button>
+            {renewalMsg && <span className="ml-2 text-xs text-teal-electric">{renewalMsg}</span>}
+          </div>
           <div className="mt-6 grid gap-2">
             {items.map((a) => (
               <button key={a._id} type="button" onClick={() => open(a._id)}

@@ -34,6 +34,9 @@ export interface Application {
   companyRegNo?: string | null
   registeredAt?: string | null
   paymentMethod?: 'stripe' | 'bank_transfer' | null
+  expiresAt?: string | null
+  remindersSent?: number[]
+  renewsApplicationId?: string | null
 }
 export interface Invoice { _id: string; invoiceNo: string; serviceName: string; amountCents: number; currency: string; method: string; status: string; issuedAt: string }
 export interface DocItem {
