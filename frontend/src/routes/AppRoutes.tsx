@@ -16,6 +16,7 @@ import ChadFreeZonePage from '@/pages/ChadFreeZonePage'
 import LoginPage from '@/pages/LoginPage'
 import GetStartedPage from '@/pages/GetStartedPage'
 import VerifyEmailPage from '@/pages/VerifyEmailPage'
+import InvoicesPage from '@/pages/InvoicesPage'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import AdminRoute from '@/components/auth/AdminRoute'
 import StaffRoute from '@/components/auth/StaffRoute'
@@ -42,6 +43,7 @@ export function AppRoutes() {
           <Route path="/applications/:id" element={<ApplicationDetailPage />} />
           <Route path="/services/new" element={<StartServicePage />} />
           <Route path="/services/:id" element={<GenericServiceWizardPage />} />
+          <Route path="/invoices" element={<InvoicesPage />} />
         </Route>
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route element={<AdminRoute />}>

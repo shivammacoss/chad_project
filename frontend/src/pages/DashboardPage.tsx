@@ -26,6 +26,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex gap-3">
             <Link to="/services/new"><Button>Start application</Button></Link>
+            <Link to="/invoices"><Button variant="ghost">Invoices</Button></Link>
             <Button variant="ghost" onClick={() => logout()}>Log out</Button>
           </div>
         </div>
