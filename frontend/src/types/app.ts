@@ -48,3 +48,6 @@ export interface DocItem {
 export interface Notification {
   _id: string; type: string; title: string; body: string; link: string; read: boolean; createdAt: string
 }
+
+export interface TicketMessage { authorRole: string; body: string; at: string }
+export interface Ticket { _id: string; category: string; subject: string; status: string; messages: TicketMessage[]; updatedAt: string }

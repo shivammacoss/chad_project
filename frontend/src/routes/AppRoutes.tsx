@@ -17,6 +17,7 @@ import LoginPage from '@/pages/LoginPage'
 import GetStartedPage from '@/pages/GetStartedPage'
 import VerifyEmailPage from '@/pages/VerifyEmailPage'
 import InvoicesPage from '@/pages/InvoicesPage'
+import SupportPage from '@/pages/SupportPage'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import AdminRoute from '@/components/auth/AdminRoute'
 import StaffRoute from '@/components/auth/StaffRoute'
@@ -44,6 +45,7 @@ export function AppRoutes() {
           <Route path="/services/new" element={<StartServicePage />} />
           <Route path="/services/:id" element={<GenericServiceWizardPage />} />
           <Route path="/invoices" element={<InvoicesPage />} />
+          <Route path="/support" element={<SupportPage />} />
         </Route>
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route element={<AdminRoute />}>
