@@ -3,6 +3,7 @@ import { Application } from '../models/Application.js'
 import { DocumentModel } from '../models/Document.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
 import { pushStatus } from './applications.js'
+import { runRenewalReminders } from '../lib/renewals.js'
 
 const ADMIN_STATUSES = ['in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected']
 
@@ -48,4 +49,9 @@ adminRouter.patch('/documents/:id', async (req, res) => {
   )
   if (!doc) return res.status(404).json({ error: 'Not found' })
   res.json(doc)
+})
+
+adminRouter.post('/run-renewal-check', async (_req, res) => {
+  const result = await runRenewalReminders()
+  res.json(result)
 })

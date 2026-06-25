@@ -88,6 +88,11 @@ export async function seedDemo(): Promise<void> {
   }
 
   const regApp = created.find((a) => a.status === 'registered')
+  if (regApp) {
+    regApp.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    regApp.remindersSent = []
+    await regApp.save()
+  }
   await Notification.deleteMany({})
   await Notification.create({ userId: user._id, type: 'payment', title: 'Payment received', body: 'Your payment was received. Application in processing.', link: regApp ? `/applications/${regApp._id}` : '/dashboard', read: false })
   await Notification.create({ userId: user._id, type: 'certificate', title: 'Your company is registered!', body: 'Your Certificate of Incorporation is ready to download.', link: regApp ? `/applications/${regApp._id}` : '/dashboard', read: false })
