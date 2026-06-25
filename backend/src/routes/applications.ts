@@ -2,7 +2,7 @@ import { Router } from 'express'
 import type { HydratedDocument } from 'mongoose'
 import { Application, type IApplication } from '../models/Application.js'
 import { totalPrice, type EntityType, type Tier, type VoPlan } from '../lib/pricing.js'
-import { getService, priceForOrder } from '../lib/services.js'
+import { getServiceDef } from '../lib/serviceStore.js'
 import { requireAuth } from '../middleware/auth.js'
 import { User } from '../models/User.js'
 import { generateCertificatePdf } from '../lib/certificate.js'
@@ -30,7 +30,7 @@ applicationsRouter.use(requireAuth)
 
 applicationsRouter.post('/', async (req, res) => {
   const { serviceKey = 'company-formation', entityType, packageTier, renewsApplicationId } = req.body ?? {}
-  const service = getService(serviceKey)
+  const service = await getServiceDef(serviceKey)
   if (!service) return res.status(400).json({ error: 'Unknown service' })
 
   if (service.flow === 'formation') {
@@ -55,7 +55,7 @@ applicationsRouter.post('/', async (req, res) => {
     userId: req.userId,
     serviceKey,
     serviceName: service.name,
-    priceCents: priceForOrder(serviceKey),
+    priceCents: service.priceCents,
     intake: {},
     statusHistory: [{ status: 'draft', at: new Date() }],
     renewsApplicationId: renewsApplicationId ?? null,
