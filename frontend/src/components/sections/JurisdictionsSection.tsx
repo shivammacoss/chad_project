@@ -19,7 +19,7 @@ const CHAD_SERVICES: ChadService[] = [
     role: 'Residents & Non-Residents',
     blurb: 'Register your company in Chad with all documents handled for you.',
     to: '/incorporation/non-resident',
-    image: '', // e.g. '/service-1.png'
+    image: '/box1.png',
   },
   {
     num: '02',
@@ -27,7 +27,7 @@ const CHAD_SERVICES: ChadService[] = [
     role: 'Official Chad Address',
     blurb: 'A compliant registered office and agent address in Chad.',
     to: '/virtual-offices',
-    image: '', // e.g. '/service-2.png'
+    image: '/box2.png',
   },
   {
     num: '03',
@@ -35,7 +35,7 @@ const CHAD_SERVICES: ChadService[] = [
     role: 'Mail Handling Included',
     blurb: 'A prestigious Chad business address with mail scanning & forwarding.',
     to: '/virtual-offices',
-    image: '', // e.g. '/service-3.png'
+    image: '/box3.png',
   },
   {
     num: '04',
@@ -43,7 +43,7 @@ const CHAD_SERVICES: ChadService[] = [
     role: 'Always in Good Standing',
     blurb: 'We keep your Chad company compliant and filings up to date.',
     to: '/company-services',
-    image: '', // e.g. '/service-4.png'
+    image: '/box4.png',
   },
 ]
 
@@ -76,7 +76,7 @@ export function JurisdictionsSection() {
               {/* Large faded step number watermark */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 select-none font-display text-[8rem] font-bold leading-none text-white/10 sm:left-6"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 select-none font-display text-[8rem] font-bold leading-none text-white/25 sm:left-6"
               >
                 {s.num}
               </span>
