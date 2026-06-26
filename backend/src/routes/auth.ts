@@ -8,6 +8,7 @@ import {
   hashToken,
 } from '../lib/auth.js'
 import { sendVerificationEmail, isEmailEnabled } from '../lib/email.js'
+import { primaryClientUrl } from '../lib/clientUrls.js'
 import { requireAuth } from '../middleware/auth.js'
 
 export const authRouter = Router()
@@ -56,7 +57,7 @@ authRouter.post('/signup', async (req, res) => {
     emailVerifyToken: hashed,
     emailVerifyExpires: expires,
   })
-  const link = `${process.env.CLIENT_URL ?? 'http://localhost:5173'}/verify-email?token=${raw}`
+  const link = `${primaryClientUrl()}/verify-email?token=${raw}`
   await sendVerificationEmail(String(email), link)
   res.status(201).json({ ok: true, verified: false, message: 'Verification email sent' })
 })
@@ -84,7 +85,7 @@ authRouter.post('/resend-verification', async (req, res) => {
     user.emailVerifyToken = hashed
     user.emailVerifyExpires = expires
     await user.save()
-    const link = `${process.env.CLIENT_URL ?? 'http://localhost:5173'}/verify-email?token=${raw}`
+    const link = `${primaryClientUrl()}/verify-email?token=${raw}`
     await sendVerificationEmail(email, link)
   }
   res.json({ ok: true }) // always 200 — no enumeration

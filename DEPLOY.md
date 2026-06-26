@@ -29,8 +29,9 @@ Railway/Render disks are ephemeral, so the DB must be external.
    |---|---|
    | `MONGODB_URI` | your Atlas URI (with `/chad`) |
    | `JWT_SECRET` | any long random string |
-   | `CLIENT_URL` | your Vercel URL, e.g. `https://chad-project.vercel.app` |
+   | `CLIENT_URL` | your Vercel URL — **no trailing slash**, e.g. `https://chad-project.vercel.app`. Can be a comma list for multiple domains. |
    | `COOKIE_SAMESITE` | `none`  ← **required** so login works cross-site |
+   | `ALLOW_VERCEL_PREVIEWS` | `true` (optional) — also allow Vercel preview URLs (`*.vercel.app`) so per-deploy URLs work |
    | `NODE_ENV` | `production` |
    | `EMAIL_ENABLED` | `false` |
    | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | optional (card payments) |
@@ -68,8 +69,13 @@ Stripe Dashboard → Developers → Webhooks → Add endpoint:
 Put its signing secret in `STRIPE_WEBHOOK_SECRET` and redeploy the backend.
 
 ## 4. Notes / free-tier limits
-- **Login not sticking?** Almost always one of: `COOKIE_SAMESITE=none` not set on the backend,
-  `VITE_API_URL` wrong/missing on Vercel, or `CLIENT_URL` not matching the Vercel URL.
+- **Login fails / "blocked by CORS policy"?** The browser Origin must match `CLIENT_URL`
+  exactly (trailing slashes are now ignored by the backend). Make sure you open the **same**
+  Vercel URL you put in `CLIENT_URL`. If you use Vercel **preview** URLs (`...-projects.vercel.app`,
+  which change per deploy), set `ALLOW_VERCEL_PREVIEWS=true`, or just always use your stable
+  production URL.
+- **Login not sticking (no error)?** Usually `COOKIE_SAMESITE=none` not set, or `VITE_API_URL`
+  wrong/missing on Vercel.
 - **Uploaded KYC files** live on the host's local disk → wiped on redeploy. Certificates and
   invoices regenerate on demand (from data), so those survive. Move uploads to S3/R2 for
   persistence (launch hardening).

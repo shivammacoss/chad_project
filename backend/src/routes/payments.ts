@@ -6,6 +6,7 @@ import { notifyUser } from '../lib/notify.js'
 import { pushStatus } from './applications.js'
 import { upsertInvoice, markInvoicePaid } from '../lib/invoice.js'
 import { getPaymentSettings } from '../lib/settings.js'
+import { primaryClientUrl } from '../lib/clientUrls.js'
 
 const BANK_DETAILS = { bankName: 'Commercial Bank of Chad', accountName: 'Chad Business Assist Ltd', accountNumber: 'CBT-000-123456', swift: 'CBTDTDND', reference: 'Use your invoice number as reference' }
 
@@ -30,7 +31,7 @@ checkoutRouter.post('/', async (req, res) => {
     return res.json({ method: 'bank_transfer', invoiceNo: invoice.invoiceNo, bankDetails: BANK_DETAILS })
   }
 
-  const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:5173'
+  const clientUrl = primaryClientUrl()
   const session = await getStripe().checkout.sessions.create({
     mode: 'payment',
     line_items: [{ price_data: { currency: 'usd', product_data: { name: `${app.serviceName} — ${app.companyDetails?.proposedName ?? ''}` }, unit_amount: app.priceCents }, quantity: 1 }],

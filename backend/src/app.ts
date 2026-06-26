@@ -12,6 +12,7 @@ import { notificationsRouter } from './routes/notifications.js'
 import { invoicesRouter } from './routes/invoices.js'
 import { ticketsRouter } from './routes/tickets.js'
 import { settingsRouter } from './routes/settings.js'
+import { isAllowedOrigin } from './lib/clientUrls.js'
 
 export function createApp(): Express {
   const app = express()
@@ -21,7 +22,12 @@ export function createApp(): Express {
 
   app.use(
     cors({
-      origin: process.env.CLIENT_URL ?? 'http://localhost:5173',
+      // Allow same-origin/no-origin (curl, server-to-server) and any configured client URL
+      // (trailing slashes are ignored). Set ALLOW_VERCEL_PREVIEWS=true to also allow *.vercel.app.
+      origin(origin, cb) {
+        if (!origin || isAllowedOrigin(origin)) return cb(null, true)
+        cb(null, false)
+      },
       credentials: true,
     }),
   )
