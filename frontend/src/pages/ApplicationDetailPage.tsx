@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { STATUS_LABEL, formatPrice } from '@/content/formations'
-import { apiGet, apiUpload, apiPost } from '@/lib/api'
+import { apiGet, apiUpload, apiPost, apiUrl } from '@/lib/api'
 import type { Application, DocItem, ApplicationStatus } from '@/types/app'
 
 export default function ApplicationDetailPage() {
@@ -125,7 +125,7 @@ export default function ApplicationDetailPage() {
             <h2 className="mt-8 text-sm uppercase tracking-wider text-frost/50">Certificate</h2>
             <div className="mt-2 flex items-center justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
               <span className="text-frost">Certificate of Incorporation — {a.companyRegNo}</span>
-              <a href={`/api/applications/${id}/certificate.pdf`} target="_blank" rel="noreferrer" className="text-teal-electric">Download / Print</a>
+              <a href={apiUrl(`/api/applications/${id}/certificate.pdf`)} target="_blank" rel="noreferrer" className="text-teal-electric">Download / Print</a>
             </div>
           </>
         )}
@@ -137,7 +137,7 @@ export default function ApplicationDetailPage() {
               {docs.filter((d) => ['certificate', 'government_receipt', 'license'].includes(d.type)).map((d) => (
                 <div key={d._id} className="flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-3 text-sm">
                   <span className="text-frost">{d.type.replace(/_/g, ' ')} — {d.fileName}</span>
-                  <a href={`/api/applications/${id}/documents/${d._id}/file`} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
+                  <a href={apiUrl(`/api/applications/${id}/documents/${d._id}/file`)} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
                 </div>
               ))}
             </div>

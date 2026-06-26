@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
-import { apiGet, apiPatch, apiPost } from '@/lib/api'
+import { apiGet, apiPatch, apiPost, apiUrl } from '@/lib/api'
 import type { Application, DocItem } from '@/types/app'
 
 const STATUSES = ['in_review', 'legal_review', 'waiting_government', 'needs_more_docs', 'rejected']
@@ -54,7 +54,7 @@ export default function LegalPanel() {
                   <div key={d._id} className="mt-2 flex items-center justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-2 text-sm">
                     <span className="text-frost">{d.ownerName ? `${d.ownerName} — ` : ''}{d.type} <span className="text-frost/50">{d.status}{d.rejectionReason ? ` (${d.rejectionReason})` : ''}</span></span>
                     <span className="flex gap-3">
-                      <a href={`/api/applications/${sel._id}/documents/${d._id}/file`} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
+                      <a href={apiUrl(`/api/applications/${sel._id}/documents/${d._id}/file`)} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
                       <button className="text-teal-electric" onClick={() => reviewDoc(d._id, 'approved')}>Approve</button>
                       <button className="text-indigo-pulse" onClick={() => reviewDoc(d._id, 'rejected')}>Reject</button>
                     </span>

@@ -1,77 +1,84 @@
-# Deploy — Frontend on Vercel, Backend on Railway
+# Deploy — Frontend on Vercel, Backend on Render or Railway
 
-The browser only ever talks to your Vercel domain. Vercel **proxies `/api/*` to Railway**
-(see `frontend/vercel.json`), so everything is same-origin: login cookies and file
-downloads work with **no CORS or cross-domain cookie problems**.
+The frontend reads `VITE_API_URL` (its `.env`) to know the backend's address and calls it
+directly. Because the two are on different origins, the auth cookie is sent **cross-site**, so
+the backend uses `SameSite=None; Secure` cookies and CORS allows the Vercel origin.
 
 ```
-Browser ──> Vercel (frontend + /api proxy) ──> Railway (Express API) ──> MongoDB Atlas
-                                                         └── Stripe webhook hits Railway directly
+Browser ──> Vercel (frontend, static)
+   │
+   └──(VITE_API_URL)──> Render/Railway (Express API) ──> MongoDB Atlas
+                                  └── Stripe webhook hits the backend directly
 ```
 
-## 0. Prerequisites
-- A **MongoDB Atlas** free cluster (Railway's disk is ephemeral, so the DB must be external).
-  Create one → "Connect" → "Drivers" → copy the connection string (looks like
-  `mongodb+srv://USER:PASS@cluster0.xxxx.mongodb.net/chad?retryWrites=true&w=majority`).
-  In Atlas → Network Access → allow `0.0.0.0/0` (or Railway's egress IPs).
+## 0. Prerequisites — MongoDB Atlas (free)
+Railway/Render disks are ephemeral, so the DB must be external.
+1. Create a free Atlas cluster → Connect → Drivers → copy the URI.
+2. Add the database name: `mongodb+srv://USER:PASS@host/chad?retryWrites=true&w=majority`.
+3. Atlas → Network Access → allow `0.0.0.0/0`.
 
 ---
 
-## 1. Backend → Railway
+## 1. Backend → Render (recommended free) or Railway
 
-1. railway.app → **New Project → Deploy from GitHub repo** → pick `shivammacoss/chad_project`.
-2. In the service **Settings**:
-   - **Root Directory:** `backend`
-   - **Start Command:** `npm run start` (already `tsx src/index.ts`)
-   - (Build command can stay default / empty — `tsx` runs TypeScript directly.)
-3. **Variables** (Settings → Variables) — add:
+### Render (free)
+1. render.com → **New → Web Service** → connect the GitHub repo.
+2. Settings: **Root Directory** `backend` · **Build** `npm install` · **Start** `npm run start` · Instance **Free**.
+3. **Environment** variables:
    | Key | Value |
    |---|---|
-   | `MONGODB_URI` | your Atlas connection string |
+   | `MONGODB_URI` | your Atlas URI (with `/chad`) |
    | `JWT_SECRET` | any long random string |
    | `CLIENT_URL` | your Vercel URL, e.g. `https://chad-project.vercel.app` |
+   | `COOKIE_SAMESITE` | `none`  ← **required** so login works cross-site |
    | `NODE_ENV` | `production` |
-   | `EMAIL_ENABLED` | `false` (keep email off for now) |
-   | `STRIPE_SECRET_KEY` | your Stripe **test** secret (optional — only for card checkout) |
-   | `STRIPE_WEBHOOK_SECRET` | from the Stripe webhook you create in step 4 (optional) |
-   - Railway provides `PORT` automatically; the server reads it.
-4. Deploy. Copy the public URL Railway gives you, e.g. `https://chad-project-production.up.railway.app`.
-5. **Seed demo data once** (optional, for the demo logins): Railway → your service →
-   **⋯ → Run a command** (or the "Shell"): `npm run seed`.
-   This creates `admin@chad.demo / Admin@123`, `user@chad.demo / User@123`, `legal@…`, `agent@…`.
-6. (Optional, for real card payments) Stripe Dashboard → Developers → Webhooks → **Add endpoint**:
-   `https://YOUR-BACKEND.up.railway.app/api/webhooks/stripe`, event `checkout.session.completed`.
-   Copy its signing secret into the `STRIPE_WEBHOOK_SECRET` variable and redeploy.
+   | `EMAIL_ENABLED` | `false` |
+   | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | optional (card payments) |
+4. Deploy → copy the URL, e.g. `https://chad-backend.onrender.com`.
+   (Free Render sleeps after ~15 min idle → first request after is slow ~50s.)
+5. Seed demo data once: Render → service → **Shell** → `npm run seed`.
+
+### Railway (alternative)
+Same idea: New Project → repo → **Root Directory** `backend`, Start `npm run start`, add the
+exact same variables (including `COOKIE_SAMESITE=none`). Copy the `*.up.railway.app` URL.
+
+> Other free options: **Koyeb** (no idle-sleep), **Fly.io** (needs a Dockerfile).
 
 ---
 
 ## 2. Frontend → Vercel
 
-1. **Edit `frontend/vercel.json`** — replace `YOUR-BACKEND.up.railway.app` with the Railway
-   URL from step 1.4 (keep the `/api/:path*` suffix). Commit + push.
-2. vercel.com → **Add New → Project** → import `shivammacoss/chad_project`.
-3. In the import screen:
-   - **Root Directory:** `frontend`
-   - Framework Preset: **Vite** (auto-detected). Build: `npm run build`, Output: `dist`.
-4. Deploy. Your site is at `https://<project>.vercel.app`.
-5. Go back to Railway and make sure `CLIENT_URL` matches this exact Vercel URL, then redeploy
-   the backend (used for invoice/cert links and Stripe redirect URLs).
+1. vercel.com → **Add New → Project** → import the repo.
+2. **Root Directory:** `frontend` · Framework **Vite** (auto) · Build `npm run build` · Output `dist`.
+3. **Environment Variables** → add:
+   | Key | Value |
+   |---|---|
+   | `VITE_API_URL` | your backend URL from step 1, e.g. `https://chad-backend.onrender.com` (no trailing slash, no `/api`) |
+4. Deploy → site is at `https://<project>.vercel.app`.
+5. Back on the backend, set `CLIENT_URL` to this exact Vercel URL and redeploy
+   (used by CORS, invoice/cert links, and Stripe redirect URLs).
 
-That's it — open the Vercel URL, log in via `/admin/login` (admin) or **Get Started** (customer).
+That's it — open the Vercel URL and log in.
 
 ---
 
-## 3. Notes / limitations on the free tier
-- **Uploaded KYC files** are written to Railway's local disk, which is **wiped on every
-  redeploy**. Generated **certificates and invoices regenerate on demand** (from data), so
-  those survive redeploys; only raw user uploads are ephemeral. Move uploads to S3/R2 for
-  persistence (tracked as launch hardening).
-- **Email is OFF** (`EMAIL_ENABLED=false`) — new signups auto-verify, so login works without
-  SMTP. Set `EMAIL_ENABLED=true` + SMTP vars to enable real emails.
-- Use **Stripe test keys** only. Card payments need the webhook (step 1.6); bank-transfer +
-  the rest work without Stripe.
-- If login seems to "not stick": confirm `frontend/vercel.json` points at the right Railway
-  URL and `NODE_ENV=production` is set on Railway (so cookies are `Secure`).
+## 3. Stripe webhook (only for real card payments)
+Stripe Dashboard → Developers → Webhooks → Add endpoint:
+`https://YOUR-BACKEND/api/webhooks/stripe`, event `checkout.session.completed`.
+Put its signing secret in `STRIPE_WEBHOOK_SECRET` and redeploy the backend.
 
-## 4. Redeploys
-Push to `main` → Vercel and Railway both auto-deploy their respective folders.
+## 4. Notes / free-tier limits
+- **Login not sticking?** Almost always one of: `COOKIE_SAMESITE=none` not set on the backend,
+  `VITE_API_URL` wrong/missing on Vercel, or `CLIENT_URL` not matching the Vercel URL.
+- **Uploaded KYC files** live on the host's local disk → wiped on redeploy. Certificates and
+  invoices regenerate on demand (from data), so those survive. Move uploads to S3/R2 for
+  persistence (launch hardening).
+- **Email is OFF** (`EMAIL_ENABLED=false`) → new signups auto-verify, login works without SMTP.
+- Use **Stripe test keys** only.
+
+## 5. Local dev
+Leave `VITE_API_URL` empty locally — `vite.config.ts` proxies `/api` to `localhost:4000`.
+`cd backend && npm run seed && npm run dev` + `cd frontend && npm run dev`.
+
+## 6. Redeploys
+Push to `main` → Vercel and the backend host both auto-deploy their folders.

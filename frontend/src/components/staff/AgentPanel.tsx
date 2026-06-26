@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
-import { apiGet, apiPatch, apiPost, apiUpload } from '@/lib/api'
+import { apiGet, apiPatch, apiPost, apiUpload, apiUrl } from '@/lib/api'
 import type { Application, DocItem } from '@/types/app'
 
 const STATUSES = ['filing_submitted', 'registered', 'completed']
@@ -59,7 +59,7 @@ export default function AgentPanel() {
                 {docs.filter((d) => GOV_DOCS.includes(d.type)).map((d) => (
                   <div key={d._id} className="mt-1 flex justify-between rounded-lg border border-frost/10 bg-steel/20 px-3 py-2 text-sm">
                     <span className="text-frost">{d.type} — {d.fileName}</span>
-                    <a href={`/api/applications/${sel._id}/documents/${d._id}/file`} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
+                    <a href={apiUrl(`/api/applications/${sel._id}/documents/${d._id}/file`)} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
                   </div>
                 ))}
               </div>

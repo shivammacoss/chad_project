@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { formatPrice } from '@/content/formations'
-import { apiGet } from '@/lib/api'
+import { apiGet, apiUrl } from '@/lib/api'
 import type { Invoice } from '@/types/app'
 
 export default function InvoicesPage() {
@@ -27,7 +27,7 @@ export default function InvoicesPage() {
                     <p className="font-medium text-frost">{inv.invoiceNo} · {inv.serviceName}</p>
                     <p className="text-frost/55">{formatPrice(inv.amountCents)} · {inv.method} · <span className={inv.status === 'paid' ? 'text-teal-electric' : 'text-indigo-pulse'}>{inv.status}</span></p>
                   </div>
-                  <a href={`/api/invoices/${inv._id}/pdf`} target="_blank" rel="noreferrer" className="text-teal-electric">Download</a>
+                  <a href={apiUrl(`/api/invoices/${inv._id}/pdf`)} target="_blank" rel="noreferrer" className="text-teal-electric">Download</a>
                 </div>
               ))}
             </div>

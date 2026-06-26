@@ -12,10 +12,15 @@ import { requireAuth } from '../middleware/auth.js'
 
 export const authRouter = Router()
 
+// When the frontend and API are on DIFFERENT origins (e.g. Vercel + Render with
+// VITE_API_URL), the auth cookie must be SameSite=None + Secure to be sent cross-site.
+// Set COOKIE_SAMESITE=none on the backend in that case. Default 'lax' suits same-origin
+// (local dev, or a Vercel /api proxy).
+const COOKIE_SAMESITE = (process.env.COOKIE_SAMESITE as 'lax' | 'none' | 'strict' | undefined) ?? 'lax'
 const COOKIE_OPTS = {
   httpOnly: true,
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
+  sameSite: COOKIE_SAMESITE,
+  secure: COOKIE_SAMESITE === 'none' || process.env.NODE_ENV === 'production',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 }
 
@@ -112,6 +117,6 @@ authRouter.get('/me', requireAuth, async (req, res) => {
 })
 
 authRouter.post('/logout', (_req, res) => {
-  res.clearCookie('token')
+  res.clearCookie('token', { httpOnly: true, sameSite: COOKIE_SAMESITE, secure: COOKIE_OPTS.secure })
   res.json({ ok: true })
 })

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/formations/StatusBadge'
 import { ENTITY_TYPES, formatPrice } from '@/content/formations'
-import { apiGet, apiPatch, apiPost } from '@/lib/api'
+import { apiGet, apiPatch, apiPost, apiUrl } from '@/lib/api'
 import type { Application, DocItem } from '@/types/app'
 
 const ADMIN_STATUSES = ['in_review', 'filing_submitted', 'registered', 'needs_more_docs', 'rejected'] as const
@@ -117,7 +117,7 @@ export default function AdminPage() {
                     <div key={d._id} className="flex items-center justify-between rounded-lg border border-frost/10 bg-steel/20 px-4 py-2 text-sm">
                       <span className="text-frost">{d.ownerName ? `${d.ownerName} — ` : ''}{d.type}</span>
                       <span className="flex items-center gap-3">
-                        <a href={`/api/applications/${selected._id}/documents/${d._id}/file`} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
+                        <a href={apiUrl(`/api/applications/${selected._id}/documents/${d._id}/file`)} target="_blank" rel="noreferrer" className="text-teal-electric">View</a>
                         <span className="text-frost/50">{d.status}</span>
                         <button type="button" className="text-teal-electric" onClick={() => reviewDoc(d._id, 'approved')}>Approve</button>
                         <button type="button" className="text-indigo-pulse" onClick={() => reviewDoc(d._id, 'rejected')}>Reject</button>
