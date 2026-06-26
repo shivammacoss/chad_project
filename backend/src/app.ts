@@ -16,6 +16,9 @@ import { settingsRouter } from './routes/settings.js'
 export function createApp(): Express {
   const app = express()
 
+  // Behind Railway/Vercel proxies — trust the first proxy so req.ip + secure cookies resolve correctly.
+  app.set('trust proxy', 1)
+
   app.use(
     cors({
       origin: process.env.CLIENT_URL ?? 'http://localhost:5173',
