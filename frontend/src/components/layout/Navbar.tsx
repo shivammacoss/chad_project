@@ -314,7 +314,9 @@ export function Navbar() {
                     navigate(homePath)
                   }}
                 >
-                  {homeLabel}
+                  {isStaff
+                    ? tr({ fr: 'Console', en: 'Console', ar: 'لوحة الإدارة' })
+                    : tr({ fr: 'Tableau de bord', en: 'Dashboard', ar: 'لوحة التحكم' })}
                 </Button>
                 <Button
                   variant="primary"
