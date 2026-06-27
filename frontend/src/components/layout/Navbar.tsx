@@ -45,6 +45,10 @@ export function Navbar() {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  // Staff/admin (any non-customer role) belong in the console (/staff), not the customer dashboard.
+  const isStaff = !!user && !['customer', 'user'].includes(user.role)
+  const homePath = isStaff ? '/staff' : '/dashboard'
+  const homeLabel = isStaff ? 'Console' : 'Dashboard'
 
   useEffect(() => {
     if (isDesktop && mobileOpen) setMobileOpen(false)
@@ -178,14 +182,9 @@ export function Navbar() {
           {user ? (
             <>
               <NotificationBell />
-              <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
-                Dashboard
+              <Button variant="ghost" size="sm" onClick={() => navigate(homePath)}>
+                {homeLabel}
               </Button>
-              {user.role === 'admin' && (
-                <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
-                  Admin
-                </Button>
-              )}
               <Button variant="primary" size="sm" onClick={() => logout()}>
                 Log out
               </Button>
@@ -300,24 +299,11 @@ export function Navbar() {
                   fullWidth
                   onClick={() => {
                     closeAll()
-                    navigate('/dashboard')
+                    navigate(homePath)
                   }}
                 >
-                  Dashboard
+                  {homeLabel}
                 </Button>
-                {user.role === 'admin' && (
-                  <Button
-                    variant="outline"
-                    size="md"
-                    fullWidth
-                    onClick={() => {
-                      closeAll()
-                      navigate('/admin')
-                    }}
-                  >
-                    Admin
-                  </Button>
-                )}
                 <Button
                   variant="primary"
                   size="md"

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from '@/components/layout/MainLayout'
 import HomePage from '@/pages/HomePage'
 import DashboardPage from '@/pages/DashboardPage'
@@ -19,10 +19,8 @@ import VerifyEmailPage from '@/pages/VerifyEmailPage'
 import InvoicesPage from '@/pages/InvoicesPage'
 import SupportPage from '@/pages/SupportPage'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
-import AdminRoute from '@/components/auth/AdminRoute'
 import StaffRoute from '@/components/auth/StaffRoute'
 import AdminLoginPage from '@/pages/AdminLoginPage'
-import AdminPage from '@/pages/AdminPage'
 import StaffPage from '@/pages/StaffPage'
 import { SERVICE_CATEGORIES } from '@/content/menu'
 
@@ -48,9 +46,8 @@ export function AppRoutes() {
           <Route path="/support" element={<SupportPage />} />
         </Route>
         <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route element={<AdminRoute />}>
-          <Route path="/admin" element={<AdminPage />} />
-        </Route>
+        {/* Old admin surface — the real console lives at /staff now. */}
+        <Route path="/admin" element={<Navigate to="/staff" replace />} />
         <Route element={<StaffRoute />}>
           <Route path="/staff" element={<StaffPage />} />
         </Route>
