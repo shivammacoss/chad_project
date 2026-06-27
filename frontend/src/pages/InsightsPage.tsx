@@ -4,10 +4,11 @@ import { Badge } from '@/components/ui/Badge'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { Breadcrumb } from '@/components/common/Breadcrumb'
 import { cn } from '@/lib/utils'
+import { useTr, type Localized } from '@/lib/i18n'
 
 interface Post {
-  title: string
-  excerpt: string
+  title: Localized
+  excerpt: Localized
   category: string
   readTime: string
   date: string
@@ -15,46 +16,102 @@ interface Post {
 
 const CATEGORIES = ['All', 'Formation', 'Compliance', 'Banking', 'Back Office']
 
+/** Display labels for the (untranslated) category keys used in filtering. */
+const CATEGORY_LABELS: Record<string, Localized> = {
+  All: { fr: 'Tout', en: 'All', ar: 'الكل' },
+  Formation: { fr: 'Création', en: 'Formation', ar: 'التأسيس' },
+  Compliance: { fr: 'Conformité', en: 'Compliance', ar: 'الامتثال' },
+  Banking: { fr: 'Banque', en: 'Banking', ar: 'الخدمات المصرفية' },
+  'Back Office': { fr: 'Back-office', en: 'Back Office', ar: 'الإدارة الخلفية' },
+}
+
 const POSTS: Post[] = [
   {
-    title: 'How non-residents can register a company in Chad',
-    excerpt:
-      'A step-by-step guide to incorporating in Chad from abroad — documents, addresses and timelines.',
+    title: {
+      fr: 'Comment les non-résidents peuvent enregistrer une entreprise au Tchad',
+      en: 'How non-residents can register a company in Chad',
+      ar: 'كيف يمكن لغير المقيمين تسجيل شركة في تشاد',
+    },
+    excerpt: {
+      fr: 'Un guide étape par étape pour se constituer au Tchad depuis l’étranger — documents, adresses et délais.',
+      en: 'A step-by-step guide to incorporating in Chad from abroad — documents, addresses and timelines.',
+      ar: 'دليل خطوة بخطوة للتأسيس في تشاد من الخارج — المستندات والعناوين والمواعيد الزمنية.',
+    },
     category: 'Formation',
     readTime: '6 min',
     date: 'Jun 2026',
   },
   {
-    title: 'Annual compliance filings: what they are and why they matter',
-    excerpt: 'Stay in good standing with the Chad company registry by understanding your annual filings.',
+    title: {
+      fr: 'Déclarations annuelles de conformité : ce qu’elles sont et pourquoi elles comptent',
+      en: 'Annual compliance filings: what they are and why they matter',
+      ar: 'الإقرارات السنوية للامتثال: ما هي ولماذا تهمّ',
+    },
+    excerpt: {
+      fr: 'Restez en règle auprès du registre des sociétés du Tchad en comprenant vos déclarations annuelles.',
+      en: 'Stay in good standing with the Chad company registry by understanding your annual filings.',
+      ar: 'حافظ على وضعك القانوني لدى سجل الشركات في تشاد من خلال فهم إقراراتك السنوية.',
+    },
     category: 'Compliance',
     readTime: '4 min',
     date: 'May 2026',
   },
   {
-    title: 'Chad International Free Zone: is it right for your business?',
-    excerpt: 'When a free-zone company makes sense versus a standard Chad company — and how to decide.',
+    title: {
+      fr: 'Zone Franche Internationale du Tchad : est-elle adaptée à votre entreprise ?',
+      en: 'Chad International Free Zone: is it right for your business?',
+      ar: 'المنطقة الحرة الدولية في تشاد: هل هي مناسبة لأعمالك؟',
+    },
+    excerpt: {
+      fr: 'Quand une société de zone franche a-t-elle du sens par rapport à une société tchadienne classique — et comment décider.',
+      en: 'When a free-zone company makes sense versus a standard Chad company — and how to decide.',
+      ar: 'متى تكون شركة المنطقة الحرة منطقية مقارنة بالشركة التشادية العادية — وكيف تقرر.',
+    },
     category: 'Formation',
     readTime: '5 min',
     date: 'May 2026',
   },
   {
-    title: 'Opening a business bank account as a new company',
-    excerpt: 'What banks look for, and how trusted referrals can speed up approval.',
+    title: {
+      fr: 'Ouvrir un compte bancaire professionnel en tant que nouvelle société',
+      en: 'Opening a business bank account as a new company',
+      ar: 'فتح حساب مصرفي تجاري كشركة جديدة',
+    },
+    excerpt: {
+      fr: 'Ce que recherchent les banques, et comment des recommandations fiables peuvent accélérer l’approbation.',
+      en: 'What banks look for, and how trusted referrals can speed up approval.',
+      ar: 'ما الذي تبحث عنه البنوك، وكيف يمكن للإحالات الموثوقة تسريع الموافقة.',
+    },
     category: 'Banking',
     readTime: '7 min',
     date: 'Apr 2026',
   },
   {
-    title: 'Outsourcing data entry without losing quality',
-    excerpt: 'How validation and QA keep accuracy high when you scale your back office.',
+    title: {
+      fr: 'Externaliser la saisie de données sans perdre en qualité',
+      en: 'Outsourcing data entry without losing quality',
+      ar: 'الاستعانة بمصادر خارجية لإدخال البيانات دون فقدان الجودة',
+    },
+    excerpt: {
+      fr: 'Comment la validation et le contrôle qualité maintiennent une grande précision lorsque vous développez votre back-office.',
+      en: 'How validation and QA keep accuracy high when you scale your back office.',
+      ar: 'كيف يحافظ التحقق وضمان الجودة على دقة عالية عند توسيع إدارتك الخلفية.',
+    },
     category: 'Back Office',
     readTime: '5 min',
     date: 'Apr 2026',
   },
   {
-    title: 'Keeping your home address private as a director',
-    excerpt: "Why a director's service address protects your privacy on the public record.",
+    title: {
+      fr: 'Préserver la confidentialité de votre adresse personnelle en tant que dirigeant',
+      en: 'Keeping your home address private as a director',
+      ar: 'الحفاظ على خصوصية عنوان منزلك بصفتك مديرًا',
+    },
+    excerpt: {
+      fr: 'Pourquoi une adresse professionnelle de dirigeant protège votre vie privée dans les registres publics.',
+      en: "Why a director's service address protects your privacy on the public record.",
+      ar: 'لماذا يحمي عنوان الخدمة الخاص بالمدير خصوصيتك في السجلات العامة.',
+    },
     category: 'Compliance',
     readTime: '4 min',
     date: 'Mar 2026',
@@ -62,6 +119,7 @@ const POSTS: Post[] = [
 ]
 
 export default function InsightsPage() {
+  const tr = useTr()
   const [active, setActive] = useState('All')
   const visible = active === 'All' ? POSTS : POSTS.filter((p) => p.category === active)
   const [featured, ...rest] = visible
@@ -76,11 +134,22 @@ export default function InsightsPage() {
         <div aria-hidden="true" className="absolute inset-0 bg-hero-gradient opacity-70" />
         <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
           <div className="flex max-w-3xl flex-col gap-6 motion-safe:animate-fade-up">
-            <Breadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Insights' }]} />
-            <SectionLabel>Latest Insights</SectionLabel>
-            <h1 className="text-display-lg font-bold text-frost">Expert Guides &amp; Insights</h1>
+            <Breadcrumb
+              items={[
+                { label: tr({ fr: 'Accueil', en: 'Home', ar: 'الرئيسية' }), to: '/' },
+                { label: tr({ fr: 'Analyses', en: 'Insights', ar: 'رؤى' }) },
+              ]}
+            />
+            <SectionLabel>{tr({ fr: 'Dernières analyses', en: 'Latest Insights', ar: 'أحدث الرؤى' })}</SectionLabel>
+            <h1 className="text-display-lg font-bold text-frost">
+              {tr({ fr: 'Guides et analyses d’experts', en: 'Expert Guides & Insights', ar: 'أدلة ورؤى الخبراء' })}
+            </h1>
             <p className="max-w-2xl font-body text-lg leading-relaxed text-frost/65">
-              Practical guidance on business formation, compliance, and entrepreneurship.
+              {tr({
+                fr: 'Des conseils pratiques sur la création d’entreprise, la conformité et l’entrepreneuriat.',
+                en: 'Practical guidance on business formation, compliance, and entrepreneurship.',
+                ar: 'إرشادات عملية حول تأسيس الأعمال والامتثال وريادة الأعمال.',
+              })}
             </p>
           </div>
         </div>
@@ -102,7 +171,7 @@ export default function InsightsPage() {
                     : 'border-frost/15 text-frost/60 hover:border-frost/30 hover:text-frost',
                 )}
               >
-                {cat}
+                {tr(CATEGORY_LABELS[cat])}
               </button>
             ))}
           </div>
@@ -113,15 +182,15 @@ export default function InsightsPage() {
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-3">
                     <Badge tone="live" withDot={false}>
-                      Featured
+                      {tr({ fr: 'À la une', en: 'Featured', ar: 'مميّز' })}
                     </Badge>
                     <span className="font-mono text-xs uppercase tracking-wider text-frost/40">
-                      {featured.category} · {featured.readTime}
+                      {tr(CATEGORY_LABELS[featured.category])} · {featured.readTime}
                     </span>
                   </div>
-                  <h2 className="text-display-md font-semibold text-frost">{featured.title}</h2>
+                  <h2 className="text-display-md font-semibold text-frost">{tr(featured.title)}</h2>
                   <p className="font-body text-base leading-relaxed text-frost/60">
-                    {featured.excerpt}
+                    {tr(featured.excerpt)}
                   </p>
                   <span className="font-mono text-xs text-frost/40">{featured.date}</span>
                 </div>
@@ -135,21 +204,23 @@ export default function InsightsPage() {
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {rest.map((post) => (
               <article
-                key={post.title}
+                key={post.title.en}
                 className="group flex flex-col gap-3 rounded-2xl border border-frost/10 bg-steel/20 p-6 transition-colors hover:bg-steel/50"
               >
                 <span className="font-mono text-xs uppercase tracking-wider text-teal-electric/80">
-                  {post.category} · {post.readTime}
+                  {tr(CATEGORY_LABELS[post.category])} · {post.readTime}
                 </span>
-                <h3 className="font-display text-lg font-semibold text-frost">{post.title}</h3>
-                <p className="font-body text-sm leading-relaxed text-frost/60">{post.excerpt}</p>
+                <h3 className="font-display text-lg font-semibold text-frost">{tr(post.title)}</h3>
+                <p className="font-body text-sm leading-relaxed text-frost/60">{tr(post.excerpt)}</p>
                 <span className="mt-auto font-mono text-xs text-frost/40">{post.date}</span>
               </article>
             ))}
           </div>
 
           {visible.length === 0 && (
-            <p className="font-body text-sm text-frost/50">No articles in this category yet.</p>
+            <p className="font-body text-sm text-frost/50">
+              {tr({ fr: 'Aucun article dans cette catégorie pour le moment.', en: 'No articles in this category yet.', ar: 'لا توجد مقالات في هذه الفئة بعد.' })}
+            </p>
           )}
         </div>
       </section>
@@ -158,9 +229,9 @@ export default function InsightsPage() {
       <section className="border-t border-frost/10">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
           <div className="flex flex-col items-center gap-5 text-center">
-            <SectionLabel>Stay in the loop</SectionLabel>
+            <SectionLabel>{tr({ fr: 'Restez informé', en: 'Stay in the loop', ar: 'ابقَ على اطّلاع' })}</SectionLabel>
             <h2 className="max-w-xl text-display-md font-semibold text-frost">
-              Get new guides in your inbox.
+              {tr({ fr: 'Recevez les nouveaux guides dans votre boîte mail.', en: 'Get new guides in your inbox.', ar: 'احصل على الأدلة الجديدة في بريدك الوارد.' })}
             </h2>
             <NewsletterInline />
           </div>
@@ -171,6 +242,7 @@ export default function InsightsPage() {
 }
 
 function NewsletterInline() {
+  const tr = useTr()
   const [email, setEmail] = useState('')
   const [done, setDone] = useState(false)
   return (
@@ -189,12 +261,14 @@ function NewsletterInline() {
           setEmail(e.target.value)
           setDone(false)
         }}
-        placeholder="Enter your email"
-        aria-label="Email address"
+        placeholder={tr({ fr: 'Saisissez votre e-mail', en: 'Enter your email', ar: 'أدخل بريدك الإلكتروني' })}
+        aria-label={tr({ fr: 'Adresse e-mail', en: 'Email address', ar: 'عنوان البريد الإلكتروني' })}
         className="h-12 w-full flex-1 rounded-lg border border-frost/15 bg-steel/30 px-4 font-body text-sm text-frost outline-none transition-colors placeholder:text-frost/35 focus:border-teal-electric/50"
       />
       <Button type="submit" variant="primary" size="lg" className="w-full sm:w-auto">
-        {done ? 'Subscribed ✓' : 'Subscribe'}
+        {done
+          ? tr({ fr: 'Inscrit ✓', en: 'Subscribed ✓', ar: 'تم الاشتراك ✓' })
+          : tr({ fr: 'S’abonner', en: 'Subscribe', ar: 'اشترك' })}
       </Button>
     </form>
   )

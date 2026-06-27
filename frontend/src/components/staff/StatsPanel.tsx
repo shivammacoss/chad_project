@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { formatPrice } from '@/content/formations'
 import { apiGet } from '@/lib/api'
+import { useTr } from '@/lib/i18n'
 import type { AdminStats } from '@/types/app'
 
 export default function StatsPanel() {
+  const tr = useTr()
   const [s, setS] = useState<AdminStats | null>(null)
   useEffect(() => { apiGet<AdminStats>('/api/admin/stats').then(setS).catch(() => {}) }, [])
   if (!s) return null
@@ -15,10 +17,10 @@ export default function StatsPanel() {
   )
   return (
     <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {card('Applications', String(s.applications.total))}
-      {card('Revenue', formatPrice(s.revenueCents))}
-      {card('Users', String(s.users))}
-      {card('Open tickets', String(s.openTickets))}
+      {card(tr({ fr: 'Demandes', en: 'Applications', ar: 'الطلبات' }), String(s.applications.total))}
+      {card(tr({ fr: 'Revenu', en: 'Revenue', ar: 'الإيرادات' }), formatPrice(s.revenueCents))}
+      {card(tr({ fr: 'Utilisateurs', en: 'Users', ar: 'المستخدمون' }), String(s.users))}
+      {card(tr({ fr: 'Tickets ouverts', en: 'Open tickets', ar: 'التذاكر المفتوحة' }), String(s.openTickets))}
     </section>
   )
 }

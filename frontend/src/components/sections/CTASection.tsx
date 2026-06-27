@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { useTr } from '@/lib/i18n'
 
 export function CTASection() {
   const navigate = useNavigate()
+  const tr = useTr()
 
   return (
     <section id="get-started" className="border-t border-frost/10 bg-navy">
@@ -24,28 +26,48 @@ export function CTASection() {
           />
 
           <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-            <Badge tone="live">Onboarding new businesses</Badge>
+            <Badge tone="live">
+              {tr({
+                fr: 'Intégration de nouvelles entreprises',
+                en: 'Onboarding new businesses',
+                ar: 'استقبال أعمال جديدة',
+              })}
+            </Badge>
 
             <h2 className="text-display-lg font-bold text-frost">
-              Bring your business <span className="text-gradient">through the gate.</span>
+              {tr({
+                fr: 'Faites passer votre entreprise',
+                en: 'Bring your business',
+                ar: 'مرِّر أعمالك',
+              })}{' '}
+              <span className="text-gradient">
+                {tr({ fr: 'par la porte.', en: 'through the gate.', ar: 'عبر البوابة.' })}
+              </span>
             </h2>
 
             <p className="max-w-xl font-body text-lg leading-relaxed text-frost/65">
-              Tell us what you need and our team will map out the fastest route to getting your
-              company set up — usually with a response within one business day.
+              {tr({
+                fr: 'Dites-nous ce dont vous avez besoin et notre équipe tracera la voie la plus rapide pour mettre en place votre société — généralement avec une réponse sous un jour ouvré.',
+                en: 'Tell us what you need and our team will map out the fastest route to getting your company set up — usually with a response within one business day.',
+                ar: 'أخبرنا بما تحتاجه وسيرسم فريقنا أسرع طريق لتأسيس شركتك — عادةً مع رد خلال يوم عمل واحد.',
+              })}
             </p>
 
             <div className="mt-2 flex flex-col gap-3 sm:flex-row">
               <Button variant="primary" size="lg" onClick={() => navigate('/contact')}>
-                Get Started
+                {tr({ fr: 'Commencer', en: 'Get Started', ar: 'ابدأ' })}
               </Button>
               <Button variant="outline" size="lg" onClick={() => navigate('/virtual-offices')}>
-                Explore Services
+                {tr({ fr: 'Explorer les services', en: 'Explore Services', ar: 'استكشف الخدمات' })}
               </Button>
             </div>
 
             <p className="mt-2 font-mono text-xs uppercase tracking-wider text-frost/40">
-              No hidden costs · Registered agent · Worldwide support
+              {tr({
+                fr: 'Aucuns frais cachés · Agent enregistré · Assistance mondiale',
+                en: 'No hidden costs · Registered agent · Worldwide support',
+                ar: 'لا تكاليف خفية · وكيل مسجَّل · دعم عالمي',
+              })}
             </p>
           </div>
         </div>

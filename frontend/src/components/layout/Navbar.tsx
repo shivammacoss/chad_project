@@ -6,17 +6,20 @@ import { MENU } from '@/content/menu'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/store/AuthContext'
 import NotificationBell from '@/components/layout/NotificationBell'
+import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
+import { useTr } from '@/lib/i18n'
 
 /** Brand logo. */
 function Logo({ onClick }: { onClick?: () => void }) {
+  const tr = useTr()
   return (
     <Link
       to="/"
       onClick={onClick}
-      className="group flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-electric/70 focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
-      aria-label="GATE home"
+      className="group flex shrink-0 items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-electric/70 focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+      aria-label={tr({ fr: 'Accueil GATE', en: 'GATE home', ar: 'الصفحة الرئيسية GATE' })}
     >
-      <img src="/logo.png" alt="GATE" className="h-9 w-auto" />
+      <img src="/logo.png" alt="GATE" className="h-12 w-auto shrink-0 sm:h-14" />
     </Link>
   )
 }
@@ -48,7 +51,7 @@ export function Navbar() {
   // Staff/admin (any non-customer role) belong in the console (/staff), not the customer dashboard.
   const isStaff = !!user && !['customer', 'user'].includes(user.role)
   const homePath = isStaff ? '/staff' : '/dashboard'
-  const homeLabel = isStaff ? 'Console' : 'Dashboard'
+  const tr = useTr()
 
   useEffect(() => {
     if (isDesktop && mobileOpen) setMobileOpen(false)
@@ -82,14 +85,14 @@ export function Navbar() {
         <Logo onClick={closeAll} />
 
         {/* Desktop navigation */}
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-0.5 lg:flex">
           <li>
             <Link
               to="/"
               onClick={() => setOpenId(null)}
-              className="flex items-center whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.9rem] font-semibold text-frost/90 transition-colors hover:text-frost"
+              className="flex items-center whitespace-nowrap rounded-md px-1.5 py-2 font-body text-[0.78rem] font-semibold text-frost/90 transition-colors hover:text-frost"
             >
-              Home
+              {tr({ fr: 'Accueil', en: 'Home', ar: 'الرئيسية' })}
             </Link>
           </li>
           {MENU.map((cat) => {
@@ -107,9 +110,9 @@ export function Navbar() {
                     onClick={() => setOpenId(null)}
                     aria-haspopup="true"
                     aria-expanded={isOpen}
-                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.9rem] font-semibold text-frost/90 transition-colors hover:text-frost"
+                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-1.5 py-2 font-body text-[0.78rem] font-semibold text-frost/90 transition-colors hover:text-frost"
                   >
-                    {cat.label}
+                    {tr(cat.label)}
                     <Chevron open={isOpen} />
                   </Link>
                 ) : (
@@ -118,9 +121,9 @@ export function Navbar() {
                     aria-haspopup="true"
                     aria-expanded={isOpen}
                     onClick={() => setOpenId((id) => (id === cat.id ? null : cat.id))}
-                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 font-body text-[0.9rem] font-semibold text-frost/90 transition-colors hover:text-frost"
+                    className="flex items-center gap-1 whitespace-nowrap rounded-md px-1.5 py-2 font-body text-[0.78rem] font-semibold text-frost/90 transition-colors hover:text-frost"
                   >
-                    {cat.label}
+                    {tr(cat.label)}
                     <Chevron open={isOpen} />
                   </button>
                 )}
@@ -151,10 +154,10 @@ export function Navbar() {
                           className="group flex flex-col gap-0.5 rounded-xl px-3 py-2.5 transition-colors hover:bg-navy/60"
                         >
                           <span className="font-body text-sm font-medium text-frost group-hover:text-teal-electric">
-                            {page.menuLabel}
+                            {tr(page.menuLabel)}
                           </span>
                           <span className="line-clamp-1 font-body text-xs text-frost/45">
-                            {page.intro}
+                            {tr(page.intro)}
                           </span>
                         </Link>
                       ))}
@@ -166,7 +169,7 @@ export function Navbar() {
                         onClick={() => setOpenId(null)}
                         className="mt-1 flex items-center justify-between rounded-xl border-t border-frost/10 px-3 py-2.5 font-mono text-xs uppercase tracking-wider text-teal-electric transition-colors hover:bg-navy/60"
                       >
-                        View all {cat.label}
+                        {tr({ fr: 'Voir tout', en: 'View all', ar: 'عرض الكل' })} {tr(cat.label)}
                         <span aria-hidden="true">→</span>
                       </Link>
                     )}
@@ -179,19 +182,22 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-2 lg:flex">
+          <LanguageSwitcher />
           {user ? (
             <>
               <NotificationBell />
               <Button variant="ghost" size="sm" onClick={() => navigate(homePath)}>
-                {homeLabel}
+                {isStaff
+                  ? tr({ fr: 'Console', en: 'Console', ar: 'لوحة الإدارة' })
+                  : tr({ fr: 'Tableau de bord', en: 'Dashboard', ar: 'لوحة التحكم' })}
               </Button>
               <Button variant="primary" size="sm" onClick={() => logout()}>
-                Log out
+                {tr({ fr: 'Déconnexion', en: 'Log out', ar: 'تسجيل الخروج' })}
               </Button>
             </>
           ) : (
             <Button variant="primary" size="sm" onClick={() => navigate('/get-started')}>
-              Get Started
+              {tr({ fr: 'Commencer', en: 'Get Started', ar: 'ابدأ' })}
             </Button>
           )}
         </div>
@@ -200,7 +206,11 @@ export function Navbar() {
         <button
           type="button"
           className="relative flex h-10 w-10 items-center justify-center rounded-md text-frost transition-colors hover:bg-steel focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-electric/70 lg:hidden"
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-label={
+            mobileOpen
+              ? tr({ fr: 'Fermer le menu', en: 'Close menu', ar: 'إغلاق القائمة' })
+              : tr({ fr: 'Ouvrir le menu', en: 'Open menu', ar: 'فتح القائمة' })
+          }
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
         >
@@ -240,7 +250,7 @@ export function Navbar() {
             onClick={closeAll}
             className="border-b border-frost/10 px-2 py-3.5 font-body text-sm font-medium text-frost"
           >
-            Home
+            {tr({ fr: 'Accueil', en: 'Home', ar: 'الرئيسية' })}
           </Link>
           {MENU.map((cat) => {
             const expanded = mobileCat === cat.id
@@ -252,7 +262,7 @@ export function Navbar() {
                   onClick={() => setMobileCat((id) => (id === cat.id ? null : cat.id))}
                   className="flex w-full items-center justify-between px-2 py-3.5 font-body text-sm font-medium text-frost"
                 >
-                  {cat.label}
+                  {tr(cat.label)}
                   <Chevron open={expanded} />
                 </button>
                 <div
@@ -268,7 +278,7 @@ export function Navbar() {
                         onClick={closeAll}
                         className="rounded-lg px-3 py-2.5 font-body text-sm text-teal-electric transition-colors hover:bg-steel"
                       >
-                        Overview
+                        {tr({ fr: 'Aperçu', en: 'Overview', ar: 'نظرة عامة' })}
                       </Link>
                     )}
                     {cat.pages.map((page) => (
@@ -278,7 +288,7 @@ export function Navbar() {
                         onClick={closeAll}
                         className="rounded-lg px-3 py-2.5 font-body text-sm text-frost/70 transition-colors hover:bg-steel hover:text-frost"
                       >
-                        {page.menuLabel}
+                        {tr(page.menuLabel)}
                       </Link>
                     ))}
                   </div>
@@ -286,6 +296,8 @@ export function Navbar() {
               </div>
             )
           })}
+
+          <LanguageSwitcher variant="mobile" onSelect={closeAll} />
 
           <div className="mt-4 flex flex-col gap-2 pt-2">
             {user ? (

@@ -5,14 +5,16 @@ import { SectionLabel } from '@/components/common/SectionLabel'
 import { Breadcrumb } from '@/components/common/Breadcrumb'
 import { MENU } from '@/content/menu'
 import { cn } from '@/lib/utils'
+import { useTr, type Localized } from '@/lib/i18n'
 
-const INTERESTS = MENU.filter((c) => !c.custom).map((c) => c.label)
+const INTERESTS: Localized[] = MENU.filter((c) => !c.custom).map((c) => c.label)
 
 const inputClasses =
   'w-full rounded-lg border border-frost/15 bg-steel/30 px-4 py-3 font-body text-sm text-frost outline-none transition-colors placeholder:text-frost/35 focus:border-teal-electric/50 focus:bg-steel/50'
 
 export default function ContactPage() {
-  const [interest, setInterest] = useState<string>(INTERESTS[0])
+  const tr = useTr()
+  const [interest, setInterest] = useState<Localized>(INTERESTS[0])
   const [sent, setSent] = useState(false)
 
   const onSubmit = (e: React.FormEvent) => {
@@ -33,14 +35,25 @@ export default function ContactPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Left: copy */}
             <div className="flex flex-col gap-6 motion-safe:animate-fade-up">
-              <Breadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Contact' }]} />
-              <SectionLabel>Get in touch</SectionLabel>
+              <Breadcrumb
+                items={[
+                  { label: tr({ fr: 'Accueil', en: 'Home', ar: 'الرئيسية' }), to: '/' },
+                  { label: tr({ fr: 'Contact', en: 'Contact', ar: 'اتصال' }) },
+                ]}
+              />
+              <SectionLabel>{tr({ fr: 'Entrer en contact', en: 'Get in touch', ar: 'تواصل معنا' })}</SectionLabel>
               <h1 className="text-display-lg font-bold text-frost">
-                Let&apos;s get your business <span className="text-gradient">moving.</span>
+                {tr({ fr: 'Mettons votre entreprise ', en: "Let's get your business ", ar: 'لنجعل أعمالك ' })}
+                <span className="text-gradient">
+                  {tr({ fr: 'en mouvement.', en: 'moving.', ar: 'تتحرّك.' })}
+                </span>
               </h1>
               <p className="max-w-md font-body text-lg leading-relaxed text-frost/65">
-                Tell us what you need and our team will get back to you, usually within one business
-                day.
+                {tr({
+                  fr: 'Dites-nous ce dont vous avez besoin et notre équipe vous répondra, généralement sous un jour ouvré.',
+                  en: 'Tell us what you need and our team will get back to you, usually within one business day.',
+                  ar: 'أخبرنا بما تحتاجه وسيردّ عليك فريقنا، عادةً في غضون يوم عمل واحد.',
+                })}
               </p>
 
               <div className="mt-2 flex flex-col gap-4">
@@ -50,7 +63,7 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <p className="font-mono text-xs uppercase tracking-wider text-frost/40">
-                      Worldwide support
+                      {tr({ fr: 'Assistance mondiale', en: 'Worldwide support', ar: 'دعم عالمي' })}
                     </p>
                     <p className="font-display text-sm font-semibold text-frost">+(8) 123 456 7890</p>
                   </div>
@@ -61,7 +74,7 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <p className="font-mono text-xs uppercase tracking-wider text-frost/40">
-                      Sales &amp; inquiries
+                      {tr({ fr: 'Ventes et demandes', en: 'Sales & inquiries', ar: 'المبيعات والاستفسارات' })}
                     </p>
                     <p className="font-display text-sm font-semibold text-frost">
                       hello@gridglobalgate.com
@@ -75,14 +88,17 @@ export default function ContactPage() {
             <div className="rounded-3xl border border-frost/10 bg-steel/30 p-6 sm:p-8">
               {sent ? (
                 <div className="flex h-full min-h-[20rem] flex-col items-center justify-center gap-4 text-center">
-                  <Badge tone="live">Message received</Badge>
-                  <h2 className="text-display-md font-semibold text-frost">Thank you.</h2>
+                  <Badge tone="live">{tr({ fr: 'Message reçu', en: 'Message received', ar: 'تم استلام الرسالة' })}</Badge>
+                  <h2 className="text-display-md font-semibold text-frost">
+                    {tr({ fr: 'Merci.', en: 'Thank you.', ar: 'شكرًا لك.' })}
+                  </h2>
                   <p className="max-w-sm font-body text-sm text-frost/60">
-                    We&apos;ve logged your enquiry about <span className="text-frost">{interest}</span>{' '}
-                    and will be in touch shortly.
+                    {tr({ fr: 'Nous avons enregistré votre demande concernant ', en: "We've logged your enquiry about ", ar: 'لقد سجّلنا استفسارك حول ' })}
+                    <span className="text-frost">{tr(interest)}</span>{' '}
+                    {tr({ fr: 'et nous vous contacterons sous peu.', en: 'and will be in touch shortly.', ar: 'وسنتواصل معك قريبًا.' })}
                   </p>
                   <Button variant="outline" size="md" onClick={() => setSent(false)}>
-                    Send another message
+                    {tr({ fr: 'Envoyer un autre message', en: 'Send another message', ar: 'إرسال رسالة أخرى' })}
                   </Button>
                 </div>
               ) : (
@@ -90,13 +106,18 @@ export default function ContactPage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-2">
                       <span className="font-mono text-xs uppercase tracking-wider text-frost/50">
-                        Full name
+                        {tr({ fr: 'Nom complet', en: 'Full name', ar: 'الاسم الكامل' })}
                       </span>
-                      <input required name="name" placeholder="Jane Doe" className={inputClasses} />
+                      <input
+                        required
+                        name="name"
+                        placeholder={tr({ fr: 'Jean Dupont', en: 'Jane Doe', ar: 'فلان الفلاني' })}
+                        className={inputClasses}
+                      />
                     </label>
                     <label className="flex flex-col gap-2">
                       <span className="font-mono text-xs uppercase tracking-wider text-frost/50">
-                        Email
+                        {tr({ fr: 'E-mail', en: 'Email', ar: 'البريد الإلكتروني' })}
                       </span>
                       <input
                         required
@@ -110,12 +131,12 @@ export default function ContactPage() {
 
                   <div className="flex flex-col gap-2">
                     <span className="font-mono text-xs uppercase tracking-wider text-frost/50">
-                      I&apos;m interested in
+                      {tr({ fr: 'Je suis intéressé par', en: "I'm interested in", ar: 'أنا مهتم بـ' })}
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {INTERESTS.map((item) => (
                         <button
-                          key={item}
+                          key={item.en}
                           type="button"
                           onClick={() => setInterest(item)}
                           className={cn(
@@ -125,7 +146,7 @@ export default function ContactPage() {
                               : 'border-frost/15 text-frost/60 hover:border-frost/30 hover:text-frost',
                           )}
                         >
-                          {item}
+                          {tr(item)}
                         </button>
                       ))}
                     </div>
@@ -133,19 +154,23 @@ export default function ContactPage() {
 
                   <label className="flex flex-col gap-2">
                     <span className="font-mono text-xs uppercase tracking-wider text-frost/50">
-                      How can we help?
+                      {tr({ fr: 'Comment pouvons-nous vous aider ?', en: 'How can we help?', ar: 'كيف يمكننا مساعدتك؟' })}
                     </span>
                     <textarea
                       required
                       name="message"
                       rows={4}
-                      placeholder="Tell us a little about your business…"
+                      placeholder={tr({
+                        fr: 'Parlez-nous un peu de votre entreprise…',
+                        en: 'Tell us a little about your business…',
+                        ar: 'أخبرنا قليلاً عن أعمالك…',
+                      })}
                       className={cn(inputClasses, 'resize-none')}
                     />
                   </label>
 
                   <Button type="submit" variant="primary" size="lg" fullWidth>
-                    Send Message
+                    {tr({ fr: 'Envoyer le message', en: 'Send Message', ar: 'إرسال الرسالة' })}
                   </Button>
                 </form>
               )}

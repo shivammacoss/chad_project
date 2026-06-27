@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { apiGet, apiPatch } from '@/lib/api'
+import { useTr } from '@/lib/i18n'
 import type { Notification } from '@/types/app'
 
 export default function NotificationBell() {
+  const tr = useTr()
   const navigate = useNavigate()
   const [count, setCount] = useState(0)
   const [open, setOpen] = useState(false)
@@ -36,10 +38,10 @@ export default function NotificationBell() {
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-frost/15 bg-steel/95 p-2 shadow-xl backdrop-blur">
           <div className="flex items-center justify-between px-2 py-1">
-            <span className="text-sm font-medium text-frost">Notifications</span>
-            <button className="text-xs text-teal-electric" onClick={markAll}>Mark all read</button>
+            <span className="text-sm font-medium text-frost">{tr({ fr: 'Notifications', en: 'Notifications', ar: 'الإشعارات' })}</span>
+            <button className="text-xs text-teal-electric" onClick={markAll}>{tr({ fr: 'Tout marquer comme lu', en: 'Mark all read', ar: 'تحديد الكل كمقروء' })}</button>
           </div>
-          {items.length === 0 && <p className="px-2 py-3 text-sm text-frost/55">No notifications.</p>}
+          {items.length === 0 && <p className="px-2 py-3 text-sm text-frost/55">{tr({ fr: 'Aucune notification.', en: 'No notifications.', ar: 'لا توجد إشعارات.' })}</p>}
           {items.map((n) => (
             <button key={n._id} onClick={() => openItem(n)}
               className={`block w-full rounded-lg px-2 py-2 text-left text-sm ${n.read ? 'text-frost/55' : 'bg-navy/40 text-frost'}`}>

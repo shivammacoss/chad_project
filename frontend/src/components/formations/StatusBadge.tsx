@@ -1,5 +1,6 @@
 import { Badge, type BadgeTone } from '@/components/ui/Badge'
 import { STATUS_LABEL } from '@/content/formations'
+import { useTr } from '@/lib/i18n'
 import type { ApplicationStatus } from '@/types/app'
 
 const TONE: Record<ApplicationStatus, BadgeTone> = {
@@ -18,5 +19,6 @@ const TONE: Record<ApplicationStatus, BadgeTone> = {
 }
 
 export function StatusBadge({ status }: { status: ApplicationStatus }) {
-  return <Badge tone={TONE[status]} withDot={status === 'registered'}>{STATUS_LABEL[status]}</Badge>
+  const tr = useTr()
+  return <Badge tone={TONE[status]} withDot={status === 'registered'}>{tr(STATUS_LABEL[status])}</Badge>
 }

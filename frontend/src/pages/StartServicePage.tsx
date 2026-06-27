@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { fetchServices, type ServiceDef } from '@/lib/services'
 import { formatPrice } from '@/content/formations'
 import { apiPost } from '@/lib/api'
+import { useTr } from '@/lib/i18n'
 import type { Application } from '@/types/app'
 
 export default function StartServicePage() {
+  const tr = useTr()
   const navigate = useNavigate()
   const [services, setServices] = useState<ServiceDef[]>([])
   const [busy, setBusy] = useState(false)
@@ -20,7 +22,7 @@ export default function StartServicePage() {
       const order = await apiPost<Application>('/api/applications', { serviceKey: s.key })
       navigate(`/services/${order._id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not start application')
+      setError(err instanceof Error ? err.message : tr({ fr: 'Impossible de démarrer la demande', en: 'Could not start application', ar: 'تعذّر بدء الطلب' }))
     } finally { setBusy(false) }
   }
 
@@ -28,7 +30,7 @@ export default function StartServicePage() {
   return (
     <div className="min-h-screen bg-navy pt-16">
       <div className="mx-auto max-w-3xl px-5 py-12">
-        <h1 className="text-2xl font-semibold text-frost">Start a new application</h1>
+        <h1 className="text-2xl font-semibold text-frost">{tr({ fr: 'Démarrer une nouvelle demande', en: 'Start a new application', ar: 'بدء طلب جديد' })}</h1>
         {error && <p className="mt-2 text-sm text-indigo-pulse">{error}</p>}
         {cats.map((cat) => (
           <div key={cat} className="mt-6">

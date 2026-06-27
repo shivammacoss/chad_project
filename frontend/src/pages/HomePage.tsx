@@ -6,6 +6,7 @@ import { GrowTogetherSection } from '@/components/sections/GrowTogetherSection'
 import { TrustedBySection } from '@/components/sections/TrustedBySection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection'
+import { ShowcaseSection } from '@/components/sections/ShowcaseSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { NewsletterSection } from '@/components/sections/NewsletterSection'
 
@@ -21,6 +22,7 @@ export default function HomePage() {
       <TrustedBySection />
       <ServicesSection />
       <TestimonialsSection />
+      <ShowcaseSection />
       <CTASection />
       <NewsletterSection />
     </>

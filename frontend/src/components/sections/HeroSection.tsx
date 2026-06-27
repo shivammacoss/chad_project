@@ -1,20 +1,45 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
+import { useTr, type Localized } from '@/lib/i18n'
 
 const HERO_IMAGE = '/hero_banner.png'
 
-const FEATURES = [
+const FEATURES: { title: Localized; text: Localized }[] = [
   {
-    title: 'Non-Resident Friendly',
-    text: 'The same process and pricing to register in Chad, wherever in the world you live.',
+    title: {
+      fr: 'Adapté aux non-résidents',
+      en: 'Non-Resident Friendly',
+      ar: 'مناسب لغير المقيمين',
+    },
+    text: {
+      fr: 'Le même processus et les mêmes tarifs pour vous enregistrer au Tchad, où que vous viviez dans le monde.',
+      en: 'The same process and pricing to register in Chad, wherever in the world you live.',
+      ar: 'نفس الإجراءات والأسعار للتسجيل في تشاد، أينما كنت تعيش في العالم.',
+    },
   },
   {
-    title: 'Fast Chad Filing',
-    text: 'Company formation filed directly with the Chad authorities, handled end to end.',
+    title: {
+      fr: 'Dépôt rapide au Tchad',
+      en: 'Fast Chad Filing',
+      ar: 'تسجيل سريع في تشاد',
+    },
+    text: {
+      fr: 'Création de société déposée directement auprès des autorités tchadiennes, gérée de bout en bout.',
+      en: 'Company formation filed directly with the Chad authorities, handled end to end.',
+      ar: 'تأسيس الشركة يُقدَّم مباشرة لدى السلطات التشادية، مع إدارة كاملة من البداية إلى النهاية.',
+    },
   },
   {
-    title: 'Registered Agent Included',
-    text: 'Registered office and agent services in Chad bundled with your package.',
+    title: {
+      fr: 'Agent enregistré agréé',
+      en: 'Authorised Registered Agent',
+      ar: 'وكيل مسجَّل معتمد',
+    },
+    text: {
+      fr: 'Services de siège social et d’agent enregistré agréés au Tchad, inclus dans votre forfait.',
+      en: 'Accredited registered office and agent services in Chad, included with your package.',
+      ar: 'خدمات مقر مسجَّل ووكيل معتمدة في تشاد، مشمولة في باقتك.',
+    },
   },
 ]
 
@@ -27,6 +52,7 @@ function CheckIcon({ className }: { className?: string }) {
 }
 
 export function HeroSection() {
+  const tr = useTr()
 
   return (
     <section id="top" className="relative pt-16">
@@ -35,7 +61,11 @@ export function HeroSection() {
         <div className="relative overflow-hidden rounded-[2rem] shadow-2xl shadow-frost/10">
           <img
             src={HERO_IMAGE}
-            alt="A team collaborating in a bright modern office"
+            alt={tr({
+              fr: 'Une équipe collaborant dans un bureau moderne et lumineux',
+              en: 'A team collaborating in a bright modern office',
+              ar: 'فريق يتعاون في مكتب عصري مضيء',
+            })}
             className="h-[420px] w-full object-cover sm:h-[520px] lg:h-[560px]"
             loading="eager"
           />
@@ -46,14 +76,14 @@ export function HeroSection() {
         <div className="relative z-10 mx-auto -mt-12 w-[94%] rounded-[2rem] bg-white p-6 shadow-2xl shadow-frost/10 sm:-mt-16 sm:w-[92%] sm:p-8 lg:w-[88%]">
           <div className="grid gap-6 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-frost/10">
             {FEATURES.map((f) => (
-              <div key={f.title} className="flex flex-col gap-2 sm:px-6 sm:first:pl-0 sm:last:pr-0">
+              <div key={f.title.en} className="flex flex-col gap-2 sm:px-6 sm:first:pl-0 sm:last:pr-0">
                 <div className="flex items-center gap-2.5">
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-electric/15 text-indigo-pulse">
                     <CheckIcon className="h-4 w-4" />
                   </span>
-                  <h3 className="font-display text-base font-semibold text-frost">{f.title}</h3>
+                  <h3 className="font-display text-base font-semibold text-frost">{tr(f.title)}</h3>
                 </div>
-                <p className="font-body text-sm leading-relaxed text-frost/55">{f.text}</p>
+                <p className="font-body text-sm leading-relaxed text-frost/55">{tr(f.text)}</p>
               </div>
             ))}
           </div>
@@ -61,11 +91,21 @@ export function HeroSection() {
           <div className="mt-7 flex flex-col gap-4 rounded-2xl bg-steel p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div className="flex flex-col gap-1">
               <p className="font-display text-lg font-semibold text-frost">
-                Start your journey by exploring our{' '}
-                <span className="text-indigo-pulse">services</span>
+                {tr({
+                  fr: 'Commencez votre parcours en explorant nos',
+                  en: 'Start your journey by exploring our',
+                  ar: 'ابدأ رحلتك باستكشاف',
+                })}{' '}
+                <span className="text-indigo-pulse">
+                  {tr({ fr: 'services', en: 'services', ar: 'خدماتنا' })}
+                </span>
               </p>
               <p className="font-body text-sm text-frost/55">
-                Everything to launch and run your company, in one place.
+                {tr({
+                  fr: 'Tout pour lancer et gérer votre société, en un seul endroit.',
+                  en: 'Everything to launch and run your company, in one place.',
+                  ar: 'كل ما يلزم لإطلاق وإدارة شركتك، في مكان واحد.',
+                })}
               </p>
             </div>
             <Link to="/get-started" className="w-full sm:w-auto">
@@ -74,7 +114,7 @@ export function HeroSection() {
                 size="lg"
                 className="w-full bg-chad-blue text-white shadow-none hover:bg-[#013a87] sm:w-auto"
               >
-                Get started now
+                {tr({ fr: 'Commencer maintenant', en: 'Get started now', ar: 'ابدأ الآن' })}
               </Button>
             </Link>
           </div>

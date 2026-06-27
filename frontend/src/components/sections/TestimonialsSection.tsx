@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { cn } from '@/lib/utils'
+import { useTr, type Localized } from '@/lib/i18n'
 
 interface Insight {
-  title: string
-  category: string
-  meta: string
+  title: Localized
+  category: Localized
+  meta: Localized
   tone: 'brand' | 'dark'
 }
 
@@ -15,39 +16,87 @@ interface Insight {
  */
 const INSIGHTS: Insight[] = [
   {
-    title: 'How to register a company in Chad as a non-resident',
-    category: 'Company Formation',
-    meta: 'Jun 2026 · 5 min read',
+    title: {
+      fr: 'Comment immatriculer une société au Tchad en tant que non-résident',
+      en: 'How to register a company in Chad as a non-resident',
+      ar: 'كيفية تسجيل شركة في تشاد بصفتك غير مقيم',
+    },
+    category: {
+      fr: 'Création de société',
+      en: 'Company Formation',
+      ar: 'تأسيس الشركات',
+    },
+    meta: { fr: 'Juin 2026 · 5 min de lecture', en: 'Jun 2026 · 5 min read', ar: 'يونيو 2026 · قراءة 5 دقائق' },
     tone: 'brand',
   },
   {
-    title: 'Why a Chad virtual office builds instant credibility',
-    category: 'Virtual Offices',
-    meta: 'Jun 2026 · 4 min read',
+    title: {
+      fr: 'Pourquoi un bureau virtuel au Tchad renforce instantanément votre crédibilité',
+      en: 'Why a Chad virtual office builds instant credibility',
+      ar: 'لماذا يمنحك المكتب الافتراضي في تشاد مصداقية فورية',
+    },
+    category: {
+      fr: 'Bureaux virtuels',
+      en: 'Virtual Offices',
+      ar: 'المكاتب الافتراضية',
+    },
+    meta: { fr: 'Juin 2026 · 4 min de lecture', en: 'Jun 2026 · 4 min read', ar: 'يونيو 2026 · قراءة 4 دقائق' },
     tone: 'dark',
   },
   {
-    title: 'Chad International Free Zone: tax advantages explained',
-    category: 'Free Zone',
-    meta: 'May 2026 · 6 min read',
+    title: {
+      fr: 'Zone Franche internationale du Tchad : les avantages fiscaux expliqués',
+      en: 'Chad International Free Zone: tax advantages explained',
+      ar: 'المنطقة الحرة الدولية في تشاد: شرح المزايا الضريبية',
+    },
+    category: {
+      fr: 'Zone Franche',
+      en: 'Free Zone',
+      ar: 'المنطقة الحرة',
+    },
+    meta: { fr: 'Mai 2026 · 6 min de lecture', en: 'May 2026 · 6 min read', ar: 'مايو 2026 · قراءة 6 دقائق' },
     tone: 'brand',
   },
   {
-    title: 'Staying compliant: statutory filings for Chad companies',
-    category: 'Compliance',
-    meta: 'May 2026 · 4 min read',
+    title: {
+      fr: 'Rester en conformité : déclarations légales des sociétés tchadiennes',
+      en: 'Staying compliant: statutory filings for Chad companies',
+      ar: 'البقاء ممتثلاً: الإيداعات القانونية للشركات التشادية',
+    },
+    category: {
+      fr: 'Conformité',
+      en: 'Compliance',
+      ar: 'الامتثال',
+    },
+    meta: { fr: 'Mai 2026 · 4 min de lecture', en: 'May 2026 · 4 min read', ar: 'مايو 2026 · قراءة 4 دقائق' },
     tone: 'dark',
   },
   {
-    title: 'Opening a business bank account from abroad',
-    category: 'Banking',
-    meta: 'Apr 2026 · 5 min read',
+    title: {
+      fr: 'Ouvrir un compte bancaire professionnel depuis l’étranger',
+      en: 'Opening a business bank account from abroad',
+      ar: 'فتح حساب مصرفي تجاري من الخارج',
+    },
+    category: {
+      fr: 'Banque',
+      en: 'Banking',
+      ar: 'الخدمات المصرفية',
+    },
+    meta: { fr: 'Avr 2026 · 5 min de lecture', en: 'Apr 2026 · 5 min read', ar: 'أبريل 2026 · قراءة 5 دقائق' },
     tone: 'brand',
   },
   {
-    title: '5 steps to launch your business in Chad remotely',
-    category: 'Guides',
-    meta: 'Apr 2026 · 3 min read',
+    title: {
+      fr: '5 étapes pour lancer votre entreprise au Tchad à distance',
+      en: '5 steps to launch your business in Chad remotely',
+      ar: '5 خطوات لإطلاق عملك في تشاد عن بُعد',
+    },
+    category: {
+      fr: 'Guides',
+      en: 'Guides',
+      ar: 'أدلة',
+    },
+    meta: { fr: 'Avr 2026 · 3 min de lecture', en: 'Apr 2026 · 3 min read', ar: 'أبريل 2026 · قراءة 3 دقائق' },
     tone: 'dark',
   },
 ]
@@ -75,6 +124,7 @@ function ArrowIcon({ dir }: { dir: 'left' | 'right' }) {
 }
 
 export function TestimonialsSection() {
+  const tr = useTr()
   const [perView, setPerView] = useState(getPerView)
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -121,16 +171,20 @@ export function TestimonialsSection() {
       <div className="mx-auto flex max-w-7xl flex-col gap-12 px-5 sm:px-8">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-5">
-            <SectionLabel>Latest insights</SectionLabel>
+            <SectionLabel>{tr({ fr: 'Derniers articles', en: 'Latest insights', ar: 'أحدث المقالات' })}</SectionLabel>
             <h2 className="max-w-xl font-display text-display-lg font-bold text-frost">
-              Insights & guides to help you launch in Chad
+              {tr({
+                fr: 'Articles et guides pour vous aider à vous lancer au Tchad',
+                en: 'Insights & guides to help you launch in Chad',
+                ar: 'مقالات وأدلة لمساعدتك على الانطلاق في تشاد',
+              })}
             </h2>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               type="button"
-              aria-label="Previous insight"
+              aria-label={tr({ fr: 'Article précédent', en: 'Previous insight', ar: 'المقال السابق' })}
               onClick={prev}
               className="flex h-12 w-12 items-center justify-center rounded-full border border-frost/15 text-frost transition-colors hover:bg-steel active:scale-95"
             >
@@ -138,7 +192,7 @@ export function TestimonialsSection() {
             </button>
             <button
               type="button"
-              aria-label="Next insight"
+              aria-label={tr({ fr: 'Article suivant', en: 'Next insight', ar: 'المقال التالي' })}
               onClick={next}
               className="flex h-12 w-12 items-center justify-center rounded-full bg-chad-blue text-white transition-colors hover:bg-[#013a87] active:scale-95"
             >
@@ -152,7 +206,7 @@ export function TestimonialsSection() {
           className="overflow-hidden"
           role="region"
           aria-roledescription="carousel"
-          aria-label="Latest insights"
+          aria-label={tr({ fr: 'Derniers articles', en: 'Latest insights', ar: 'أحدث المقالات' })}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
@@ -166,7 +220,7 @@ export function TestimonialsSection() {
           >
             {INSIGHTS.map((item, i) => (
               <div
-                key={item.title}
+                key={item.title.en}
                 className="w-full shrink-0 grow-0 basis-full px-2.5 sm:basis-1/2 lg:basis-1/3"
                 aria-hidden={i < index || i >= index + perView}
               >
@@ -177,7 +231,7 @@ export function TestimonialsSection() {
                   )}
                 >
                   <h3 className="font-display text-lg font-semibold leading-snug text-white">
-                    {item.title}
+                    {tr(item.title)}
                   </h3>
 
                   <div
@@ -192,7 +246,7 @@ export function TestimonialsSection() {
                         item.tone === 'brand' ? 'bg-frost text-white' : 'bg-chad-yellow text-chad-blue',
                       )}
                     >
-                      {item.category
+                      {tr(item.category)
                         .split(' ')
                         .map((p) => p[0])
                         .join('')
@@ -205,7 +259,7 @@ export function TestimonialsSection() {
                           item.tone === 'brand' ? 'text-frost' : 'text-white',
                         )}
                       >
-                        {item.category}
+                        {tr(item.category)}
                       </p>
                       <p
                         className={cn(
@@ -213,7 +267,7 @@ export function TestimonialsSection() {
                           item.tone === 'brand' ? 'text-frost/60' : 'text-white/60',
                         )}
                       >
-                        {item.meta}
+                        {tr(item.meta)}
                       </p>
                     </div>
                   </div>
@@ -229,7 +283,7 @@ export function TestimonialsSection() {
             <button
               key={i}
               type="button"
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={tr({ fr: `Aller à la diapositive ${i + 1}`, en: `Go to slide ${i + 1}`, ar: `الانتقال إلى الشريحة ${i + 1}` })}
               aria-current={index === i}
               onClick={() => goTo(i)}
               className={cn(

@@ -1,11 +1,18 @@
+import { useTr } from '@/lib/i18n'
+
 const LOGOS = ['Barclays', 'Tide', 'Wise', 'ANNA', 'Monzo', 'World First']
 
 export function TrustedBySection() {
+  const tr = useTr()
   return (
     <section className="py-14 sm:py-16">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-8 px-5 sm:px-8">
         <p className="font-mono text-xs font-medium uppercase tracking-[0.25em] text-frost/45">
-          We only partner with the best
+          {tr({
+            fr: 'Nous ne nous associons qu’aux meilleurs',
+            en: 'We only partner with the best',
+            ar: 'نحن نتشارك فقط مع الأفضل',
+          })}
         </p>
         <div className="flex w-full flex-wrap items-center justify-center gap-x-12 gap-y-6">
           {LOGOS.map((logo, i) => (

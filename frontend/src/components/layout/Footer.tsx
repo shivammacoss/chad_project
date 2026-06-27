@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useTr, type Localized } from '@/lib/i18n'
 
 /* ----------------------------- icons ----------------------------- */
 
@@ -94,29 +95,29 @@ const SOCIALS = [
   { label: 'YouTube', href: '#', Icon: YouTubeIcon },
 ]
 
-const OFFICE_LOCATIONS = [
-  "N'Djamena, Chad",
-  'Chad International Free Zone',
-  'Moundou, Chad',
-  'Sarh, Chad',
-  'Abéché, Chad',
+const OFFICE_LOCATIONS: Localized[] = [
+  { fr: "N'Djamena, Tchad", en: "N'Djamena, Chad", ar: 'نجامينا، تشاد' },
+  { fr: 'Zone Franche Internationale du Tchad', en: 'Chad International Free Zone', ar: 'المنطقة الحرة الدولية بتشاد' },
+  { fr: 'Moundou, Tchad', en: 'Moundou, Chad', ar: 'موندو، تشاد' },
+  { fr: 'Sarh, Tchad', en: 'Sarh, Chad', ar: 'سرح، تشاد' },
+  { fr: 'Abéché, Tchad', en: 'Abéché, Chad', ar: 'أبيشي، تشاد' },
 ]
 
-const QUICK_LINKS = [
-  { label: 'About Us', to: '/chad-free-zone' },
-  { label: 'Latest Insights', to: '/insights' },
-  { label: 'Contact Us', to: '/contact' },
-  { label: 'Affiliate Programme', to: '/affiliate' },
-  { label: 'Privacy Policy', to: '/contact' },
-  { label: 'Terms & Conditions', to: '/contact' },
-  { label: 'Site Map', to: '/' },
+const QUICK_LINKS: { label: Localized; to: string }[] = [
+  { label: { fr: 'À propos', en: 'About Us', ar: 'من نحن' }, to: '/chad-free-zone' },
+  { label: { fr: 'Derniers articles', en: 'Latest Insights', ar: 'أحدث المقالات' }, to: '/insights' },
+  { label: { fr: 'Contactez-nous', en: 'Contact Us', ar: 'اتصل بنا' }, to: '/contact' },
+  { label: { fr: "Programme d'affiliation", en: 'Affiliate Programme', ar: 'برنامج الشراكة' }, to: '/affiliate' },
+  { label: { fr: 'Politique de confidentialité', en: 'Privacy Policy', ar: 'سياسة الخصوصية' }, to: '/contact' },
+  { label: { fr: 'Conditions générales', en: 'Terms & Conditions', ar: 'الشروط والأحكام' }, to: '/contact' },
+  { label: { fr: 'Plan du site', en: 'Site Map', ar: 'خريطة الموقع' }, to: '/' },
 ]
 
-const CONTACT_CARDS = [
-  { title: 'Email', sub: 'hello@gridglobalgate.com', href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
-  { title: 'Live Chat', sub: 'Talk to a specialist', href: '#chat', Icon: ChatIcon },
-  { title: 'WhatsApp', sub: 'Drop a message now', href: 'https://wa.me/23585243639', Icon: WhatsAppIcon },
-  { title: 'Phone', sub: '+235 85 24 36 39', href: 'tel:+23585243639', Icon: PhoneIcon },
+const CONTACT_CARDS: { title: Localized; sub: Localized; href: string; Icon: typeof MailIcon }[] = [
+  { title: { fr: 'E-mail', en: 'Email', ar: 'البريد الإلكتروني' }, sub: { fr: 'hello@gridglobalgate.com', en: 'hello@gridglobalgate.com', ar: 'hello@gridglobalgate.com' }, href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
+  { title: { fr: 'Chat en direct', en: 'Live Chat', ar: 'الدردشة المباشرة' }, sub: { fr: 'Parlez à un spécialiste', en: 'Talk to a specialist', ar: 'تحدث إلى أحد المختصين' }, href: '#chat', Icon: ChatIcon },
+  { title: { fr: 'WhatsApp', en: 'WhatsApp', ar: 'واتساب' }, sub: { fr: 'Envoyez un message maintenant', en: 'Drop a message now', ar: 'أرسل رسالة الآن' }, href: 'https://wa.me/23585243639', Icon: WhatsAppIcon },
+  { title: { fr: 'Téléphone', en: 'Phone', ar: 'الهاتف' }, sub: { fr: '+235 85 24 36 39', en: '+235 85 24 36 39', ar: '+235 85 24 36 39' }, href: 'tel:+23585243639', Icon: PhoneIcon },
 ]
 
 const PAYMENTS = ['VISA', 'Mastercard', 'Amex', 'PayPal', 'Wise']
@@ -126,6 +127,7 @@ const YEAR = 2026
 /* ----------------------------- footer ----------------------------- */
 
 export function Footer() {
+  const tr = useTr()
   return (
     <footer className="relative overflow-hidden bg-chad-blue text-white">
       {/* Faint dotted map backdrop on the right */}
@@ -145,8 +147,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="max-w-xs font-body text-sm leading-relaxed text-white/70">
-              Avenue Charles de Gaulle, N&apos;Djamena, Republic of Chad — your gateway to
-              international business support in Chad.
+              {tr({
+                fr: "Avenue Charles de Gaulle, N'Djamena, République du Tchad — votre porte d'entrée vers l'accompagnement des entreprises internationales au Tchad.",
+                en: "Avenue Charles de Gaulle, N'Djamena, Republic of Chad — your gateway to international business support in Chad.",
+                ar: 'شارع شارل ديغول، نجامينا، جمهورية تشاد — بوابتك إلى دعم الأعمال الدولية في تشاد.',
+              })}
             </p>
 
             {/* Socials */}
@@ -169,7 +174,7 @@ export function Footer() {
                 <span className="text-[#4285F4]">G</span>
               </span>
               <div className="flex flex-col">
-                <span className="font-body text-sm font-semibold text-white">Google Reviews</span>
+                <span className="font-body text-sm font-semibold text-white">{tr({ fr: 'Avis Google', en: 'Google Reviews', ar: 'تقييمات Google' })}</span>
                 <span className="flex items-center gap-1.5">
                   <span className="font-display text-sm font-bold text-white">4.8</span>
                   <span className="flex text-chad-yellow">
@@ -177,7 +182,7 @@ export function Footer() {
                       <StarIcon key={i} className="h-3.5 w-3.5" />
                     ))}
                   </span>
-                  <span className="font-body text-xs text-white/60">500+ reviews</span>
+                  <span className="font-body text-xs text-white/60">{tr({ fr: '500+ avis', en: '500+ reviews', ar: '+500 تقييم' })}</span>
                 </span>
               </div>
             </div>
@@ -185,14 +190,14 @@ export function Footer() {
 
           {/* Office Locations */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-display text-lg font-bold text-white">Office Locations</h3>
+            <h3 className="font-display text-lg font-bold text-white">{tr({ fr: 'Nos bureaux', en: 'Office Locations', ar: 'مواقع المكاتب' })}</h3>
             <ul className="flex flex-col gap-3">
               {OFFICE_LOCATIONS.map((loc) => (
-                <li key={loc} className="flex items-center gap-2.5 font-body text-sm text-white/70">
+                <li key={loc.en} className="flex items-center gap-2.5 font-body text-sm text-white/70">
                   <span className="text-chad-yellow">
                     <Chevron />
                   </span>
-                  {loc}
+                  {tr(loc)}
                 </li>
               ))}
             </ul>
@@ -200,10 +205,10 @@ export function Footer() {
 
           {/* Quick Links */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-display text-lg font-bold text-white">Quick Links</h3>
+            <h3 className="font-display text-lg font-bold text-white">{tr({ fr: 'Liens rapides', en: 'Quick Links', ar: 'روابط سريعة' })}</h3>
             <ul className="flex flex-col gap-3">
               {QUICK_LINKS.map((link) => (
-                <li key={link.label}>
+                <li key={link.label.en}>
                   <Link
                     to={link.to}
                     className="flex items-center gap-2.5 font-body text-sm text-white/70 transition-colors hover:text-chad-yellow"
@@ -211,7 +216,7 @@ export function Footer() {
                     <span className="text-chad-yellow">
                       <Chevron />
                     </span>
-                    {link.label}
+                    {tr(link.label)}
                   </Link>
                 </li>
               ))}
@@ -223,7 +228,7 @@ export function Footer() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {CONTACT_CARDS.map(({ title, sub, href, Icon }) => (
             <a
-              key={title}
+              key={title.en}
               href={href}
               target={href.startsWith('http') ? '_blank' : undefined}
               rel={href.startsWith('http') ? 'noreferrer' : undefined}
@@ -233,9 +238,9 @@ export function Footer() {
                 <Icon className="h-5 w-5" />
               </span>
               <span className="font-display text-sm font-bold uppercase tracking-wider text-white">
-                {title}
+                {tr(title)}
               </span>
-              <span className="font-body text-sm text-white/60">{sub}</span>
+              <span className="font-body text-sm text-white/60">{tr(sub)}</span>
             </a>
           ))}
         </div>
@@ -243,11 +248,14 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-14 flex flex-col items-center gap-4 border-t border-white/10 pt-8 text-center">
           <p className="font-body text-sm text-white/70">
-            © {YEAR} GATE. All rights reserved.
+            © {YEAR} GATE. {tr({ fr: 'Tous droits réservés.', en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.' })}
           </p>
           <p className="max-w-xl font-body text-xs leading-relaxed text-white/45">
-            GATE is a registered company-formation agent operating in the Republic of
-            Chad.
+            {tr({
+              fr: "GATE est un agent agréé de création d'entreprises exerçant en République du Tchad.",
+              en: 'GATE is a registered company-formation agent operating in the Republic of Chad.',
+              ar: 'GATE وكيل معتمد لتأسيس الشركات يعمل في جمهورية تشاد.',
+            })}
           </p>
           <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
             {PAYMENTS.map((p) => (

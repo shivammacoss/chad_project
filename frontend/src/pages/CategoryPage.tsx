@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/Button'
 import { SectionLabel } from '@/components/common/SectionLabel'
 import { Breadcrumb } from '@/components/common/Breadcrumb'
 import type { MenuCategory } from '@/content/menu'
+import { useTr } from '@/lib/i18n'
 
 /** Overview page for a menu category — lists its service sub-pages as cards. */
 export default function CategoryPage({ category }: { category: MenuCategory }) {
   const navigate = useNavigate()
+  const tr = useTr()
 
   return (
     <div className="bg-navy">
@@ -19,11 +21,16 @@ export default function CategoryPage({ category }: { category: MenuCategory }) {
 
         <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
           <div className="flex max-w-3xl flex-col gap-6 motion-safe:animate-fade-up">
-            <Breadcrumb items={[{ label: 'Home', to: '/' }, { label: category.label }]} />
-            <SectionLabel>Services</SectionLabel>
-            <h1 className="text-display-lg font-bold text-frost">{category.label}</h1>
+            <Breadcrumb
+              items={[
+                { label: tr({ fr: 'Accueil', en: 'Home', ar: 'الرئيسية' }), to: '/' },
+                { label: tr(category.label) },
+              ]}
+            />
+            <SectionLabel>{tr({ fr: 'Services', en: 'Services', ar: 'الخدمات' })}</SectionLabel>
+            <h1 className="text-display-lg font-bold text-frost">{tr(category.label)}</h1>
             <p className="max-w-2xl font-body text-lg leading-relaxed text-frost/65">
-              {category.blurb}
+              {tr(category.blurb)}
             </p>
           </div>
         </div>
@@ -41,10 +48,10 @@ export default function CategoryPage({ category }: { category: MenuCategory }) {
                 <span className="font-mono text-xs font-medium tracking-wider text-teal-electric/80">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <h2 className="font-display text-lg font-semibold text-frost">{page.menuLabel}</h2>
-                <p className="font-body text-sm leading-relaxed text-frost/60">{page.intro}</p>
+                <h2 className="font-display text-lg font-semibold text-frost">{tr(page.menuLabel)}</h2>
+                <p className="font-body text-sm leading-relaxed text-frost/60">{tr(page.intro)}</p>
                 <span className="mt-1 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-teal-electric opacity-0 transition-opacity group-hover:opacity-100">
-                  Learn more
+                  {tr({ fr: 'En savoir plus', en: 'Learn more', ar: 'اعرف المزيد' })}
                   <span aria-hidden="true">→</span>
                 </span>
               </Link>
@@ -53,7 +60,11 @@ export default function CategoryPage({ category }: { category: MenuCategory }) {
 
           <div className="mt-10">
             <Button variant="outline" size="lg" onClick={() => navigate('/contact')}>
-              Not sure which fits? Talk to us
+              {tr({
+                fr: 'Vous ne savez pas quoi choisir ? Parlons-en',
+                en: 'Not sure which fits? Talk to us',
+                ar: 'لست متأكدًا من الخيار المناسب؟ تحدث إلينا',
+              })}
             </Button>
           </div>
         </div>

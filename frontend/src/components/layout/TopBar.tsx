@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useTr, type Localized } from '@/lib/i18n'
 
 function StarIcon({ className }: { className?: string }) {
   return (
@@ -86,15 +87,16 @@ function UserIcon({ className }: { className?: string }) {
   )
 }
 
-const CONTACTS = [
-  { label: 'Email', href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
-  { label: 'Live Chat', href: '#chat', Icon: ChatIcon },
-  { label: 'WhatsApp', href: 'https://wa.me/23585243639', Icon: WhatsAppIcon },
-  { label: 'Call', href: 'tel:+23585243639', Icon: PhoneIcon },
+const CONTACTS: { label: Localized; href: string; Icon: typeof MailIcon }[] = [
+  { label: { fr: 'E-mail', en: 'Email', ar: 'البريد الإلكتروني' }, href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
+  { label: { fr: 'Chat en direct', en: 'Live Chat', ar: 'الدردشة المباشرة' }, href: '#chat', Icon: ChatIcon },
+  { label: { fr: 'WhatsApp', en: 'WhatsApp', ar: 'واتساب' }, href: 'https://wa.me/23585243639', Icon: WhatsAppIcon },
+  { label: { fr: 'Appeler', en: 'Call', ar: 'اتصال' }, href: 'tel:+23585243639', Icon: PhoneIcon },
 ]
 
 /** Slim utility bar above the navbar: reviews + contact channels + client login. */
 export function TopBar() {
+  const tr = useTr()
   return (
     <div className="fixed inset-x-0 top-0 z-50 h-12 bg-chad-blue text-white">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 sm:px-8">
@@ -107,7 +109,7 @@ export function TopBar() {
             ))}
           </span>
           <span className="hidden font-body text-sm font-medium text-white/85 sm:inline">
-            Reviews
+            {tr({ fr: 'Avis', en: 'Reviews', ar: 'تقييمات' })}
           </span>
         </div>
 
@@ -116,14 +118,14 @@ export function TopBar() {
           <div className="hidden items-center md:flex">
             {CONTACTS.map(({ label, href, Icon }) => (
               <a
-                key={label}
+                key={label.en}
                 href={href}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel={href.startsWith('http') ? 'noreferrer' : undefined}
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 font-body text-sm text-white/75 transition-colors hover:text-white"
               >
                 <Icon className="h-4 w-4" />
-                {label}
+                {tr(label)}
               </a>
             ))}
           </div>
@@ -133,7 +135,7 @@ export function TopBar() {
             className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-chad-yellow px-3.5 py-1.5 font-display text-sm font-semibold text-chad-blue transition-colors hover:bg-chad-yellow/90"
           >
             <UserIcon className="h-4 w-4" />
-            Client Login
+            {tr({ fr: 'Espace client', en: 'Client Login', ar: 'تسجيل دخول العملاء' })}
           </Link>
         </div>
       </div>
