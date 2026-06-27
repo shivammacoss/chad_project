@@ -14,9 +14,9 @@ function Logo({ onClick }: { onClick?: () => void }) {
       to="/"
       onClick={onClick}
       className="group flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-electric/70 focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
-      aria-label="GRIDGLOBAL home"
+      aria-label="GATE home"
     >
-      <img src="/logo.png" alt="GRIDGLOBAL" className="h-9 w-auto" />
+      <img src="/logo.png" alt="GATE" className="h-9 w-auto" />
     </Link>
   )
 }

@@ -31,7 +31,7 @@ export function GrowTogetherSection() {
         <div className="flex flex-col gap-6">
           <SectionLabel>Grow with us</SectionLabel>
           <h2 className="max-w-md font-display text-display-lg font-bold text-frost">
-            Grow with GRIDGLOBAL GATE together
+            Grow with GATE together
           </h2>
           <p className="max-w-md font-body text-base leading-relaxed text-frost/60">
             We provide quick solutions to drive growth and success for your business in Chad.

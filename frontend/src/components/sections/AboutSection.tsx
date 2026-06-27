@@ -22,7 +22,7 @@ export function AboutSection() {
 
         <div className="flex flex-col gap-5 text-left">
           <p className="font-body text-base leading-relaxed text-frost/65">
-            At GRIDGLOBAL GATE, we make starting and running a business in Chad simple, fast and
+            At GATE, we make starting and running a business in Chad simple, fast and
             professional. As a trusted provider of business support solutions, we work with
             entrepreneurs, start-ups, SMEs and large enterprises to establish, grow and manage their
             operations in Chad with confidence.

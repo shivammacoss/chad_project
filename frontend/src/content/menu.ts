@@ -1,5 +1,5 @@
 /**
- * Site content model for GRIDGLOBAL GATE.
+ * Site content model for GATE.
  *
  * A single source of truth that drives the navigation mega-menu, the
  * generated service routes, and the category overview pages.
@@ -607,7 +607,7 @@ export const MENU: MenuCategory[] = [
         id: 'affiliate',
         path: '/affiliate',
         menuLabel: 'Affiliate Programme',
-        heroTitle: 'Partner With GRIDGLOBAL GATE',
+        heroTitle: 'Partner With GATE',
         intro: 'Earn by referring businesses to our services. Simple sign-up, transparent commissions.',
         sections: [],
         cta: 'Join the Programme',

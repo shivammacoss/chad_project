@@ -89,8 +89,8 @@ function UserIcon({ className }: { className?: string }) {
 const CONTACTS = [
   { label: 'Email', href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
   { label: 'Live Chat', href: '#chat', Icon: ChatIcon },
-  { label: 'WhatsApp', href: 'https://wa.me/8112345678900', Icon: WhatsAppIcon },
-  { label: 'Call', href: 'tel:+8112345678900', Icon: PhoneIcon },
+  { label: 'WhatsApp', href: 'https://wa.me/23585243639', Icon: WhatsAppIcon },
+  { label: 'Call', href: 'tel:+23585243639', Icon: PhoneIcon },
 ]
 
 /** Slim utility bar above the navbar: reviews + contact channels + client login. */

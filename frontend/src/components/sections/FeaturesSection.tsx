@@ -40,7 +40,7 @@ export function FeaturesSection() {
     <section id="why" className="border-t border-frost/10 bg-navy">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
         <div className="mb-12 flex flex-col gap-4">
-          <SectionLabel index="04">Why GRIDGLOBAL GATE</SectionLabel>
+          <SectionLabel index="04">Why GATE</SectionLabel>
           <h2 className="max-w-2xl text-display-lg font-semibold text-frost">
             Built to make global business simple.
           </h2>

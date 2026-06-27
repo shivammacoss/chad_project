@@ -79,8 +79,7 @@ export default function ChadFreeZonePage() {
             </h1>
             <p className="max-w-2xl font-body text-lg leading-relaxed text-frost/65">
               Incorporate in a fast-growing African free zone with a competitive tax structure,
-              100% foreign ownership, and a fully remote setup — managed end to end by GRIDGLOBAL
-              GATE.
+              100% foreign ownership, and a fully remote setup — managed end to end by GATE.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button variant="primary" size="lg" onClick={() => navigate('/contact')}>
@@ -123,7 +122,7 @@ export default function ChadFreeZonePage() {
                 environment.
               </p>
               <p>
-                As your registered agent, GRIDGLOBAL GATE manages the entire process — from
+                As your registered agent, GATE manages the entire process — from
                 documentation and filing to your registered address and ongoing compliance — so you
                 can set up remotely and focus on growing your business.
               </p>

@@ -38,7 +38,7 @@ export default function AffiliatePage() {
             <Breadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Affiliate Programme' }]} />
             <SectionLabel>Partnerships</SectionLabel>
             <h1 className="text-display-lg font-bold text-frost">
-              Partner With <span className="text-gradient">GRIDGLOBAL GATE</span>
+              Partner With <span className="text-gradient">GATE</span>
             </h1>
             <p className="max-w-2xl font-body text-lg leading-relaxed text-frost/65">
               Earn by referring businesses to our services. Simple sign-up, transparent commissions.

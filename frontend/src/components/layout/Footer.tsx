@@ -115,8 +115,8 @@ const QUICK_LINKS = [
 const CONTACT_CARDS = [
   { title: 'Email', sub: 'hello@gridglobalgate.com', href: 'mailto:hello@gridglobalgate.com', Icon: MailIcon },
   { title: 'Live Chat', sub: 'Talk to a specialist', href: '#chat', Icon: ChatIcon },
-  { title: 'WhatsApp', sub: 'Drop a message now', href: 'https://wa.me/235650000000', Icon: WhatsAppIcon },
-  { title: 'Phone', sub: '+235 65 00 00 00', href: 'tel:+235650000000', Icon: PhoneIcon },
+  { title: 'WhatsApp', sub: 'Drop a message now', href: 'https://wa.me/23585243639', Icon: WhatsAppIcon },
+  { title: 'Phone', sub: '+235 85 24 36 39', href: 'tel:+23585243639', Icon: PhoneIcon },
 ]
 
 const PAYMENTS = ['VISA', 'Mastercard', 'Amex', 'PayPal', 'Wise']
@@ -139,10 +139,9 @@ export function Footer() {
         <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr]">
           {/* Brand block */}
           <div className="flex flex-col gap-6">
-            <Link to="/" className="flex items-center gap-2" aria-label="GRIDGLOBAL GATE home">
-              <span className="font-display text-xl font-bold tracking-tight">
-                <span className="text-chad-yellow">GRID</span>
-                <span className="text-white">GLOBAL</span>
+            <Link to="/" className="flex items-center gap-2" aria-label="GATE home">
+              <span className="font-display text-xl font-bold tracking-tight text-chad-yellow">
+                GATE
               </span>
             </Link>
             <p className="max-w-xs font-body text-sm leading-relaxed text-white/70">
@@ -244,10 +243,10 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-14 flex flex-col items-center gap-4 border-t border-white/10 pt-8 text-center">
           <p className="font-body text-sm text-white/70">
-            © {YEAR} GRIDGLOBAL GATE. All rights reserved.
+            © {YEAR} GATE. All rights reserved.
           </p>
           <p className="max-w-xl font-body text-xs leading-relaxed text-white/45">
-            GRIDGLOBAL GATE is a registered company-formation agent operating in the Republic of
+            GATE is a registered company-formation agent operating in the Republic of
             Chad.
           </p>
           <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
