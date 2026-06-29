@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useTr, type Localized } from '@/lib/i18n'
 
-const HERO_IMAGE = '/hero_banner.png'
+const HERO_IMAGE = '/hero_banner1.png'
 
 const FEATURES: { title: Localized; text: Localized }[] = [
   {
