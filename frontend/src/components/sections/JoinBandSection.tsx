@@ -48,9 +48,9 @@ export function JoinBandSection() {
 
         <h2 className="font-display text-display-lg font-bold text-white">
           {tr({
-            fr: 'Faites passer votre entreprise par la porte.',
-            en: 'Bring your business through the gate.',
-            ar: 'اعبر بعملك من البوابة.',
+            fr: 'Faites passer votre entreprise par GATE.',
+            en: 'Bring your business through the GATE.',
+            ar: 'اعبر بعملك من GATE.',
           })}
         </h2>
 

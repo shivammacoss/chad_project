@@ -4,7 +4,7 @@
 export type NodeStatus = 'online' | 'degraded' | 'offline' | 'standby'
 
 /**
- * A single node in the global grid topology.
+ * A single node in the network topology.
  *
  * Coordinates are expressed in the GridCanvas viewBox space
  * (0–1280 on x, 0–600 on y) so they can be rendered directly as SVG.

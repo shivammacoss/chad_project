@@ -41,7 +41,7 @@ export function CTASection() {
                 ar: 'مرِّر أعمالك',
               })}{' '}
               <span className="text-gradient">
-                {tr({ fr: 'par la porte.', en: 'through the gate.', ar: 'عبر البوابة.' })}
+                {tr({ fr: 'par GATE.', en: 'through the GATE.', ar: 'عبر GATE.' })}
               </span>
             </h2>
 

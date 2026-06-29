@@ -103,11 +103,22 @@ export function ServicesSection() {
             })}
           </SectionLabel>
           <h2 className="max-w-md font-display text-display-lg font-bold text-frost">
-            {tr({
-              fr: 'Une seule porte d’entrée, des objectifs communs',
-              en: 'One gateway with common goals',
-              ar: 'بوابة واحدة بأهداف مشتركة',
-            })}
+            {(() => {
+              const heading = tr({
+                fr: 'Une seule porte d’entrée, des objectifs communs',
+                en: 'One GATEway with common goals',
+                ar: 'بوابة واحدة بأهداف مشتركة',
+              })
+              const [before, ...rest] = heading.split('GATE')
+              if (rest.length === 0) return heading
+              return (
+                <>
+                  {before}
+                  <span className="bg-gradient-to-r from-[#6d1a5c] via-[#b41f57] to-[#e22d2d] bg-clip-text text-transparent">GATE</span>
+                  {rest.join('GATE')}
+                </>
+              )
+            })()}
           </h2>
           <p className="max-w-md font-body text-base leading-relaxed text-frost/60">
             {tr({

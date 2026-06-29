@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "GATE — global infrastructure and energy grid management platform",
+  "description": "GATE — company formation and corporate services in Chad",
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.json && vite build",

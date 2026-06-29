@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useTr, type Localized } from '@/lib/i18n'
 
-const HERO_IMAGE = '/hero_banner.png'
+const HERO_IMAGES = ['/hero_banner1.png', '/hero_banner2.png', '/hero_banner3.png']
+// Clone the first slide at the end so the loop scrolls forward seamlessly.
+const HERO_SLIDES = [...HERO_IMAGES, HERO_IMAGES[0]]
 
 const FEATURES: { title: Localized; text: Localized }[] = [
   {
@@ -53,22 +56,58 @@ function CheckIcon({ className }: { className?: string }) {
 
 export function HeroSection() {
   const tr = useTr()
+  const [index, setIndex] = useState(0)
+  const [withTransition, setWithTransition] = useState(true)
+
+  // Auto-advance every 2 seconds.
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => i + 1), 2000)
+    return () => clearInterval(id)
+  }, [])
+
+  // When we land on the cloned slide, snap back to the real first one (without a
+  // transition) so the loop appears continuous.
+  useEffect(() => {
+    if (index !== HERO_IMAGES.length) return
+    const t = setTimeout(() => {
+      setWithTransition(false)
+      setIndex(0)
+    }, 700)
+    return () => clearTimeout(t)
+  }, [index])
+
+  // Re-enable the sliding transition on the next frame after a snap.
+  useEffect(() => {
+    if (withTransition) return
+    const r = requestAnimationFrame(() => setWithTransition(true))
+    return () => cancelAnimationFrame(r)
+  }, [withTransition])
+
+  const heroAlt = tr({
+    fr: 'Une équipe collaborant dans un bureau moderne et lumineux',
+    en: 'A team collaborating in a bright modern office',
+    ar: 'فريق يتعاون في مكتب عصري مضيء',
+  })
 
   return (
     <section id="top" className="relative pt-16">
       <div className="mx-auto max-w-7xl px-5 pt-8 sm:px-8 sm:pt-10">
-        {/* Hero image with overlaid headline */}
+        {/* Hero image carousel with overlaid headline */}
         <div className="relative overflow-hidden rounded-[2rem] shadow-2xl shadow-frost/10">
-          <img
-            src={HERO_IMAGE}
-            alt={tr({
-              fr: 'Une équipe collaborant dans un bureau moderne et lumineux',
-              en: 'A team collaborating in a bright modern office',
-              ar: 'فريق يتعاون في مكتب عصري مضيء',
-            })}
-            className="h-[420px] w-full object-cover sm:h-[520px] lg:h-[560px]"
-            loading="eager"
-          />
+          <div
+            className={`flex ${withTransition ? 'transition-transform duration-700 ease-out' : ''}`}
+            style={{ transform: `translateX(-${index * 100}%)` }}
+          >
+            {HERO_SLIDES.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={heroAlt}
+                className="h-[420px] w-full shrink-0 object-cover sm:h-[520px] lg:h-[560px]"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            ))}
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E13]/85 via-[#0B0E13]/25 to-transparent" />
         </div>
 
